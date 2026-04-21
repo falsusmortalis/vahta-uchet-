@@ -38,6 +38,7 @@
     .otgul { color: var(--orange); background: #fff7ed; }
     .pg { color: #7c3aed; background: #f5f3ff; }
     .del-btn { padding: 4px 8px; font-size: 12px; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; border-radius: 6px; cursor: pointer; }
+    #importStatus { margin-top: 6px; font-size: 13px; min-height: 18px; }
     @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -46,11 +47,12 @@
   <div class="header">
     <h1>📊 Учёт вахт</h1>
     <div class="btns">
-      <button onclick="exportData()">📤 Экспорт JSON</button>
-      <label class="btn" for="importFile">📥 Импорт JSON</label>      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+      <button onclick="exportData()">📤 Экспорт JSON</button>      <label class="btn primary" for="importFile">📥 Импорт JSON</label>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importData(this)">
       <button class="danger" onclick="resetAll()">🗑 Сбросить всё</button>
     </div>
   </div>
+  <div id="importStatus" style="margin-bottom:10px; color:#6b7280"></div>
 
   <div class="grid">
     <div>
@@ -94,9 +96,9 @@
 
       <div class="card">
         <h2>📅 Недельный баланс</h2>
-        <div class="row" style="margin-bottom:10px">
-          <div class="field" style="flex:1"><label>Выбрать сотрудника</label><select id="weekFilterPerson" onchange="renderWeeklyTable()"></select></div>
-        </div>        <div style="overflow:auto">
+        <div class="row" style="margin-bottom:10px">          <div class="field" style="flex:1"><label>Выбрать сотрудника</label><select id="weekFilterPerson" onchange="renderWeeklyTable()"></select></div>
+        </div>
+        <div style="overflow:auto">
           <table>
             <thead><tr><th>Неделя</th><th>Платные, ч</th><th>Бесплатные, ч</th><th>Отгул, ч</th><th>Платные, сут/ч</th><th>Бесплатные, сут/ч</th></tr></thead>
             <tbody id="weekTableBody"></tbody>
@@ -122,48 +124,44 @@
   let DB = { people: [], holidays: [], entries: [] };
   let currentMode = 'paid';
 
+  // --- Безопасный парсер JSON (убирает пробелы в ключах) ---
+  function cleanObject(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+    const clean = {};
+    for (const k in obj) {
+      const cleanK = k.trim();
+      clean[cleanK] = Array.isArray(obj[k]) ? obj[k].map(item => typeof item === 'string' ? item.trim() : cleanObject(item)) : cleanObject(obj[k]);
+    }
+    return clean;
+  }
+
   // Загрузка из localStorage при старте
   function init() {
     const saved = localStorage.getItem('vahtaDB');
-    if (saved) {
-      try { DB = JSON.parse(saved); } catch(e) {}
-    } else {
-      loadDefaultHolidays();
-    }
+    if (saved) { try { DB = cleanObject(JSON.parse(saved)); } catch(e) {} }
+    else { loadDefaultHolidays(); }
     renderAll();
   }
 
-  function saveDB() { 
-    localStorage.setItem('vahtaDB', JSON.stringify(DB)); 
-    renderAll(); 
-  }
-  function renderAll() { 
-    renderPeople(); renderSelects(); renderJournal(); renderWeeklyTable(); 
-    document.getElementById('holidaysInput').value = DB.holidays.join('\n'); 
-  }
-
+  function saveDB() { localStorage.setItem('vahtaDB', JSON.stringify(DB)); renderAll(); }
+  function renderAll() { renderPeople(); renderSelects(); renderJournal(); renderWeeklyTable(); document.getElementById('holidaysInput').value = DB.holidays.join('\n'); }
   // --- Сотрудники ---
   function addPerson() {
     const name = document.getElementById('newPersonName').value.trim();
-    if (!name || DB.people.includes(name)) return alert('Введите уникальное имя');    DB.people.push(name);
+    if (!name || DB.people.includes(name)) return alert('Введите уникальное имя');
+    DB.people.push(name);
     document.getElementById('newPersonName').value = '';
     saveDB();
   }
   function removePerson(name) {
-    if (!confirm(`Удалить ${name}? Все его записи останутся в журнале.`)) return;
+    if (!confirm(`Удалить ${name}? Записи останутся в журнале.`)) return;
     DB.people = DB.people.filter(p => p !== name);
     saveDB();
   }
   function renderPeople() {
-    const el = document.getElementById('peopleList');
-    el.innerHTML = DB.people.map(p => `
-      <div class="person-item">
-        <span>${p}</span>
-        <button class="del-btn" onclick="removePerson('${p}')">Удалить</button>
-      </div>`).join('');
+    document.getElementById('peopleList').innerHTML = DB.people.map(p => `
+      <div class="person-item"><span>${p}</span><button class="del-btn" onclick="removePerson('${p}')">Удалить</button></div>`).join('');
   }
-
-  // --- Выпадающие списки ---
   function renderSelects() {
     const opts = DB.people.map(p => `<option value="${p}">${p}</option>`).join('');
     document.getElementById('entryPerson').innerHTML = '<option value="">-- Выберите --</option>' + opts;
@@ -172,66 +170,57 @@
 
   // --- Праздники ---
   function saveHolidays() {
-    const txt = document.getElementById('holidaysInput').value;
-    DB.holidays = txt.split('\n').map(s => s.trim()).filter(Boolean);
-    saveDB();
-    alert('Праздники сохранены');
+    DB.holidays = document.getElementById('holidaysInput').value.split('\n').map(s => s.trim()).filter(Boolean);
+    saveDB(); alert('Праздники сохранены');
   }
   function loadDefaultHolidays() {
-    DB.holidays = [
-      "2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11",
-      "2026-02-23","2026-03-09","2026-05-01","2026-05-11","2026-06-12","2026-11-04","2026-12-31"
-    ];
+    DB.holidays = ["2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11","2026-02-23","2026-03-09","2026-05-01","2026-05-11","2026-06-12","2026-11-04","2026-12-31"];
     saveDB();
   }
 
   // --- Режимы и добавление записи ---
   function setMode(el) {
     document.querySelectorAll('.mode').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    currentMode = el.dataset.type;
+    el.classList.add('active'); currentMode = el.dataset.type;
   }
   function addEntry() {
     const person = document.getElementById('entryPerson').value;
     const date = document.getElementById('entryDate').value;
-    const count = parseInt(document.getElementById('entryCount').value) || 1;    const note = document.getElementById('entryNote').value.trim();
+    const count = parseInt(document.getElementById('entryCount').value) || 1;
+    const note = document.getElementById('entryNote').value.trim();
     if (!person || !date) return alert('Выберите сотрудника и дату');
-
     DB.entries.push({ id: Date.now(), person, date, type: currentMode, count, note });
     saveDB();
     document.getElementById('entryNote').value = '';
-    document.getElementById('entryCount').value = '1';
   }
   function deleteEntry(id) {
-    if (!confirm('Удалить эту запись из журнала?')) return;
-    DB.entries = DB.entries.filter(e => e.id !== id);
+    if (!confirm('Удалить запись? Баланс пересчитается.')) return;    DB.entries = DB.entries.filter(e => e.id !== id);
     saveDB();
   }
 
   // --- Логика расчёта часов ---
   function getHours(dateStr, type) {
-    const d = new Date(dateStr);
-    const dow = d.getDay(); // 0=Вс, 1=Пн...
+    // Явно разбиваем дату, чтобы избежать сдвигов из-за UTC/часовых поясов
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const date = new Date(y, m-1, d);
+    const dow = date.getDay(); // 0=Вс
     const isHoliday = DB.holidays.includes(dateStr);
 
     if (type === 'paid') return 16;
     if (type === 'otgul') return 0;
-    if (type === 'pg') return (dow === 0 || dow === 6 || isHoliday) ? 8 : 0; // ПГ: 8ч в Сб/Вс/Праздник
+    if (type === 'pg') return (dow === 0 || dow === 6 || isHoliday) ? 8 : 0;
     if (type === 'free') {
-      if (isHoliday) return 20; // 🎉 Праздник = 20ч
-      if (dow === 0) return 16; // Воскресенье = 16ч
-      if (dow === 6) return 20; // Суббота = 20ч
-      if (dow === 5) return 12; // Пятница = 12ч
-      return 8; // Пн-Чт = 8ч
+      if (isHoliday) return 20; // Праздник = 20ч
+      if (dow === 0) return 16; // Вс
+      if (dow === 6) return 20; // Сб
+      if (dow === 5) return 12; // Пт
+      return 8; // Пн-Чт
     }
     return 0;
   }
-
   function formatDaysHours(h) {
     if (h <= 0) return '0 сут / 0 ч';
-    const d = Math.floor(h / 24);
-    const r = Math.round(h % 24);
-    return `${d} сут / ${r} ч`;
+    return `${Math.floor(h / 24)} сут / ${Math.round(h % 24)} ч`;
   }
 
   // --- Недельная таблица ---
@@ -240,108 +229,99 @@
     const tbody = document.getElementById('weekTableBody');
     if (!person) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#6b7280">Выберите сотрудника</td></tr>'; return; }
 
-    const entries = DB.entries.filter(e => e.person === person).sort((a,b) => new Date(a.date) - new Date(b.date));
+    const entries = DB.entries.filter(e => e.person === person).sort((a,b) => a.date.localeCompare(b.date));
     const weeks = {};
     let cumPaid = 0, cumFree = 0;
+
     entries.forEach(e => {
-      const d = new Date(e.date);
-      const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(d);
-      monday.setDate(diff);
-      const sunday = new Date(monday);
-      sunday.setDate(monday.getDate() + 6);
+      const [y, m, d] = e.date.split('-').map(Number);
+      const date = new Date(y, m-1, d);
+      const day = date.getDay();
+      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(y, m-1, diff);
+      const sunday = new Date(y, m-1, diff + 6);
       
       const key = monday.toISOString().slice(0,10);
       const label = `${monday.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit'}).slice(0,5)} - ${sunday.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit'}).slice(0,5)}`;
-
-      if (!weeks[key]) weeks[key] = { label, paid:0, free:0, otgul:0, cumPaid:0, cumFree:0 };
+      if (!weeks[key]) weeks[key] = { label, paid:0, free:0, otgul:0 };
 
       const h = getHours(e.date, e.type) * (e.count || 1);
-      if (e.type === 'paid') {
-        cumPaid += h;
-        weeks[key].paid += h;
-      } else if (e.type === 'free' || e.type === 'pg') {
-        cumFree += h;
-        weeks[key].free += h;
-      } else if (e.type === 'otgul') {
+      if (e.type === 'paid') { cumPaid += h; weeks[key].paid += h; }
+      else if (e.type === 'free' || e.type === 'pg') { cumFree += h; weeks[key].free += h; }
+      else if (e.type === 'otgul') {
         const deduct = 8 * (e.count || 1);
         weeks[key].otgul += deduct;
-        // Приоритет: сначала бесплатные, потом платные
         if (cumFree >= deduct) { cumFree -= deduct; }
-        else { const rem = deduct - cumFree; cumFree = 0; cumPaid -= rem; }
+        else { const rem = deduct - cumFree; cumFree = 0; cumPaid = Math.max(0, cumPaid - rem); }
       }
-      // Защита от отрицательных значений
-      if (cumPaid < 0) cumPaid = 0;
-      if (cumFree < 0) cumFree = 0;
       weeks[key].cumPaid = cumPaid;
       weeks[key].cumFree = cumFree;
     });
 
-    const sortedKeys = Object.keys(weeks).sort();
-    tbody.innerHTML = sortedKeys.map(k => {
+    tbody.innerHTML = Object.keys(weeks).sort().map(k => {
       const w = weeks[k];
-      return `<tr>
-        <td>${w.label}</td>
-        <td>${w.paid}</td>
-        <td>${w.free}</td>
-        <td class="otgul">${w.otgul || 0}</td>
-        <td>${formatDaysHours(w.cumPaid)}</td>
-        <td>${formatDaysHours(w.cumFree)}</td>
-      </tr>`;
+      return `<tr><td>${w.label}</td><td>${w.paid}</td><td>${w.free}</td><td class="otgul">${w.otgul || 0}</td><td>${formatDaysHours(w.cumPaid)}</td><td>${formatDaysHours(w.cumFree)}</td></tr>`;
     }).join('') || '<tr><td colspan="6" style="text-align:center">Нет записей</td></tr>';
   }
 
-  // --- Журнал ---  function renderJournal() {
-    const sorted = [...DB.entries].sort((a,b) => new Date(b.date) - new Date(a.date));
+  // --- Журнал ---
+  function renderJournal() {
+    const sorted = [...DB.entries].sort((a,b) => b.date.localeCompare(a.date));
     document.getElementById('journalBody').innerHTML = sorted.map(e => `
-      <tr>
-        <td>${e.date}</td>
-        <td>${e.person}</td>
-        <td><span class="badge ${e.type}">${e.type.toUpperCase()}</span></td>
-        <td>${e.type === 'otgul' ? '-8' : getHours(e.date, e.type) * (e.count || 1)}</td>
-        <td>${e.note || '-'}</td>
-        <td><button class="del-btn" onclick="deleteEntry(${e.id})">🗑 Удалить</button></td>
-      </tr>
+      <tr><td>${e.date}</td><td>${e.person}</td><td><span class="badge ${e.type}">${e.type.toUpperCase()}</span></td><td>${e.type === 'otgul' ? '-8' : getHours(e.date, e.type) * (e.count || 1)}</td><td>${e.note || '-'}</td><td><button class="del-btn" onclick="deleteEntry(${e.id})">🗑 Удалить</button></td></tr>
     `).join('');
   }
 
   // --- Импорт / Экспорт ---
   function exportData() {
-    const cleanDB = { people: DB.people, holidays: DB.holidays, entries: DB.entries };
-    const blob = new Blob([JSON.stringify(cleanDB, null, 2)], {type: 'application/json'});
+    const blob = new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
+    a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
   }
   function importData(input) {
-    const file = input.files[0]; if (!file) return;
+    const file = input.files[0]; 
+    const status = document.getElementById('importStatus');
+    if (!file) return;
+    status.textContent = '⏳ Чтение файла...';
+    
     const reader = new FileReader();
     reader.onload = e => {
       try {
-        let raw = JSON.parse(e.target.result);
-        // Автоматическая чистка ключей с пробелами и значений
-        DB.people = (raw['people '] || raw.people || []).map(p => (p||'').trim()).filter(Boolean);
-        DB.holidays = (raw['holidays '] || raw.holidays || []).map(h => (h||'').trim()).filter(Boolean);
-        DB.entries = (raw['entries '] || raw.entries || []).map(en => ({
+        const raw = JSON.parse(e.target.result);
+        const data = cleanObject(raw);
+        
+        DB.people = Array.isArray(data.people) ? data.people : [];
+        DB.entries = Array.isArray(data.entries) ? data.entries : [];
+        DB.holidays = Array.isArray(data.holidays) ? data.holidays : [];        
+        // Финальная чистка записей
+        DB.entries = DB.entries.map(en => ({
           id: en.id || Date.now() + Math.random(),
-          person: (en.person || '').trim(),
-          date: (en.date || '').trim(),
-          type: (en.type || '').trim().toLowerCase(),
+          person: String(en.person || '').trim(),
+          date: String(en.date || '').trim(),
+          type: String(en.type || 'paid').trim().toLowerCase(),
           count: Number(en.count) || 1,
-          note: (en.note || '').trim()
-        })).filter(en => en.person && en.date && en.type);
+          note: String(en.note || '').trim()
+        })).filter(en => en.person && en.date);
+
+        DB.holidays = DB.holidays.filter(h => /^20\d{2}-\d{2}-\d{2}$/.test(h));
+        DB.people = DB.people.filter(p => p);
 
         saveDB();
-        alert('✅ Импорт успешен! Все записи пересчитаны по новым правилам (праздник=20ч, отгулы списаны хронологически).');
-      } catch(err) { alert('❌ Ошибка формата JSON: ' + err.message); console.error(err); }
+        status.textContent = `✅ Успешно! Загружено ${DB.entries.length} записей, ${DB.people.length} сотрудников.`;
+        status.style.color = '#16a34a';
+      } catch(err) { 
+        status.textContent = `❌ Ошибка: ${err.message}`;
+        status.style.color = '#dc2626';
+        console.error(err);
+      }
     };
-    reader.readAsText(file);
+    reader.readAsText(file, 'UTF-8');
     input.value = '';
   }
   function resetAll() {
-    if (!confirm('Это удалит ВСЕ данные безвозвратно. Продолжить?')) return;
-    DB = { people: [], holidays: [], entries: [] };    localStorage.removeItem('vahtaDB');
+    if (!confirm('Удалить ВСЕ данные безвозвратно?')) return;
+    DB = { people: [], holidays: [], entries: [] };
+    localStorage.removeItem('vahtaDB');
     renderAll();
   }
 
