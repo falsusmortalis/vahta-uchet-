@@ -1,117 +1,694 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Учёт вахт</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Учет вахт</title>
 <style>
-:root{--bg:#0b1220;--panel:#111827;--line:#263244;--text:#e5e7eb;--muted:#94a3b8;--accent:#38bdf8;--good:#22c55e;--warn:#f59e0b;--bad:#ef4444}
+:root{
+  --bg:#f5f5f2; --card:#fff; --line:#d9d9d2; --text:#202020; --muted:#6d6d67;
+  --accent:#0f6b70; --accentBg:#e9f4f4; --green:#2f7d32; --greenBg:#eef8ef;
+  --orange:#9a5b13; --orangeBg:#faf1e5; --red:#a33a68; --redBg:#f8eaf1;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#08101c,#0f172a);color:var(--text)}
-.wrap{max-width:1600px;margin:0 auto;padding:18px}
-h1{margin:0 0 6px;font-size:28px}.sub{color:var(--muted);margin-bottom:14px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.card{background:rgba(17,24,39,.96);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.22)}
-input,select,button,textarea{font:inherit;border-radius:10px;border:1px solid var(--line);background:#0b1220;color:var(--text);padding:10px 12px}
-button{cursor:pointer}button.primary{background:linear-gradient(180deg,#38bdf8,#0284c7);border:none;color:#fff}button.good{background:linear-gradient(180deg,#22c55e,#16a34a);border:none;color:#fff}button.ghost{background:transparent}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:14px 0}.kpi .n{font-size:26px;font-weight:800;margin-top:4px}.kpi .l{color:var(--muted);font-size:13px}
-.two{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.panel{max-height:650px;overflow:auto}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}th{position:sticky;top:0;background:#101827;z-index:1}
-.small{font-size:12px;color:var(--muted)}textarea{width:100%;min-height:320px;resize:vertical}.drop{border:1px dashed #3b82f6;padding:16px;border-radius:14px;background:rgba(56,189,248,.06)}.drop.drag{background:rgba(56,189,248,.16)}.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#172036;border:1px solid #2b3b57;font-size:12px;color:#cbd5e1}
-@media(max-width:1100px){.two,.three{grid-template-columns:1fr}}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1400px;margin:0 auto;padding:16px}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+.title h1{margin:0 0 6px;font-size:32px}
+.title p{margin:0;color:var(--muted)}
+.btns,.rowBtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn,button,label.btn{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:14px;display:inline-flex;align-items:center}
+.primary{color:#fff;background:var(--accent)!important;border-color:var(--accent)!important}
+.grid{display:grid;grid-template-columns:350px 1fr;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.stack{display:grid;gap:12px}
+h2{margin:0 0 6px;font-size:22px}
+.muted{color:var(--muted);font-size:14px}
+.field{display:grid;gap:6px}
+.field label{font-size:14px;font-weight:700}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;color:var(--text)}
+textarea{min-height:100px;resize:vertical}
+.two,.three{display:grid;gap:12px}
+.two{grid-template-columns:1fr 1fr}
+.three{grid-template-columns:repeat(3,1fr)}
+.modes{display:flex;gap:8px;flex-wrap:wrap}
+.mode{padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer}
+.mode.active{background:var(--accentBg);border-color:var(--accent);color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.kpi .v{font-size:28px;font-weight:700;margin:6px 0}
+.people{display:grid;gap:8px;max-height:420px;overflow:auto}
+.person{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;gap:8px}
+.person.active{border-color:var(--accent);background:var(--accentBg)}
+.personTop{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.personMain{cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center;width:100%;background:transparent;border:0;padding:0;text-align:left}
+.pill{font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:#fff}
+.note{padding:12px;border-radius:12px;background:var(--accentBg);border:1px solid rgb(207,228,229);font-size:14px}
+.tableWrap{overflow:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 8px;border-bottom:1px solid rgb(236,236,231);text-align:left;font-size:14px;vertical-align:top}
+th{color:var(--muted)}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
+.paid{color:var(--accent);background:var(--accentBg)}
+.free{color:var(--green);background:var(--greenBg)}
+.pg{color:var(--red);background:var(--redBg)}
+.otgul{color:var(--orange);background:var(--orangeBg)}
+.danger{color:rgb(180,35,24);border-color:rgb(240,201,196);background:rgb(255,247,246)}
+.inlineHelp{font-size:12px;color:var(--muted)}
+@media (max-width:1100px){
+  .grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:700px){
+  .two,.three,.kpis{grid-template-columns:1fr}
+  .title h1{font-size:26px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>Учёт вахт</h1>
-<div class="sub">Сотрудники, вахты, импорт JSON, недельный расчёт с понедельника по воскресенье и итог в формате сутки/часы.</div>
-<div class="row" style="margin-bottom:12px">
-  <label class="card">JSON файл<br><input id="fileInput" type="file" accept="application/json,.json" style="margin-top:8px"></label>
-  <button id="btnSample" class="ghost">Показать пример</button>
-  <button id="btnExportJson" class="primary">Скачать JSON</button>
-  <button id="btnExportHtml" class="ghost">Скачать HTML</button>
-  <div class="card">Статус: <span id="status" class="badge">готово</span></div>
-</div>
-<div class="drop card" id="dropZone">Перетащи сюда JSON-файл.</div>
-<div class="kpis">
-  <div class="card kpi"><div class="l">Сотрудников</div><div class="n" id="kPeople">0</div></div>
-  <div class="card kpi"><div class="l">Записей</div><div class="n" id="kEntries">0</div></div>
-  <div class="card kpi"><div class="l">Сутки</div><div class="n" id="kDays">0</div></div>
-  <div class="card kpi"><div class="l">Часы</div><div class="n" id="kHours">0</div></div>
-  <div class="card kpi"><div class="l">Платные часы</div><div class="n" id="kPaidHours">0</div></div>
-  <div class="card kpi"><div class="l">Бесплатные часы</div><div class="n" id="kFreeHours">0</div></div>
-  <div class="card kpi"><div class="l">Отгулы</div><div class="n" id="kOtgulDays">0</div></div>
-</div>
-<div class="two">
-  <div class="card panel">
-    <div class="row" style="justify-content:space-between;align-items:end">
-      <div><h3 style="margin:0 0 6px">Сотрудники и вахты</h3><div class="small">Можно добавлять сотрудников и вахты отдельно.</div></div>
-      <div class="row"><select id="personSelect"></select><button id="btnAddPerson" class="ghost">+ сотрудник</button></div>
+  <div class="card stack" style="border:2px solid #7c3aed;box-shadow:0 8px 30px rgba(124,58,237,.12);margin-bottom:16px;">
+    <div id="importStatusBanner" style="padding:8px 10px;background:#eef2ff;border-radius:10px;margin-bottom:10px;font-size:14px;">ИМПОРТ СТАТУС: ожидание файла</div>
+    <div id="importStatus" class="muted" style="margin-bottom:8px"></div>
+    <div class="two">
+      <div>
+        <h2>Таблица по сотруднику</h2>
+        <div class="muted">Сразу видны понедельные платные и бесплатные часы по выбранному человеку.</div>
+      </div>
+      <div class="rowBtns" style="align-items:flex-end">
+        <div class="field" style="min-width:220px">
+          <label>Сотрудник</label>
+          <select id="personWeekSelect" style="width:100%;min-height:44px;font-size:16px;"></select>
+        </div>
+        <button id="forceRecalcBtn" type="button">Пересчитать</button>
+      </div>
     </div>
-    <div class="row" style="margin-top:10px">
-      <input id="newPersonName" placeholder="Имя/код сотрудника">
-      <input id="entryDate" type="date">
-      <select id="entryType"><option value="paid">paid</option><option value="free">free</option><option value="otgul">otgul</option><option value="pg">pg</option></select>
-      <input id="entryDays" type="number" value="1" min="1" step="1" style="width:90px" title="сутки">
-      <input id="entryHours" type="number" value="16" min="0" step="1" style="width:100px" title="часы">
-      <input id="entryNote" placeholder="примечание">
-      <button id="btnAddEntry" class="good">+ вахта</button>
-    </div>
-    <div style="margin-top:12px" class="small">Фильтры: <input id="filterMonth" type="month"> <input id="filterPerson" placeholder="все сотрудники"> <input id="filterWeek" placeholder="неделя стартом, напр. 2026-01-05"></div>
-    <div style="margin-top:12px;overflow:auto;max-height:390px">
-      <table><thead><tr><th>Дата</th><th>Неделя</th><th>Сотрудник</th><th>Тип</th><th>Сутки</th><th>Часы</th><th>Note</th><th></th></tr></thead><tbody id="entriesBody"></tbody></table>
+    <div style="overflow:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Неделя</th>
+            <th>Платные, ч</th>
+            <th>Бесплатные, ч</th>
+            <th>Отгул</th>
+            <th>Платные, сут/ч</th>
+            <th>Бесплатные, сут/ч</th>
+          </tr>
+        </thead>
+        <tbody id="personWeekBody"></tbody>
+      </table>
     </div>
   </div>
-  <div class="card panel">
-    <h3 style="margin:0 0 8px">JSON импорт/экспорт</h3>
-    <textarea id="jsonArea"></textarea>
-    <div class="row" style="margin-top:10px"><button id="btnApplyJson" class="primary">Применить JSON</button><button id="btnDownloadWorking" class="ghost">Скачать текущий JSON</button></div>
+
+  <div class="head">
+    <div class="title">
+      <h1>Учёт вахт</h1>
+      <p>Понедельные итоги, платные/бесплатные часы, отгулы и нормальный выбор сотрудника.</p>
+    </div>
+    <div class="btns">
+      <button id="seedBtn" type="button">Тестовые данные</button>
+      <button id="resetBtn" type="button" class="danger">Сбросить всё</button>
+      <button id="exportBtn" type="button">Экспорт JSON</button>
+      <label class="btn" for="importFileInput" id="importBtn">Импорт JSON</label>
+    </div>
+  </div>
+
+  <input id="importFileInput" type="file" accept="application/json,.json" hidden>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid">
+    <div class="stack">
+      <div class="card stack">
+        <div>
+          <h2>Сотрудники</h2>
+          <div class="muted">Выбор сотрудника должен работать как фильтр и обновлять таблицу.</div>
+        </div>
+        <div class="two">
+          <div class="field">
+            <label for="personName">Фамилия / имя</label>
+            <input id="personName" placeholder="Например: Иванов А.А.">
+          </div>
+          <div class="field" style="align-self:end">
+            <button id="addPersonBtn" class="primary" type="button">Добавить</button>
+          </div>
+        </div>
+        <div id="peopleList" class="people"></div>
+      </div>
+
+      <div class="card stack">
+        <div>
+          <h2>Праздники</h2>
+          <div class="muted">Формат: 2026-01-01, каждая дата с новой строки.</div>
+        </div>
+        <div class="field"><textarea id="holidaysInput"></textarea></div>
+        <div class="rowBtns">
+          <button id="saveHolidaysBtn" type="button">Сохранить праздники</button>
+          <button id="loadDefaultHolidaysBtn" type="button">РФ 2026</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card stack">
+        <div>
+          <h2>Добавить запись</h2>
+          <div class="muted">Дата в формате ГГГГ-ММ-ДД.</div>
+        </div>
+
+        <div class="modes">
+          <button class="mode active" data-mode="paid" type="button">Платная вахта</button>
+          <button class="mode" data-mode="free" type="button">Бесплатная вахта</button>
+          <button class="mode" data-mode="pg" type="button">ПГ</button>
+          <button class="mode" data-mode="otgul" type="button">Отгул</button>
+        </div>
+
+        <div class="three">
+          <div class="field"><label for="entryPerson">Сотрудник</label><select id="entryPerson"></select></div>
+          <div class="field"><label for="entryDate">Дата</label><input id="entryDate" type="date"></div>
+          <div class="field"><label for="entryCount">Количество</label><input id="entryCount" type="number" value="1" min="1" step="1"></div>
+        </div>
+
+        <div class="inlineHelp">Можно выбрать дату в календаре или ввести вручную.</div>
+
+        <div class="two">
+          <div class="field"><label for="entryNote">Комментарий</label><input id="entryNote" placeholder="Например: замена / праздник / уточнение"></div>
+          <div class="field"><label>Авто-правило</label><div id="rulePreview" class="note">Выбери дату и тип записи.</div></div>
+        </div>
+
+        <div class="rowBtns">
+          <button id="addEntryBtn" class="primary" type="button">Сохранить запись</button>
+          <button id="clearAllBtn" type="button">Очистить все записи</button>
+        </div>
+      </div>
+
+      <div class="card stack">
+        <div class="two">
+          <div>
+            <h2>Итоги по людям</h2>
+            <div class="muted">Отдельно платные и бесплатные часы, плюс отгулы.</div>
+          </div>
+          <div class="field"><label for="filterPerson">Фильтр</label><select id="filterPerson"></select></div>
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Человек</th>
+                <th>Платные</th>
+                <th>Бесплатные</th>
+                <th>Отгулы</th>
+                <th>Ост. платных</th>
+                <th>Ост. бесплатных</th>
+                <th>Всего</th>
+                <th>Сутки/часы</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card stack">
+        <div>
+          <h2>Журнал</h2>
+          <div class="muted">Записи сортируются по дате. Ошибочные можно удалить.</div>
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Человек</th>
+                <th>Тип</th>
+                <th>Часы</th>
+                <th>Комментарий</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="journalBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div class="three" style="margin-top:12px">
-  <div class="card panel"><h3 style="margin:0 0 8px">Итоги по людям</h3><table><thead><tr><th>Сотрудник</th><th>Записей</th><th>Сутки</th><th>Часы</th><th>paid</th><th>free</th><th>otgul</th></tr></thead><tbody id="peopleBody"></tbody></table></div>
-  <div class="card panel"><h3 style="margin:0 0 8px">Итоги по неделям</h3><table><thead><tr><th>Неделя</th><th>Сутки</th><th>Часы</th><th>paid hours</th><th>free hours</th><th>otgul</th></tr></thead><tbody id="weeksBody"></tbody></table></div>
-  <div class="card panel"><h3 style="margin:0 0 8px">Итоги по месяцам</h3><table><thead><tr><th>Месяц</th><th>Записей</th><th>Сутки</th><th>Часы</th><th>paid hours</th><th>free hours</th><th>otgul</th></tr></thead><tbody id="monthsBody"></tbody></table></div>
-</div>
-</div>
+
 <script>
-let data={people:[],entries:[],holidays:[],selectedPerson:'',mode:'paid'};
-const $=id=>document.getElementById(id);
-const sample={people:['ГАВ','МАН','ЩВМ','НСМ','ВРВ','ЧИП','МАВ','СНВ'],entries:[],holidays:[],selectedPerson:'',mode:'paid'};
-const uid=()=> 'id'+Math.floor(Date.now()+Math.random()*1e6);
-function weekStartStr(d){const x=new Date(d+'T00:00:00');const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);return x.toISOString().slice(0,10)}
-function weekLabel(d){const s=weekStartStr(d),e=new Date(s+'T00:00:00');e.setDate(e.getDate()+6);return `${s.slice(8,10)}.${s.slice(5,7)}-${e.toISOString().slice(8,10)}.${e.toISOString().slice(5,7)}`}
-function monthLabel(d){return String(d).slice(0,7)}
-function filtered(){const m=$('filterMonth').value,p=$('filterPerson').value.trim(),w=$('filterWeek').value.trim();return (data.entries||[]).filter(e=>(!m||monthLabel(e.date)===m)&&(!p||e.person===p)&&(!w||weekStartStr(e.date)===w)).sort((a,b)=>String(a.date).localeCompare(String(b.date)))}
-function calcRows(rows){return rows.reduce((a,e)=>{a.entries++;a.days+=Number(e.count||1);a.hours+=Number(e.hours||0);if(e.type==='paid')a.paid+=Number(e.hours||0);if(e.type==='free')a.free+=Number(e.hours||0);if(e.type==='otgul')a.otgul+=Number(e.count||1);return a},{entries:0,days:0,hours:0,paid:0,free:0,otgul:0})}
-function render(){
-  $('jsonArea').value=JSON.stringify(data,null,2);
-  $('kPeople').textContent=(data.people||[]).length;
-  $('kEntries').textContent=(data.entries||[]).length;
-  const all=calcRows(data.entries||[]);$('kDays').textContent=all.days;$('kHours').textContent=all.hours;$('kPaidHours').textContent=all.paid;$('kFreeHours').textContent=all.free;$('kOtgulDays').textContent=all.otgul;
-  $('personSelect').innerHTML=['<option value="">все</option>',...(data.people||[]).map(p=>`<option value="${p}">${p}</option>`)].join('');
-  const rows=filtered();
-  $('entriesBody').innerHTML=rows.map(e=>`<tr><td>${e.date||''}</td><td>${weekLabel(e.date||'')}</td><td>${e.person||''}</td><td>${e.type||''}</td><td>${e.count??''}</td><td>${e.hours??''}</td><td>${e.note||''}</td><td><button data-id="${e.id}" class="ghost">✕</button></td></tr>`).join('');
-  $('entriesBody').querySelectorAll('button[data-id]').forEach(b=>b.onclick=()=>{data.entries=data.entries.filter(x=>x.id!==b.dataset.id);render()});
-  const byP=Object.fromEntries((data.people||[]).map(p=>[p,{entries:0,days:0,hours:0,paid:0,free:0,otgul:0}]));
-  for(const e of data.entries||[]){if(!byP[e.person])byP[e.person]={entries:0,days:0,hours:0,paid:0,free:0,otgul:0};byP[e.person].entries++;byP[e.person].days+=Number(e.count||1);byP[e.person].hours+=Number(e.hours||0);if(e.type==='paid')byP[e.person].paid+=Number(e.hours||0);if(e.type==='free')byP[e.person].free+=Number(e.hours||0);if(e.type==='otgul')byP[e.person].otgul+=Number(e.count||1)}
-  $('peopleBody').innerHTML=Object.entries(byP).map(([p,s])=>`<tr><td>${p}</td><td>${s.entries}</td><td>${s.days}</td><td>${s.hours}</td><td>${s.paid}</td><td>${s.free}</td><td>${s.otgul}</td></tr>`).join('');
-  const wk={},mo={};
-  for(const e of data.entries||[]){const w=weekLabel(e.date),m=monthLabel(e.date);wk[w]??={days:0,hours:0,paid:0,free:0,otgul:0};mo[m]??={entries:0,days:0,hours:0,paid:0,free:0,otgul:0};wk[w].days+=Number(e.count||1);wk[w].hours+=Number(e.hours||0);mo[m].entries++;mo[m].days+=Number(e.count||1);mo[m].hours+=Number(e.hours||0);if(e.type==='paid'){wk[w].paid+=Number(e.hours||0);mo[m].paid+=Number(e.hours||0)}if(e.type==='free'){wk[w].free+=Number(e.hours||0);mo[m].free+=Number(e.hours||0)}if(e.type==='otgul'){wk[w].otgul+=Number(e.count||1);mo[m].otgul+=Number(e.count||1)}}
-  $('weeksBody').innerHTML=Object.entries(wk).sort((a,b)=>a[0].localeCompare(b[0])).map(([w,s])=>`<tr><td>${w}</td><td>${s.days}</td><td>${s.hours}</td><td>${s.paid}</td><td>${s.free}</td><td>${s.otgul}</td></tr>`).join('');
-  $('monthsBody').innerHTML=Object.entries(mo).sort((a,b)=>a[0].localeCompare(b[0])).map(([m,s])=>`<tr><td>${m}</td><td>${s.entries}</td><td>${s.days}</td><td>${s.hours}</td><td>${s.paid}</td><td>${s.free}</td><td>${s.otgul}</td></tr>`).join('');
+const LS_KEY='vahta_v1';
+const PEOPLE_KEY='vahta_people_v1';
+const HOLIDAYS_KEY='vahta_holidays_v1';
+const DEFAULT_HOLIDAYS_2026 = ['2026-01-01','2026-01-07','2026-02-23','2026-03-08','2026-05-01','2026-05-09','2026-06-12','2026-11-04'];
+
+const $ = s => document.querySelector(s);
+const el = id => document.getElementById(id);
+
+let state = {
+  people: [],
+  entries: [],
+  holidays: [],
+  mode: 'paid',
+  selectedPersonId: null
+};
+
+function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+
+function parseState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(LS_KEY)||'null');
+    if(saved && typeof saved==='object'){
+      state.people = Array.isArray(saved.people) ? saved.people : [];
+      state.entries = Array.isArray(saved.entries) ? saved.entries : [];
+      state.holidays = Array.isArray(saved.holidays) ? saved.holidays : [];
+      state.selectedPersonId = saved.selectedPersonId || null;
+      state.mode = saved.mode || 'paid';
+    }
+  }catch(e){}
+  try{
+    const p = JSON.parse(localStorage.getItem(PEOPLE_KEY)||'null');
+    if(Array.isArray(p) && !state.people.length) state.people = p;
+  }catch(e){}
+  try{
+    const h = JSON.parse(localStorage.getItem(HOLIDAYS_KEY)||'null');
+    if(Array.isArray(h) && !state.holidays.length) state.holidays = h;
+  }catch(e){}
+  if(!state.people.length){
+    state.people = [{id:uid(), name:'ГАВ'},{id:uid(), name:'МАН'},{id:uid(), name:'ЦВМ'}];
+  }
+  if(!state.selectedPersonId && state.people[0]) state.selectedPersonId = state.people[0].id;
 }
-function setData(obj){data=obj||{people:[],entries:[],holidays:[],selectedPerson:'',mode:'paid'};if(!Array.isArray(data.people))data.people=[];if(!Array.isArray(data.entries))data.entries=[];render();$('status').textContent='загружено'}
-$('btnSample').onclick=()=>setData(sample);
-$('btnAddPerson').onclick=()=>{const v=$('newPersonName').value.trim();if(!v)return;if(!data.people.includes(v))data.people.push(v);$('newPersonName').value='';render()};
-$('btnAddEntry').onclick=()=>{const person=$('personSelect').value||$('newPersonName').value.trim();if(!person)return;if(!data.people.includes(person))data.people.push(person);data.entries.push({id:uid(),person,date:$('entryDate').value||new Date().toISOString().slice(0,10),type:$('entryType').value,count:Number($('entryDays').value||1),hours:Number($('entryHours').value||0),note:$('entryNote').value||''});render()};
-$('btnApplyJson').onclick=()=>{try{setData(JSON.parse($('jsonArea').value))}catch(e){$('status').textContent='ошибка JSON'}};
-$('fileInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{setData(JSON.parse(await f.text()))}catch(err){$('status').textContent='ошибка файла'}};
-$('dropZone').ondragover=e=>{e.preventDefault();$('dropZone').classList.add('drag')};$('dropZone').ondragleave=()=>$('dropZone').classList.remove('drag');$('dropZone').ondrop=async e=>{e.preventDefault();$('dropZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(!f)return;try{setData(JSON.parse(await f.text()))}catch(err){$('status').textContent='ошибка файла'}};
-$('filterMonth').oninput=render;$('filterPerson').oninput=render;$('filterWeek').oninput=render;
-$('btnExportJson').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='vahta-uchet-v2-2-6.json';a.click()};
-$('btnExportHtml').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([document.documentElement.outerHTML],{type:'text/html'}));a.download='vahta-uchet.html';a.click()};
-setData({people:['ГАВ','МАН','ЩВМ','НСМ','ВРВ','ЧИП','МАВ','СНВ'],entries:[],holidays:[],selectedPerson:'',mode:'paid'});
+
+function save(){
+  localStorage.setItem(LS_KEY, JSON.stringify({
+    people: state.people,
+    entries: state.entries,
+    holidays: state.holidays,
+    selectedPersonId: state.selectedPersonId,
+    mode: state.mode
+  }));
+  localStorage.setItem(PEOPLE_KEY, JSON.stringify(state.people));
+  localStorage.setItem(HOLIDAYS_KEY, JSON.stringify(state.holidays));
+}
+
+function ymdToDate(s){ return new Date(s + 'T12:00:00'); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function fmtDate(s){
+  const d = ymdToDate(s);
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`;
+}
+
+function weekStart(dateStr){
+  const d = ymdToDate(dateStr);
+  const day = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - day);
+  return d.toISOString().slice(0,10);
+}
+
+function weekLabelFromStart(startStr){
+  const s = ymdToDate(startStr);
+  const e = new Date(s);
+  e.setDate(e.getDate()+6);
+  return `${pad(s.getDate())}.${pad(s.getMonth()+1)}-${pad(e.getDate())}.${pad(e.getMonth()+1)}`;
+}
+
+function normalizeDateInput(v){
+  if(!v) return '';
+  const t = String(v).trim();
+  if(/^d{4}-d{2}-d{2}$/.test(t)) return t;
+  return t;
+}
+
+function isHoliday(dateStr){
+  return new Set(state.holidays).has(dateStr);
+}
+
+function freeHours(dateStr){
+  const d = ymdToDate(dateStr);
+  const day = d.getDay();
+  if(isHoliday(dateStr)) return 20;
+  if(day===5) return 12;
+  if(day===6) return 20;
+  if(day===0) return 16;
+  return 8;
+}
+
+function paidHours(dateStr){
+  const d = ymdToDate(dateStr);
+  const day = d.getDay();
+  if(isHoliday(dateStr)) return 20;
+  if(day===5) return 12;
+  if(day===6) return 20;
+  if(day===0) return 16;
+  return 8;
+}
+
+function otgulHours(){
+  return 8;
+}
+
+function hoursForEntry(entry){
+  if(entry.type==='otgul') return otgulHours() * (entry.count || 1);
+  if(entry.type==='free') return freeHours(entry.date) * (entry.count || 1);
+  if(entry.type==='paid') return paidHours(entry.date) * (entry.count || 1);
+  return 0;
+}
+
+function addPerson(name){
+  const n = name.trim();
+  if(!n) return;
+  state.people.push({id:uid(), name:n});
+  state.selectedPersonId = state.people[state.people.length-1].id;
+  save();
+  renderAll();
+}
+
+function addEntry(){
+  const personId = el('entryPerson').value;
+  const date = normalizeDateInput(el('entryDate').value);
+  const count = Math.max(1, parseInt(el('entryCount').value || '1',10));
+  const note = el('entryNote').value.trim();
+  if(!personId || !date) return;
+  state.entries.push({
+    id: uid(),
+    personId,
+    date,
+    count,
+    type: state.mode,
+    note
+  });
+  save();
+  renderAll();
+}
+
+function removeEntry(id){
+  state.entries = state.entries.filter(x => x.id !== id);
+  save();
+  renderAll();
+}
+
+function removePerson(id){
+  const has = state.entries.some(x => x.personId === id);
+  if(has && !confirm('У сотрудника есть записи. Удалить вместе с ними?')) return;
+  state.people = state.people.filter(x => x.id !== id);
+  state.entries = state.entries.filter(x => x.personId !== id);
+  if(state.selectedPersonId === id) state.selectedPersonId = state.people[0]?.id || null;
+  save();
+  renderAll();
+}
+
+function setMode(mode){
+  state.mode = mode;
+  document.querySelectorAll('.mode').forEach(b => b.classList.toggle('active', b.dataset.mode===mode));
+  save();
+  renderRule();
+}
+
+function renderPeople(){
+  const peopleList = el('peopleList');
+  const entryPerson = el('entryPerson');
+  const filterPerson = el('filterPerson');
+  const personWeekSelect = el('personWeekSelect');
+  peopleList.innerHTML = '';
+  entryPerson.innerHTML = '';
+  filterPerson.innerHTML = '<option value="">Все</option>';
+  personWeekSelect.innerHTML = '';
+  state.people.forEach(p => {
+    const opt1 = document.createElement('option');
+    opt1.value = p.id;
+    opt1.textContent = p.name;
+    entryPerson.appendChild(opt1);
+
+    const opt2 = document.createElement('option');
+    opt2.value = p.id;
+    opt2.textContent = p.name;
+    personWeekSelect.appendChild(opt2);
+
+    const opt3 = document.createElement('option');
+    opt3.value = p.id;
+    opt3.textContent = p.name;
+    filterPerson.appendChild(opt3);
+
+    const card = document.createElement('div');
+    card.className = 'person' + (p.id===state.selectedPersonId ? ' active' : '');
+    card.innerHTML = `
+      <div class="personTop">
+        <button class="personMain" type="button">
+          <strong>${p.name}</strong>
+          <span class="pill">выбрать</span>
+        </button>
+        <button type="button" class="danger">✕</button>
+      </div>
+    `;
+    card.querySelector('.personMain').onclick = () => {
+      state.selectedPersonId = p.id;
+      save();
+      renderAll();
+    };
+    card.querySelector('.danger').onclick = () => removePerson(p.id);
+    peopleList.appendChild(card);
+  });
+  if(state.selectedPersonId && state.people.some(p=>p.id===state.selectedPersonId)){
+    entryPerson.value = state.selectedPersonId;
+    personWeekSelect.value = state.selectedPersonId;
+  } else if(state.people[0]){
+    state.selectedPersonId = state.people[0].id;
+    entryPerson.value = state.selectedPersonId;
+    personWeekSelect.value = state.selectedPersonId;
+  }
+}
+
+function totalsByPerson(personId){
+  const entries = state.entries.filter(e => e.personId === personId);
+  let paid=0, free=0, otgul=0;
+  entries.forEach(e => {
+    if(e.type==='paid') paid += hoursForEntry(e);
+    if(e.type==='free') free += hoursForEntry(e);
+    if(e.type==='otgul') otgul += (e.count||1);
+  });
+  return {paid, free, otgul, total: paid + free, leftPaid: paid, leftFree: free};
+}
+
+function renderSummary(){
+  const body = el('summaryBody');
+  const filter = el('filterPerson').value;
+  body.innerHTML = '';
+  const list = state.people.filter(p => !filter || p.id === filter);
+  list.forEach(p => {
+    const t = totalsByPerson(p.id);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${p.name}</td>
+      <td>${t.paid}</td>
+      <td>${t.free}</td>
+      <td>${t.otgul}</td>
+      <td>${t.leftPaid}</td>
+      <td>${t.leftFree}</td>
+      <td>${t.total}</td>
+      <td>${Math.floor(t.total/24)} сут ${t.total%24} час</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function renderWeeks(){
+  const body = el('personWeekBody');
+  body.innerHTML = '';
+  const personId = el('personWeekSelect').value || state.selectedPersonId;
+  const entries = state.entries.filter(e => e.personId === personId).slice();
+  const map = new Map();
+  entries.forEach(e => {
+    const k = weekStart(e.date);
+    if(!map.has(k)) map.set(k, {key:k, paid:0, free:0, otgul:0});
+    const w = map.get(k);
+    if(e.type==='paid') w.paid += hoursForEntry(e);
+    if(e.type==='free') w.free += hoursForEntry(e);
+    if(e.type==='otgul') w.otgul += (e.count||1);
+  });
+  const rows = [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+  rows.forEach(([k,w]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${weekLabelFromStart(k)}</td>
+      <td>${w.paid}</td>
+      <td>${w.free}</td>
+      <td>${w.otgul}</td>
+      <td>${Math.floor(w.paid/24)} сут ${w.paid%24} час</td>
+      <td>${Math.floor(w.free/24)} сут ${w.free%24} час</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function renderJournal(){
+  const body = el('journalBody');
+  body.innerHTML = '';
+  const list = state.entries.slice().sort((a,b) => a.date.localeCompare(b.date));
+  list.forEach(e => {
+    const p = state.people.find(x=>x.id===e.personId);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${fmtDate(e.date)}</td>
+      <td>${p ? p.name : ''}</td>
+      <td><span class="badge ${e.type}">${e.type}</span></td>
+      <td>${hoursForEntry(e)}</td>
+      <td>${e.note || ''}</td>
+      <td><button type="button" class="danger">Удалить</button></td>
+    `;
+    tr.querySelector('button').onclick = () => removeEntry(e.id);
+    body.appendChild(tr);
+  });
+}
+
+function renderKPIs(){
+  const total = state.people.reduce((s,p) => {
+    const t = totalsByPerson(p.id);
+    return {paid:s.paid+t.paid, free:s.free+t.free, otgul:s.otgul+t.otgul, total:s.total+t.total};
+  }, {paid:0, free:0, otgul:0, total:0});
+  el('kpis').innerHTML = `
+    <div class="kpi"><div class="muted">Платные часы</div><div class="v">${total.paid}</div></div>
+    <div class="kpi"><div class="muted">Бесплатные часы</div><div class="v">${total.free}</div></div>
+    <div class="kpi"><div class="muted">Отгулы</div><div class="v">${total.otgul}</div></div>
+    <div class="kpi"><div class="muted">Всего часов</div><div class="v">${total.total}</div></div>
+  `;
+}
+
+function renderRule(){
+  const date = el('entryDate').value || '';
+  const mode = state.mode;
+  let text = 'Выбери дату и тип записи.';
+  if(date){
+    if(mode==='free') text = `Бесплатная вахта: ${freeHours(date)} ч на эту дату.`;
+    if(mode==='paid') text = `Платная вахта: ${paidHours(date)} ч на эту дату.`;
+    if(mode==='otgul') text = `Отгул: ${otgulHours()} ч за одну запись.`;
+    if(mode==='pg') text = 'ПГ: запись без часов, если так нужно.';
+  }
+  el('rulePreview').textContent = text;
+}
+
+function renderAll(){
+  renderPeople();
+  renderKPIs();
+  renderSummary();
+  renderWeeks();
+  renderJournal();
+  renderRule();
+}
+
+function exportJSON(){
+  const blob = new Blob([JSON.stringify({
+    people: state.people,
+    entries: state.entries,
+    holidays: state.holidays
+  }, null, 2)], {type:'application/json;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'vahta.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+function loadHolidaysText(){
+  el('holidaysInput').value = state.holidays.join('
+');
+}
+
+function saveHolidaysFromText(){
+  state.holidays = el('holidaysInput').value.split(/
+?
+/).map(s => s.trim()).filter(Boolean);
+  save();
+  renderAll();
+}
+
+function importJSONFile(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      if(Array.isArray(data.people)) state.people = data.people;
+      if(Array.isArray(data.entries)) state.entries = data.entries;
+      if(Array.isArray(data.holidays)) state.holidays = data.holidays;
+      state.selectedPersonId = state.people[0]?.id || null;
+      save();
+      loadHolidaysText();
+      renderAll();
+      el('importStatusBanner').textContent = 'ИМПОРТ СТАТУС: файл загружен';
+      el('importStatus').textContent = 'Импорт прошёл успешно';
+    }catch(e){
+      el('importStatusBanner').textContent = 'ИМПОРТ СТАТУС: ошибка';
+      el('importStatus').textContent = 'Не удалось прочитать JSON';
+      alert('Ошибка импорта JSON');
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function seedTest(){
+  const p = state.people[0]?.id;
+  if(!p) return;
+  state.entries.push(
+    {id:uid(), personId:p, date:'2026-01-02', type:'free', count:1, note:''},
+    {id:uid(), personId:p, date:'2026-01-04', type:'free', count:1, note:''},
+    {id:uid(), personId:p, date:'2026-01-11', type:'free', count:1, note:''},
+    {id:uid(), personId:p, date:'2026-01-12', type:'otgul', count:1, note:''}
+  );
+  save();
+  renderAll();
+}
+
+function bind(){
+  document.querySelectorAll('.mode').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+  el('addPersonBtn').onclick = () => {
+    addPerson(el('personName').value);
+    el('personName').value = '';
+  };
+  el('addEntryBtn').onclick = addEntry;
+  el('clearAllBtn').onclick = () => {
+    if(confirm('Очистить все записи?')){
+      state.entries = [];
+      save();
+      renderAll();
+    }
+  };
+  el('resetBtn').onclick = () => {
+    if(confirm('Сбросить все данные?')){
+      localStorage.removeItem(LS_KEY);
+      localStorage.removeItem(PEOPLE_KEY);
+      localStorage.removeItem(HOLIDAYS_KEY);
+      location.reload();
+    }
+  };
+  el('seedBtn').onclick = seedTest;
+  el('exportBtn').onclick = exportJSON;
+  el('saveHolidaysBtn').onclick = saveHolidaysFromText;
+  el('loadDefaultHolidaysBtn').onclick = () => {
+    state.holidays = DEFAULT_HOLIDAYS_2026.slice();
+    loadHolidaysText();
+    save();
+    renderAll();
+  };
+  el('importBtn').onclick = () => el('importFileInput').click();
+  el('importFileInput').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if(f) importJSONFile(f);
+  });
+  el('filterPerson').addEventListener('change', renderSummary);
+  el('personWeekSelect').addEventListener('change', () => {
+    state.selectedPersonId = el('personWeekSelect').value || state.selectedPersonId;
+    save();
+    renderWeeks();
+    renderPeople();
+  });
+  el('forceRecalcBtn').onclick = renderAll;
+  el('entryDate').addEventListener('change', renderRule);
+  el('entryDate').addEventListener('input', renderRule);
+}
+
+parseState();
+bind();
+loadHolidaysText();
+setMode(state.mode || 'paid');
+renderAll();
 </script>
 </body>
 </html>
