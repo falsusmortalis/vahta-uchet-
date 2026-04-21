@@ -141,7 +141,7 @@
     if (saved) { try { DB = cleanObject(JSON.parse(saved)); } catch(e) {} }
     else { loadDefaultHolidays(); }
     
-    // Делегирование событий для кнопок удаления (работает всегда)
+    // Делегирование событий для кнопок удаления
     document.getElementById('journalBody').addEventListener('click', (e) => {
       const btn = e.target.closest('.del-btn');
       if (btn) deleteEntry(btn.dataset.id);
@@ -258,8 +258,12 @@
       else if (e.type === 'otgul') {
         const deduct = 8 * (e.count || 1);
         weeks[key].otgul += deduct;
-        if (cumFree >= deduct) { cumFree -= deduct; }
-        else { const rem = deduct - cumFree; cumFree = 0; cumPaid = Math.max(0, cumPaid - rem); }
+        // 🔥 НОВАЯ ЛОГИКА: Если бесплатных >= 8, вычитаем из них. Если < 8, не трогаем бесплатные, вычитаем всё из платных.
+        if (cumFree >= deduct) {
+          cumFree -= deduct;
+        } else {
+          cumPaid = Math.max(0, cumPaid - deduct);
+        }
       }
       weeks[key].cumPaid = cumPaid;
       weeks[key].cumFree = cumFree;
@@ -288,11 +292,11 @@
   }
 
   // --- Импорт / Экспорт ---
-  function exportData() {
-    const blob = new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'});
+  function exportData() {    const blob = new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
-  }  function importData(input) {
+  }
+  function importData(input) {
     const file = input.files[0]; 
     const status = document.getElementById('importStatus');
     if (!file) return;
@@ -322,7 +326,7 @@
         DB.people = DB.people.filter(p => p);
 
         saveDB();
-        status.textContent = `✅ Успешно! Загружено ${DB.entries.length} записей, ${DB.people.length} сотрудников. Кнопка удаления теперь работает.`;
+        status.textContent = `✅ Успешно! Загружено ${DB.entries.length} записей, ${DB.people.length} сотрудников. Логика отгулов обновлена.`;
         status.style.color = '#16a34a';
       } catch(err) { 
         status.textContent = `❌ Ошибка: ${err.message}`;
@@ -338,7 +342,7 @@
     localStorage.removeItem('vahtaDB');
     renderAll();
   }
-
   init();
 </script>
-</body></html>
+</body>
+</html>
