@@ -124,7 +124,7 @@
   let DB = { people: [], holidays: [], entries: [] };
   let currentMode = 'paid';
 
-  // --- Безопасный парсер JSON (убирает пробелы в ключах) ---
+  // Безопасный парсер JSON (убирает пробелы в ключах и значениях)
   function cleanObject(obj) {
     if (!obj || typeof obj !== 'object') return obj;
     const clean = {};
@@ -140,11 +140,18 @@
     const saved = localStorage.getItem('vahtaDB');
     if (saved) { try { DB = cleanObject(JSON.parse(saved)); } catch(e) {} }
     else { loadDefaultHolidays(); }
+    
+    // Делегирование событий для кнопок удаления (работает всегда)
+    document.getElementById('journalBody').addEventListener('click', (e) => {
+      const btn = e.target.closest('.del-btn');
+      if (btn) deleteEntry(btn.dataset.id);
+    });
     renderAll();
   }
 
   function saveDB() { localStorage.setItem('vahtaDB', JSON.stringify(DB)); renderAll(); }
   function renderAll() { renderPeople(); renderSelects(); renderJournal(); renderWeeklyTable(); document.getElementById('holidaysInput').value = DB.holidays.join('\n'); }
+
   // --- Сотрудники ---
   function addPerson() {
     const name = document.getElementById('newPersonName').value.trim();
@@ -187,20 +194,20 @@
     const person = document.getElementById('entryPerson').value;
     const date = document.getElementById('entryDate').value;
     const count = parseInt(document.getElementById('entryCount').value) || 1;
-    const note = document.getElementById('entryNote').value.trim();
-    if (!person || !date) return alert('Выберите сотрудника и дату');
-    DB.entries.push({ id: Date.now(), person, date, type: currentMode, count, note });
+    const note = document.getElementById('entryNote').value.trim();    if (!person || !date) return alert('Выберите сотрудника и дату');
+    DB.entries.push({ id: Date.now().toString(), person, date, type: currentMode, count, note });
     saveDB();
     document.getElementById('entryNote').value = '';
   }
-  function deleteEntry(id) {
-    if (!confirm('Удалить запись? Баланс пересчитается.')) return;    DB.entries = DB.entries.filter(e => e.id !== id);
+  function deleteEntry(rawId) {
+    const idToMatch = String(rawId).trim();
+    if (!confirm('Удалить эту запись из журнала? Баланс пересчитается.')) return;
+    DB.entries = DB.entries.filter(e => String(e.id).trim() !== idToMatch);
     saveDB();
   }
 
   // --- Логика расчёта часов ---
   function getHours(dateStr, type) {
-    // Явно разбиваем дату, чтобы избежать сдвигов из-за UTC/часовых поясов
     const [y, m, d] = dateStr.split('-').map(Number);
     const date = new Date(y, m-1, d);
     const dow = date.getDay(); // 0=Вс
@@ -210,7 +217,7 @@
     if (type === 'otgul') return 0;
     if (type === 'pg') return (dow === 0 || dow === 6 || isHoliday) ? 8 : 0;
     if (type === 'free') {
-      if (isHoliday) return 20; // Праздник = 20ч
+      if (isHoliday) return 20; // 🎉 Праздник = 20ч
       if (dow === 0) return 16; // Вс
       if (dow === 6) return 20; // Сб
       if (dow === 5) return 12; // Пт
@@ -236,13 +243,13 @@
     entries.forEach(e => {
       const [y, m, d] = e.date.split('-').map(Number);
       const date = new Date(y, m-1, d);
-      const day = date.getDay();
-      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+      const day = date.getDay();      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
       const monday = new Date(y, m-1, diff);
       const sunday = new Date(y, m-1, diff + 6);
       
       const key = monday.toISOString().slice(0,10);
       const label = `${monday.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit'}).slice(0,5)} - ${sunday.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit'}).slice(0,5)}`;
+
       if (!weeks[key]) weeks[key] = { label, paid:0, free:0, otgul:0 };
 
       const h = getHours(e.date, e.type) * (e.count || 1);
@@ -267,9 +274,17 @@
   // --- Журнал ---
   function renderJournal() {
     const sorted = [...DB.entries].sort((a,b) => b.date.localeCompare(a.date));
-    document.getElementById('journalBody').innerHTML = sorted.map(e => `
-      <tr><td>${e.date}</td><td>${e.person}</td><td><span class="badge ${e.type}">${e.type.toUpperCase()}</span></td><td>${e.type === 'otgul' ? '-8' : getHours(e.date, e.type) * (e.count || 1)}</td><td>${e.note || '-'}</td><td><button class="del-btn" onclick="deleteEntry(${e.id})">🗑 Удалить</button></td></tr>
-    `).join('');
+    document.getElementById('journalBody').innerHTML = sorted.map(e => {
+      const safeId = String(e.id).trim();
+      return `<tr>
+        <td>${e.date}</td>
+        <td>${e.person}</td>
+        <td><span class="badge ${e.type}">${e.type.toUpperCase()}</span></td>
+        <td>${e.type === 'otgul' ? '-8' : getHours(e.date, e.type) * (e.count || 1)}</td>
+        <td>${e.note || '-'}</td>
+        <td><button class="del-btn" data-id="${safeId}">🗑 Удалить</button></td>
+      </tr>`;
+    }).join('');
   }
 
   // --- Импорт / Экспорт ---
@@ -277,12 +292,12 @@
     const blob = new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'});
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
-  }
-  function importData(input) {
+  }  function importData(input) {
     const file = input.files[0]; 
     const status = document.getElementById('importStatus');
     if (!file) return;
     status.textContent = '⏳ Чтение файла...';
+    status.style.color = '#6b7280';
     
     const reader = new FileReader();
     reader.onload = e => {
@@ -292,10 +307,10 @@
         
         DB.people = Array.isArray(data.people) ? data.people : [];
         DB.entries = Array.isArray(data.entries) ? data.entries : [];
-        DB.holidays = Array.isArray(data.holidays) ? data.holidays : [];        
-        // Финальная чистка записей
+        DB.holidays = Array.isArray(data.holidays) ? data.holidays : [];
+        
         DB.entries = DB.entries.map(en => ({
-          id: en.id || Date.now() + Math.random(),
+          id: String(en.id || Date.now() + Math.random()).trim(),
           person: String(en.person || '').trim(),
           date: String(en.date || '').trim(),
           type: String(en.type || 'paid').trim().toLowerCase(),
@@ -307,12 +322,11 @@
         DB.people = DB.people.filter(p => p);
 
         saveDB();
-        status.textContent = `✅ Успешно! Загружено ${DB.entries.length} записей, ${DB.people.length} сотрудников.`;
+        status.textContent = `✅ Успешно! Загружено ${DB.entries.length} записей, ${DB.people.length} сотрудников. Кнопка удаления теперь работает.`;
         status.style.color = '#16a34a';
       } catch(err) { 
         status.textContent = `❌ Ошибка: ${err.message}`;
         status.style.color = '#dc2626';
-        console.error(err);
       }
     };
     reader.readAsText(file, 'UTF-8');
@@ -327,5 +341,4 @@
 
   init();
 </script>
-</body>
-</html>
+</body></html>
