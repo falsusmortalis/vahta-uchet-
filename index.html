@@ -1,280 +1,104 @@
-<!DOCTYPE html><html lang="ru"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Учет вахт 2.10</title>
-  <style>
-    :root { --bg:#f5f5f2; --card:#fff; --line:#d9d9d2; --text:#202020; --muted:#6d6d67; --accent:#0f6b70; --accentBg:#e9f4f4; --green:#2f7d32; --greenBg:#eef8ef; --orange:#9a5b13; --orangeBg:#faf1e5; --red:#a33a68; --redBg:#f8eaf1; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:1400px;margin:0 auto;padding:16px}
-    .head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
-    .title h1{margin:0 0 6px;font-size:32px}
-    .title p{margin:0;color:var(--muted)}
-    .btns,.rowBtns{display:flex;gap:8px;flex-wrap:wrap}
-    .btn,button,label.btn{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:14px;display:inline-flex;align-items:center}
-    .primary{color:#fff;background:var(--accent)!important;border-color:var(--accent)!important}
-    .grid{display:grid;grid-template-columns:350px 1fr;gap:16px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-    .stack{display:grid;gap:12px}
-    h2{margin:0 0 6px;font-size:22px}
-    .muted{color:var(--muted);font-size:14px}
-    .field{display:grid;gap:6px}
-    .field label{font-size:14px;font-weight:700}
-    input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;color:var(--text)}
-    textarea{min-height:100px;resize:vertical}
-    .two,.three{display:grid;gap:12px}
-    .two{grid-template-columns:1fr 1fr}
-    .three{grid-template-columns:repeat(3,1fr)}
-    .modes{display:flex;gap:8px;flex-wrap:wrap}
-    .mode{padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer}
-    .mode.active{background:var(--accentBg);border-color:var(--accent);color:var(--accent)}
-    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-    .kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
-    .kpi .v{font-size:28px;font-weight:700;margin:6px 0}
-    .people{display:grid;gap:8px;max-height:420px;overflow:auto}
-    .person{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;gap:8px}
-    .person.active{border-color:var(--accent);background:var(--accentBg)}
-    .personTop{display:flex;justify-content:space-between;gap:8px;align-items:center}
-    .personMain{cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center;width:100%;background:transparent;border:0;padding:0;text-align:left}
-    .pill{font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:#fff}
-    .note{padding:12px;border-radius:12px;background:var(--accentBg);border:1px solid #cfe4e5;font-size:14px}
-    .tableWrap{overflow:auto}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px 8px;border-bottom:1px solid #ecece7;text-align:left;font-size:14px;vertical-align:top}
-    th{color:var(--muted)}
-    .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
-    .paid{color:var(--accent);background:var(--accentBg)}
-    .free{color:var(--green);background:var(--greenBg)}
-    .pg{color:var(--red);background:var(--redBg)}
-    .otgul{color:var(--orange);background:var(--orangeBg)}
-    .danger{color:#b42318;border-color:#f0c9c4;background:#fff7f6}
-    .inlineHelp{font-size:12px;color:var(--muted)}
-    @media (max-width:1100px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:700px){.two,.three,.kpis{grid-template-columns:1fr}.title h1{font-size:26px}}
-  </style>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учет вахт 2.10</title>
+<style>
+:root{--bg:#f5f5f2;--card:#fff;--line:#d9d9d2;--text:#202020;--muted:#6d6d67;--accent:#0f6b70;--accentBg:#e9f4f4;--green:#2f7d32;--greenBg:#eef8ef;--orange:#9a5b13;--orangeBg:#faf1e5;--red:#a33a68;--redBg:#f8eaf1}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1400px;margin:0 auto;padding:16px}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+.title h1{margin:0 0 6px;font-size:32px}.title p{margin:0;color:var(--muted)}
+.btns,.rowBtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn,button,label.btn{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:14px;display:inline-flex;align-items:center}
+.primary{color:#fff;background:var(--accent)!important;border-color:var(--accent)!important}
+.danger{color:#b42318;border-color:#f0c9c4;background:#fff7f6}
+.grid{display:grid;grid-template-columns:350px 1fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}.stack{display:grid;gap:12px}
+h2{margin:0 0 6px;font-size:22px}.muted{color:var(--muted);font-size:14px}
+.field{display:grid;gap:6px}.field label{font-size:14px;font-weight:700}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;color:var(--text)}
+textarea{min-height:100px;resize:vertical}.two,.three{display:grid;gap:12px}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}
+.modes{display:flex;gap:8px;flex-wrap:wrap}.mode{padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer}.mode.active{background:var(--accentBg);border-color:var(--accent);color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.kpi .v{font-size:28px;font-weight:700;margin:6px 0}
+.people{display:grid;gap:8px;max-height:420px;overflow:auto}.person{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;gap:8px}.person.active{border-color:var(--accent);background:var(--accentBg)}
+.personTop{display:flex;justify-content:space-between;gap:8px;align-items:center}.personMain{cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center;width:100%;background:transparent;border:0;padding:0;text-align:left}.pill{font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:#fff}
+.note{padding:12px;border-radius:12px;background:var(--accentBg);border:1px solid #cfe4e5;font-size:14px}.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse}
+th,td{padding:10px 8px;border-bottom:1px solid #ecece7;text-align:left;font-size:14px;vertical-align:top}th{color:var(--muted)}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}.paid{color:var(--accent);background:var(--accentBg)}.free{color:var(--green);background:var(--greenBg)}.pg{color:var(--red);background:var(--redBg)}.otgul{color:var(--orange);background:var(--orangeBg)}
+.inlineHelp{font-size:12px;color:var(--muted)}
+#debug{position:fixed;left:8px;right:8px;bottom:8px;background:#111;color:#0f0;padding:8px;border-radius:10px;font:12px/1.35 monospace;white-space:pre-wrap;z-index:99999;opacity:.95}
+@media (max-width:1100px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}@media (max-width:700px){.two,.three,.kpis{grid-template-columns:1fr}.title h1{font-size:26px}}
+</style>
 </head>
 <body>
-  <input id="importFileInput" type="file" accept="application/json,.json" style="display:none">
-  <div class="wrap">
-    <div class="card stack" style="border:2px solid #7c3aed; box-shadow:0 8px 30px rgba(124,58,237,.12); margin-bottom:16px;">
-      <div style="padding:8px 10px; background:#eef2ff; border-radius:10px; margin-bottom:10px; font-size:14px;" id="importStatusBanner">ИМПОРТ СТАТУС: ожидание файла</div>
-      <div id="importStatus" class="muted" style="margin-bottom:8px"></div>
-      <div class="two">
-        <div>
-          <h2>Таблица по сотруднику</h2>
-          <div class="muted">Сразу видны понедельные платные и бесплатные часы по выбранному человеку.</div>
-        </div>
-        <div class="rowBtns" style="align-items:flex-end">
-          <div class="field" style="min-width:220px"><label>Сотрудник</label><select id="personWeekSelect" style="width:100%; min-height:44px; font-size:16px;"></select></div>
-          <button id="forceRecalcBtn" type="button">Пересчитать</button>
-        </div>
-      </div>
-      <div style="overflow:auto">
-        <table>
-          <thead><tr><th>Неделя</th><th>Платные, ч</th><th>Бесплатные, ч</th><th>Платные, сут/ч</th><th>Бесплатные, сут/ч</th></tr></thead>
-          <tbody id="personWeekBody"></tbody>
-        </table>
+<input id="importFileInput" type="file" accept="application/json,.json" style="display:none">
+<div id="debug">BOOT...</div>
+<div class="wrap">
+  <div class="card stack" style="border:2px solid #7c3aed;box-shadow:0 8px 30px rgba(124,58,237,.12);margin-bottom:16px;">
+    <div style="padding:8px 10px;background:#eef2ff;border-radius:10px;margin-bottom:10px;font-size:14px;" id="importStatusBanner">ИМПОРТ СТАТУС: ожидание файла</div>
+    <div id="importStatus" class="muted" style="margin-bottom:8px"></div>
+    <div class="two">
+      <div><h2>Таблица по сотруднику</h2><div class="muted">Сразу видны понедельные платные и бесплатные часы по выбранному человеку.</div></div>
+      <div class="rowBtns" style="align-items:flex-end">
+        <div class="field" style="min-width:220px"><label>Сотрудник</label><select id="personWeekSelect" style="width:100%;min-height:44px;font-size:16px;"></select></div>
+        <button id="forceRecalcBtn" type="button">Пересчитать</button>
       </div>
     </div>
-
-    <div class="head">
-      <div class="title">
-        <h1>Учёт вахт 2.10</h1>
-        <p>Добавлено: понедельный баланс платных/бесплатных часов, последовательное списание отгулов по состоянию на неделю, импорт старого JSON сохранён.</p>
-      </div>
-      <div class="btns">
-        <button id="seedBtn" type="button">Тестовые данные</button>
-        <button id="resetBtn" type="button" class="danger">Сбросить всё</button>
-        <button id="exportBtn" type="button">Экспорт JSON</button>
-        <label class="btn" for="importFileInput" id="importBtn">Импорт JSON</label>
-      </div>
+    <div style="overflow:auto"><table><thead><tr><th>Неделя</th><th>Платные, ч</th><th>Бесплатные, ч</th><th>Платные, сут/ч</th><th>Бесплатные, сут/ч</th></tr></thead><tbody id="personWeekBody"></tbody></table></div>
+  </div>
+  <div class="head">
+    <div class="title"><h1>Учёт вахт 2.10</h1><p>Добавлено: понедельный баланс платных/бесплатных часов, последовательное списание отгулов по состоянию на неделю, импорт старого JSON сохранён.</p></div>
+    <div class="btns"><button id="seedBtn" type="button">Тестовые данные</button><button id="resetBtn" type="button" class="danger">Сбросить всё</button><button id="exportBtn" type="button">Экспорт JSON</button><label class="btn" for="importFileInput" id="importBtn">Импорт JSON</label></div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <div class="grid">
+    <div class="stack">
+      <div class="card stack"><div><h2>Сотрудники</h2><div class="muted">Теперь сотрудника можно удалить. Если у него есть записи, приложение спросит подтверждение.</div></div><div class="two"><div class="field"><label for="personName">Фамилия / имя</label><input id="personName" placeholder="Например: Иванов А.А."></div><div class="field" style="align-self:end"><button id="addPersonBtn" class="primary" type="button">Добавить</button></div></div><div id="peopleList" class="people"></div></div>
+      <div class="card stack"><div><h2>Праздники</h2><div class="muted">Формат: 2026-01-01, каждая дата с новой строки.</div></div><div class="field"><textarea id="holidaysInput"></textarea></div><div class="rowBtns"><button id="saveHolidaysBtn" type="button">Сохранить праздники</button><button id="loadDefaultHolidaysBtn" type="button">РФ 2026</button></div></div>
     </div>
-
-    <div class="kpis" id="kpis"></div>
-
-    <div class="grid">
-      <div class="stack">
-        <div class="card stack">
-          <div>
-            <h2>Сотрудники</h2>
-            <div class="muted">Теперь сотрудника можно удалить. Если у него есть записи, приложение спросит подтверждение.</div>
-          </div>
-          <div class="two">
-            <div class="field">
-              <label for="personName">Фамилия / имя</label>
-              <input id="personName" placeholder="Например: Иванов А.А.">
-            </div>
-            <div class="field" style="align-self:end">
-              <button id="addPersonBtn" class="primary" type="button">Добавить</button>
-            </div>
-          </div>
-          <div id="peopleList" class="people"></div>
-        </div>
-
-        <div class="card stack">
-          <div>
-            <h2>Праздники</h2>
-            <div class="muted">Формат: 2026-01-01, каждая дата с новой строки.</div>
-          </div>
-          <div class="field"><textarea id="holidaysInput"></textarea></div>
-          <div class="rowBtns">
-            <button id="saveHolidaysBtn" type="button">Сохранить праздники</button>
-            <button id="loadDefaultHolidaysBtn" type="button">РФ 2026</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="stack">
-        <div class="card stack">
-          <div>
-            <h2>Добавить запись</h2>
-            <div class="muted">Дата теперь текстовая в формате ГГГГ-ММ-ДД, чтобы работало в любом браузере.</div>
-          </div>
-          <div class="modes">
-            <button class="mode active" data-mode="paid" type="button">Платная вахта</button>
-            <button class="mode" data-mode="free" type="button">Бесплатная вахта</button>
-            <button class="mode" data-mode="pg" type="button">ПГ</button>
-            <button class="mode" data-mode="otgul" type="button">Отгул</button>
-          </div>
-          <div class="three">
-            <div class="field"><label for="entryPerson">Сотрудник</label><select id="entryPerson"></select></div>
-            <div class="field"><label for="entryDate">Дата</label><input id="entryDate" type="date" placeholder="2026-04-21" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}"></div>
-            <div class="field"><label for="entryCount">Количество</label><input id="entryCount" type="number" value="1" min="1" step="1"></div>
-          </div>
-          <div class="inlineHelp">Можно выбрать дату в календаре или ввести вручную в формате 2026-04-21.</div>
-          <div class="two">
-            <div class="field"><label for="entryNote">Комментарий</label><input id="entryNote" placeholder="Например: замена / праздник / уточнение"></div>
-            <div class="field"><label>Авто-правило</label><div id="rulePreview" class="note">Выбери дату и тип записи.</div></div>
-          </div>
-          <div class="rowBtns">
-            <button id="addEntryBtn" class="primary" type="button">Сохранить запись</button>
-            <button id="clearAllBtn" type="button">Очистить все записи</button>
-          </div>
-        </div>
-
-        <div class="card stack">
-          <div class="two">
-            <div>
-              <h2>Итоги по людям</h2>
-              <div class="muted">Отдельно платные и бесплатные часы, плюс остаток.</div>
-            </div>
-            <div class="field"><label for="filterPerson">Фильтр</label><select id="filterPerson"></select></div>
-          </div>
-          <div class="tableWrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Человек</th>
-                  <th>Платные</th>
-                  <th>Бесплатные</th>
-                  <th>Отгулы</th>
-                  <th>Ост. платных</th>
-                  <th>Ост. бесплатных</th>
-                  <th>Всего</th>
-                  <th>Сутки/часы</th>
-                </tr>
-              </thead>
-              <tbody id="summaryBody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="card stack">
-          <div>
-            <h2>Журнал</h2>
-            <div class="muted">Записи сортируются по дате. Ошибочные можно удалить.</div>
-          </div>
-          <div class="tableWrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Дата</th>
-                  <th>Человек</th>
-                  <th>Тип</th>
-                  <th>Часы</th>
-                  <th>Комментарий</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="journalBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+    <div class="stack">
+      <div class="card stack"><div><h2>Добавить запись</h2><div class="muted">Дата теперь текстовая в формате ГГГГ-ММ-ДД, чтобы работало в любом браузере.</div></div><div class="modes"><button class="mode active" data-mode="paid" type="button">Платная вахта</button><button class="mode" data-mode="free" type="button">Бесплатная вахта</button><button class="mode" data-mode="pg" type="button">ПГ</button><button class="mode" data-mode="otgul" type="button">Отгул</button></div><div class="three"><div class="field"><label for="entryPerson">Сотрудник</label><select id="entryPerson"></select></div><div class="field"><label for="entryDate">Дата</label><input id="entryDate" type="date" placeholder="2026-04-21" inputmode="numeric" pattern="d{4}-d{2}-d{2}"></div><div class="field"><label for="entryCount">Количество</label><input id="entryCount" type="number" value="1" min="1" step="1"></div></div><div class="inlineHelp">Можно выбрать дату в календаре или ввести вручную в формате 2026-04-21.</div><div class="two"><div class="field"><label for="entryNote">Комментарий</label><input id="entryNote" placeholder="Например: замена / праздник / уточнение"></div><div class="field"><label>Авто-правило</label><div id="rulePreview" class="note">Выбери дату и тип записи.</div></div></div><div class="rowBtns"><button id="addEntryBtn" class="primary" type="button">Сохранить запись</button><button id="clearAllBtn" type="button">Очистить все записи</button></div></div>
+      <div class="card stack"><div class="two"><div><h2>Итоги по людям</h2><div class="muted">Отдельно платные и бесплатные часы, плюс остаток.</div></div><div class="field"><label for="filterPerson">Фильтр</label><select id="filterPerson"></select></div></div><div class="tableWrap"><table><thead><tr><th>Человек</th><th>Платные</th><th>Бесплатные</th><th>Отгулы</th><th>Ост. платных</th><th>Ост. бесплатных</th><th>Всего</th><th>Сутки/часы</th></tr></thead><tbody id="summaryBody"></tbody></table></div></div>
+      <div class="card stack"><div><h2>Журнал</h2><div class="muted">Записи сортируются по дате. Ошибочные можно удалить.</div></div><div class="tableWrap"><table><thead><tr><th>Дата</th><th>Человек</th><th>Тип</th><th>Часы</th><th>Комментарий</th><th></th></tr></thead><tbody id="journalBody"></tbody></table></div></div>
     </div>
   </div>
+</div>
 
-  <script>
-    const LS='vahta210_state';
-    const $=id=>document.getElementById(id);
-    const state={people:[],entries:[],holidays:[],selectedPerson:'',mode:'paid'};
-    const DEFAULT_HOLIDAYS=['2026-01-01','2026-01-02','2026-01-03','2026-01-04','2026-01-05','2026-01-06','2026-01-07','2026-01-08','2026-01-09','2026-01-10','2026-01-11','2026-02-23','2026-03-09','2026-05-01','2026-05-11','2026-06-12','2026-11-04','2026-12-31'];
-
-    function setStatus(t){ $('importStatusBanner').textContent=t; $('importStatus').textContent=t; }
-    function uid(){ return 'id'+Math.random().toString(36).slice(2)+Date.now().toString(36); }
-    function normDate(v){ return String(v||'').slice(0,10); }
-    function hoursByType(type){ return type==='free' ? 8 : type==='otgul' ? 8 : type==='pg' ? 8 : 16; }
-    function save(){ localStorage.setItem(LS, JSON.stringify(state)); }
-    function load(){ const raw=localStorage.getItem(LS); if(raw){ try{ Object.assign(state, JSON.parse(raw)); }catch(e){} } if(!state.holidays.length) state.holidays=[...DEFAULT_HOLIDAYS]; if(!state.mode) state.mode='paid'; }
-
-    function renderAll(){
-      const peopleSorted=[...state.people].sort((a,b)=>a.name.localeCompare(b.name,'ru'));
-      const entriesSorted=[...state.entries].sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-      $('entryPerson').innerHTML=peopleSorted.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
-      $('filterPerson').innerHTML='<option value="">Все</option>'+peopleSorted.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
-      $('personWeekSelect').innerHTML=peopleSorted.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
-      if(!state.selectedPerson && peopleSorted[0]) state.selectedPerson=peopleSorted[0].id;
-      $('entryPerson').value=state.selectedPerson||peopleSorted[0]?.id||'';
-      $('filterPerson').value=state.filterPerson||'';
-      $('personWeekSelect').value=state.selectedPerson||peopleSorted[0]?.id||'';
-      $('personName').value='';
-      $('entryCount').value=1;
-      $('entryNote').value='';
-      $('holidaysInput').value=state.holidays.join('
-');
-      $('kpis').innerHTML=`<div class="kpi"><div class="muted">Сотрудники</div><div class="v">${state.people.length}</div></div><div class="kpi"><div class="muted">Записи</div><div class="v">${state.entries.length}</div></div><div class="kpi"><div class="muted">Праздники</div><div class="v">${state.holidays.length}</div></div><div class="kpi"><div class="muted">Режим</div><div class="v">${state.mode}</div></div>`;
-      $('peopleList').innerHTML=peopleSorted.map(p=>`<div class="person ${p.id===state.selectedPerson?'active':''}"><div class="personTop"><button class="personMain" data-pick="${p.id}" type="button"><span>${p.name}</span><span class="pill">${entriesSorted.filter(x=>x.personId===p.id).length} запис.</span></button><button data-del="${p.id}" type="button">Удалить</button></div></div>`).join('');
-      $('summaryBody').innerHTML=peopleSorted.map(p=>{const pe=entriesSorted.filter(x=>x.personId===p.id); const ph=pe.filter(x=>x.type==='paid').reduce((s,x)=>s+hoursByType(x.type)*Number(x.count||1),0); const fh=pe.filter(x=>x.type==='free').reduce((s,x)=>s+hoursByType(x.type)*Number(x.count||1),0); const oh=pe.filter(x=>x.type==='otgul').reduce((s,x)=>s+hoursByType(x.type)*Number(x.count||1),0); return `<tr><td>${p.name}</td><td>${ph}</td><td>${fh}</td><td>${oh}</td><td>${Math.max(ph-oh,0)}</td><td>${Math.max(fh-oh,0)}</td><td>${ph+fh+oh}</td><td>${Math.floor((ph+fh+oh)/16)} / ${(ph+fh+oh)%16}</td></tr>`}).join('');
-      $('journalBody').innerHTML=entriesSorted.map(x=>`<tr><td>${x.date||''}</td><td>${(peopleSorted.find(p=>p.id===x.personId)||{}).name||''}</td><td><span class="badge ${x.type}">${x.type}</span></td><td>${hoursByType(x.type)*Number(x.count||1)}</td><td>${x.note||''}</td><td><button data-del-entry="${x.id}" type="button">Удалить</button></td></tr>`).join('');
-      const sel=state.selectedPerson||peopleSorted[0]?.id||'';
-      const w=entriesSorted.filter(x=>x.personId===sel);
-      $('personWeekBody').innerHTML=w.map(x=>`<tr><td>${x.date||''}</td><td>${x.type==='paid'?hoursByType(x.type)*Number(x.count||1):0}</td><td>${x.type==='free'?hoursByType(x.type)*Number(x.count||1):0}</td><td>${x.type==='paid'?Math.floor(hoursByType(x.type)*Number(x.count||1)/16)+' / '+(hoursByType(x.type)*Number(x.count||1)%16):''}</td><td>${x.type==='free'?Math.floor(hoursByType(x.type)*Number(x.count||1)/16)+' / '+(hoursByType(x.type)*Number(x.count||1)%16):''}</td></tr>`).join('');
-    }
-
-    function addPerson(){ const name=$('personName').value.trim(); if(!name) return; state.people.push({id:uid(),name}); state.selectedPerson=state.selectedPerson||state.people[0]?.id||''; save(); renderAll(); }
-    function addEntry(){ const pid=$('entryPerson').value; const date=normDate($('entryDate').value); const count=Number($('entryCount').value||1); if(!pid||!date) return; state.entries.push({id:uid(),personId:pid,date,type:state.mode,count,note:$('entryNote').value.trim()}); save(); renderAll(); }
-    function delPerson(id){ if(state.entries.some(e=>e.personId===id)&&!confirm('У сотрудника есть записи. Удалить?')) return; state.people=state.people.filter(p=>p.id!==id); state.entries=state.entries.filter(e=>e.personId!==id); if(state.selectedPerson===id) state.selectedPerson=state.people[0]?.id||''; save(); renderAll(); }
-    function delEntry(id){ state.entries=state.entries.filter(e=>e.id!==id); save(); renderAll(); }
-    function clearAll(){ if(!confirm('Очистить все записи?')) return; state.entries=[]; save(); renderAll(); }
-    function exportJson(){ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='vahta-uchet-v2-2-6.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href); setStatus('Экспорт выполнен'); }
-    function importJson(file){ setStatus('ИМПОРТ СТАТУС: чтение '+file.name+'...'); const reader=new FileReader(); reader.onload=()=>{ try{ setStatus('ИМПОРТ СТАТУС: парсинг JSON...'); const data=JSON.parse(String(reader.result||'')); const people=Array.isArray(data.people)?data.people:[]; const entries=Array.isArray(data.entries)?data.entries:[]; state.people=people.map(p=>({id:String(p.id||uid()),name:String(p.name||'').trim()})).filter(p=>p.name); state.entries=entries.map(x=>({id:String(x.id||uid()),personId:String(x.personId||x.person||''),date:normDate(x.date),type:String(x.type||'paid'),count:Number(x.count||1),note:String(x.note||'')})).filter(x=>x.personId&&x.date); state.holidays=Array.isArray(data.holidays)?data.holidays.map(String):[...DEFAULT_HOLIDAYS]; state.selectedPerson=String(data.selectedPerson||state.people[0]?.id||''); state.mode=String(data.mode||'paid'); save(); setStatus(`ИМПОРТ СТАТУС: выполнен (${state.people.length} сотрудников, ${state.entries.length} записей)`); renderAll(); }catch(e){ setStatus('ИМПОРТ СТАТУС: ошибка - '+e.message); alert('Не удалось импортировать JSON: '+e.message); } }; reader.onerror=()=>setStatus('ИМПОРТ СТАТУС: ошибка чтения файла'); reader.readAsText(file,'utf-8'); }
-    function seed(){ state.people=[{id:'p1',name:'Иванов А.А.'},{id:'p2',name:'Петров П.П.'}]; state.entries=[{id:uid(),personId:'p1',date:'2026-01-01',type:'paid',count:1,note:''},{id:uid(),personId:'p2',date:'2026-01-02',type:'free',count:1,note:''}]; save(); renderAll(); }
-    function loadDefaults(){ state.holidays=[...DEFAULT_HOLIDAYS]; save(); renderAll(); }
-    function wire(){
-      document.addEventListener('click',e=>{
-        const t=e.target;
-        if(t.matches('#addPersonBtn')) addPerson();
-        if(t.matches('#addEntryBtn')) addEntry();
-        if(t.matches('#resetBtn')){ localStorage.removeItem(LS); location.reload(); }
-        if(t.matches('#exportBtn')) exportJson();
-        if(t.matches('#clearAllBtn')) clearAll();
-        if(t.matches('#seedBtn')) seed();
-        if(t.matches('#saveHolidaysBtn')){ state.holidays=String($('holidaysInput').value||'').split(/
+<script>
+const LS='vahta210_state'; const $=id=>document.getElementById(id); const state={people:[],entries:[],holidays:[],selectedPerson:'',mode:'paid'}; const DEFAULT_HOLIDAYS=['2026-01-01','2026-01-02','2026-01-03','2026-01-04','2026-01-05','2026-01-06','2026-01-07','2026-01-08','2026-01-09','2026-01-10','2026-01-11','2026-02-23','2026-03-09','2026-05-01','2026-05-11','2026-06-12','2026-11-04','2026-12-31'];
+function dbg(x){$('debug').textContent=String(x)} function setStatus(t){$('importStatusBanner').textContent=t; $('importStatus').textContent=t; dbg(t)} function uid(){return 'id'+Math.random().toString(36).slice(2)+Date.now().toString(36)} function normDate(v){return String(v||'').slice(0,10)} function hoursByType(type){return type==='free'||type==='otgul'||type==='pg'?8:16} function save(){localStorage.setItem(LS,JSON.stringify(state))} function load(){const raw=localStorage.getItem(LS); if(raw){try{Object.assign(state,JSON.parse(raw))}catch(e){dbg('LS parse error '+e.message)}} if(!state.holidays.length) state.holidays=[...DEFAULT_HOLIDAYS]; if(!state.mode) state.mode='paid'}
+function renderAll(){const ps=[...state.people].sort((a,b)=>a.name.localeCompare(b.name,'ru')); const es=[...state.entries].sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.id).localeCompare(String(b.id))); $('entryPerson').innerHTML=ps.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); $('filterPerson').innerHTML='<option value="">Все</option>'+ps.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); $('personWeekSelect').innerHTML=ps.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); if(!state.selectedPerson&&ps[0]) state.selectedPerson=ps[0].id; $('entryPerson').value=state.selectedPerson||ps[0]?.id||''; $('filterPerson').value=state.filterPerson||''; $('personWeekSelect').value=state.selectedPerson||ps[0]?.id||''; $('personName').value=''; $('entryCount').value=1; $('entryNote').value=''; $('holidaysInput').value=state.holidays.join('
+'); $('kpis').innerHTML=`<div class="kpi"><div class="muted">Сотрудники</div><div class="v">${state.people.length}</div></div><div class="kpi"><div class="muted">Записи</div><div class="v">${state.entries.length}</div></div><div class="kpi"><div class="muted">Праздники</div><div class="v">${state.holidays.length}</div></div><div class="kpi"><div class="muted">Режим</div><div class="v">${state.mode}</div></div>`; $('peopleList').innerHTML=ps.map(p=>`<div class="person ${p.id===state.selectedPerson?'active':''}"><div class="personTop"><button class="personMain" data-pick="${p.id}" type="button"><span>${p.name}</span><span class="pill">${es.filter(x=>x.personId===p.id).length} запис.</span></button><button data-del="${p.id}" type="button">Удалить</button></div></div>`).join(''); $('summaryBody').innerHTML=ps.map(p=>{const pe=es.filter(x=>x.personId===p.id); const ph=pe.filter(x=>x.type==='paid').reduce((s,x)=>s+hoursByType(x.type)*Number(x.count||1),0); const fh=pe.filter(x=>x.type==='free').reduce((s,x)=>s+hoursByType(x.type)*Number(x.count||1),0); const oh=pe.filter(x=>x.type==='otgul').reduce((s,x)=>s+hoursByType(x.type)*Number(x.count||1),0); return `<tr><td>${p.name}</td><td>${ph}</td><td>${fh}</td><td>${oh}</td><td>${Math.max(ph-oh,0)}</td><td>${Math.max(fh-oh,0)}</td><td>${ph+fh+oh}</td><td>${Math.floor((ph+fh+oh)/16)} / ${(ph+fh+oh)%16}</td></tr>`}).join(''); $('journalBody').innerHTML=es.map(x=>`<tr><td>${x.date||''}</td><td>${(ps.find(p=>p.id===x.personId)||{}).name||''}</td><td><span class="badge ${x.type}">${x.type}</span></td><td>${hoursByType(x.type)*Number(x.count||1)}</td><td>${x.note||''}</td><td><button data-del-entry="${x.id}" type="button">Удалить</button></td></tr>`).join(''); const sel=state.selectedPerson||ps[0]?.id||''; const w=es.filter(x=>x.personId===sel); $('personWeekBody').innerHTML=w.map(x=>`<tr><td>${x.date||''}</td><td>${x.type==='paid'?hoursByType(x.type)*Number(x.count||1):0}</td><td>${x.type==='free'?hoursByType(x.type)*Number(x.count||1):0}</td><td>${x.type==='paid'?Math.floor(hoursByType(x.type)*Number(x.count||1)/16)+' / '+(hoursByType(x.type)*Number(x.count||1)%16):''}</td><td>${x.type==='free'?Math.floor(hoursByType(x.type)*Number(x.count||1)/16)+' / '+(hoursByType(x.type)*Number(x.count||1)%16):''}</td></tr>`).join('')}
+function addPerson(){const name=$('personName').value.trim(); if(!name){setStatus('Введите имя'); return} state.people.push({id:uid(),name}); state.selectedPerson=state.selectedPerson||state.people[0]?.id||''; save(); renderAll(); setStatus('Сотрудник добавлен')}
+function addEntry(){const pid=$('entryPerson').value; const date=normDate($('entryDate').value); const count=Number($('entryCount').value||1); if(!pid||!date){setStatus('Не выбраны сотрудник или дата'); return} state.entries.push({id:uid(),personId:pid,date,type:state.mode,count,note:$('entryNote').value.trim()}); save(); renderAll(); setStatus('Запись добавлена')}
+function delPerson(id){if(state.entries.some(e=>e.personId===id)&&!confirm('У сотрудника есть записи. Удалить?')) return; state.people=state.people.filter(p=>p.id!==id); state.entries=state.entries.filter(e=>e.personId!==id); if(state.selectedPerson===id) state.selectedPerson=state.people[0]?.id||''; save(); renderAll(); setStatus('Сотрудник удалён')}
+function delEntry(id){state.entries=state.entries.filter(e=>e.id!==id); save(); renderAll(); setStatus('Запись удалена')}
+function clearAll(){if(!confirm('Очистить все записи?')) return; state.entries=[]; save(); renderAll(); setStatus('Все записи очищены')}
+function exportJson(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='vahta-uchet-v2-2-6.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href); setStatus('Экспорт выполнен')}
+function importJson(file){setStatus('ИМПОРТ: чтение '+file.name+'...'); const r=new FileReader(); r.onload=()=>{try{setStatus('ИМПОРТ: парсинг...'); const d=JSON.parse(String(r.result||'')); const people=Array.isArray(d.people)?d.people:[]; const entries=Array.isArray(d.entries)?d.entries:[]; state.people=people.map(p=>({id:String(p.id||uid()),name:String(p.name||'').trim()})).filter(p=>p.name); state.entries=entries.map(x=>({id:String(x.id||uid()),personId:String(x.personId||x.person||''),date:normDate(x.date),type:String(x.type||'paid'),count:Number(x.count||1),note:String(x.note||'')})).filter(x=>x.personId&&x.date); state.holidays=Array.isArray(d.holidays)?d.holidays.map(String):[...DEFAULT_HOLIDAYS]; state.selectedPerson=String(d.selectedPerson||state.people[0]?.id||''); state.mode=String(d.mode||'paid'); save(); renderAll(); setStatus(`ИМПОРТ: готово (${state.people.length} сотрудников, ${state.entries.length} записей)`)}catch(e){setStatus('ИМПОРТ ОШИБКА: '+e.message)}}; r.onerror=()=>setStatus('ИМПОРТ: ошибка чтения'); r.readAsText(file,'utf-8')}
+function seed(){state.people=[{id:'p1',name:'Иванов А.А.'},{id:'p2',name:'Петров П.П.'}]; state.entries=[{id:uid(),personId:'p1',date:'2026-01-01',type:'paid',count:1,note:''},{id:uid(),personId:'p2',date:'2026-01-02',type:'free',count:1,note:''}]; save(); renderAll(); setStatus('Тестовые данные загружены')}
+function loadDefaults(){state.holidays=[...DEFAULT_HOLIDAYS]; save(); renderAll(); setStatus('Праздники РФ 2026 загружены')}
+function bind(el, fn){ if(!el) return; ['pointerup','click','touchend'].forEach(ev=>el.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); fn(e); }, {passive:false})) }
+function wire(){
+  bind($('addPersonBtn'), addPerson);
+  bind($('addEntryBtn'), addEntry);
+  bind($('resetBtn'), ()=>{localStorage.removeItem(LS); location.reload()});
+  bind($('exportBtn'), exportJson);
+  bind($('clearAllBtn'), clearAll);
+  bind($('seedBtn'), seed);
+  bind($('saveHolidaysBtn'), ()=>{state.holidays=String($('holidaysInput').value||'').split(/
 ?
-/).map(s=>s.trim()).filter(Boolean); save(); renderAll(); }
-        if(t.matches('#loadDefaultHolidaysBtn')) loadDefaults();
-        if(t.matches('#forceRecalcBtn')) renderAll();
-        if(t.matches('[data-pick]')){ state.selectedPerson=t.dataset.pick; save(); renderAll(); }
-        if(t.matches('[data-del]')) delPerson(t.dataset.del);
-        if(t.matches('[data-del-entry]')) delEntry(t.dataset.delEntry);
-        if(t.matches('.mode')){ document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active')); t.classList.add('active'); state.mode=t.dataset.mode; save(); renderAll(); }
-      });
-      $('importFileInput').addEventListener('change',function(){ const f=this.files&&this.files[0]; if(!f) return; importJson(f); this.value=''; });
-      const importBtn=document.getElementById('importBtn'); if(importBtn) importBtn.addEventListener('click',()=>setStatus('ИМПОРТ СТАТУС: выбери JSON файл'));
-    }
-    function boot(){ try{ load(); wire(); renderAll(); setStatus('ИМПОРТ СТАТУС: ожидание файла'); } catch(e){ document.body.innerHTML='<pre style="white-space:pre-wrap;color:red;padding:20px">BOOT ERROR: '+e.stack.replace(/</g,'<')+'</pre>'; } }
-    if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',boot); } else { boot(); }
-  </script>
-
-
-</body></html>
+/).map(s=>s.trim()).filter(Boolean); save(); renderAll(); setStatus('Праздники сохранены')});
+  bind($('loadDefaultHolidaysBtn'), loadDefaults);
+  bind($('forceRecalcBtn'), ()=>renderAll());
+  $('importFileInput').addEventListener('change',function(){const f=this.files&&this.files[0]; if(!f){setStatus('Файл не выбран'); return} importJson(f); this.value=''})
+  const importBtn=document.getElementById('importBtn'); if(importBtn) bind(importBtn, ()=>setStatus('Импорт: выберите JSON'))
+  document.addEventListener('pointerup',e=>{const t=e.target.closest('[data-pick],[data-del],[data-del-entry],.mode'); if(!t) return; if(t.matches('[data-pick]')){state.selectedPerson=t.dataset.pick; save(); renderAll(); setStatus('Сотрудник выбран')} else if(t.matches('[data-del]')) delPerson(t.dataset.del); else if(t.matches('[data-del-entry]')) delEntry(t.dataset.delEntry); else if(t.matches('.mode')){document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active')); t.classList.add('active'); state.mode=t.dataset.mode; save(); renderAll(); setStatus('Режим: '+state.mode)}} , {capture:true})
+}
+function boot(){try{load(); wire(); renderAll(); setStatus('Готово')}catch(e){document.body.innerHTML='<pre style="white-space:pre-wrap;color:red;padding:20px">BOOT ERROR: '+(e&&e.stack?e.stack:e)+'</pre>'}}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot)}else{boot()}
+</script>
+</body>
+</html>
