@@ -207,11 +207,11 @@
           <th>Платн. нар.</th>
           <th>Конверт. (3/ост.)</th>
           <th>у.е. за нед.</th>
-          <th>Беспл., ч</th>
+          <th>Беспл. (сут/ч)</th>
           <th>Отгулы</th>
           <th>Отпуска</th>
           <th>Баланс у.е.</th>
-          <th>Баланс ч</th>
+          <th>Баланс (сут/ч)</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -255,6 +255,17 @@ const RF_2026 = [
   "2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11",
   "2026-06-12","2026-11-04","2026-12-31"
 ];
+
+// ============ ФОРМАТИРОВАНИЕ ============
+// Часы → "X сут Y ч"
+function formatHours(hours) {
+  if (hours === 0) return '0 ч';
+  const s = Math.floor(hours / 24);
+  const h = hours % 24;
+  if (s === 0) return `${h} ч`;
+  if (h === 0) return `${s} сут`;
+  return `${s} сут ${h} ч`;
+}
 
 // ============ СОХРАНЕНИЕ ============
 function save() { localStorage.setItem('vahta_data', JSON.stringify(state)); }
@@ -512,7 +523,6 @@ function calcBalance(person = null) {
       }
     }
 
-    // Обработка отпусков в эту дату
     while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
       vacIdx++;
     }
@@ -584,11 +594,11 @@ function calcWithDetails(person = null) {
     } else if (e.type === 'free') {
       const h = getFreeHours(e.date) * e.count;
       freeHours += h;
-      detail.calcInfo = { kind: 'free', value: `${h}ч`, freeHours };
+      detail.calcInfo = { kind: 'free', value: formatHours(h), freeHours };
     } else if (e.type === 'pg') {
       const h = getPgHours(e.date) * e.count;
       freeHours += h;
-      detail.calcInfo = { kind: 'pg', value: h > 0 ? `${h}ч` : '0ч (будни)', freeHours };
+      detail.calcInfo = { kind: 'pg', value: h > 0 ? formatHours(h) : '0ч (будни)', freeHours };
     } else if (e.type === 'otgul') {
       const results = [];
       for (let i = 0; i < e.count; i++) {
@@ -666,7 +676,7 @@ function renderBalanceCards(b) {
     </div>
     <div class="balance-card">
       <div class="label">Бесплатных часов</div>
-      <div class="value ${freeClass}">${b.freeHours}ч</div>
+      <div class="value ${freeClass}">${formatHours(b.freeHours)}</div>
       <div class="sub">≈ ${Math.floor(b.freeHours / 8)} отгулов</div>
     </div>
     <div class="balance-card">
@@ -780,11 +790,11 @@ function renderWeekly() {
       <td class="type-paid">${paidWeek || '—'}</td>
       <td class="carry-cell">${converted * 3}/${remainder}</td>
       <td class="ue-cell">${weekUE || '—'}</td>
-      <td class="type-free">${freeWeekH || '—'}</td>
+      <td class="type-free">${freeWeekH ? formatHours(freeWeekH) : '—'}</td>
       <td class="type-otgul">${otgulWeek || '—'}</td>
       <td class="type-vacation">${vacWeek || '—'}</td>
       <td class="${totalUE > 0 ? 'type-free' : (totalUE < 0 ? 'type-otgul' : '')}">${totalUE} у.е.</td>
-      <td class="${freeHours > 0 ? 'type-free' : ''}">${freeHours}ч</td>
+      <td class="${freeHours > 0 ? 'type-free' : ''}">${formatHours(freeHours)}</td>
     </tr>`;
   }
 
@@ -815,10 +825,10 @@ function renderJournal() {
       valueCell = `<span class="${typeClass}">${e.count} наряд</span>`;
     } else if (e.type === 'free') {
       const h = getFreeHours(e.date);
-      valueCell = `<span class="${typeClass}">${h * e.count}ч</span>`;
+      valueCell = `<span class="${typeClass}">${formatHours(h * e.count)}</span>`;
     } else if (e.type === 'pg') {
       const h = getPgHours(e.date);
-      valueCell = `<span class="${typeClass}">${h * e.count}ч</span>`;
+      valueCell = `<span class="${typeClass}">${formatHours(h * e.count)}</span>`;
     } else if (e.type === 'otgul') {
       if (d && d.calcInfo) {
         const results = d.calcInfo.results;
