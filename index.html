@@ -70,7 +70,6 @@
   .type-free { color: #34d399; font-weight: 600; }
   .type-pg { color: #a78bfa; font-weight: 600; }
   .type-otgul { color: #f87171; font-weight: 600; }
-  .type-vacation { color: #fb923c; font-weight: 600; }
   .type-otgul.debt {
     color: #fecaca; background: #7f1d1d;
     padding: 2px 6px; border-radius: 3px;
@@ -103,21 +102,6 @@
 
   .carry-cell { font-family: monospace; font-weight: bold; color: #fbbf24; }
   .ue-cell { color: #34d399; font-weight: bold; }
-
-  .vacation-list {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 8px; margin-top: 8px;
-  }
-  .vacation-item {
-    background: #0f172a; border: 1px solid #334155;
-    border-radius: 6px; padding: 8px; font-size: 11px;
-  }
-  .vacation-item .vac-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 4px;
-  }
-  .vacation-item .vac-person { color: #60a5fa; font-weight: bold; }
-  .vacation-item .vac-dates { color: #fb923c; }
 
   @media (max-width: 600px) {
     table { font-size: 11px; }
@@ -153,20 +137,6 @@
     <button class="primary" onclick="saveHolidays()">Сохранить</button>
     <button onclick="loadRF2026()">РФ 2026</button>
   </div>
-</div>
-
-<div class="section">
-  <h2>🏖 Отпуска</h2>
-  <div class="form-row">
-    <select id="vacPerson"></select>
-    <input type="date" id="vacEndDate" title="Дата выхода из отпуска">
-    <input type="number" id="vacDays" value="5" min="1" max="30" title="Количество суток">
-    <button class="primary" onclick="addVacation()">Добавить отпуск</button>
-  </div>
-  <div class="info">
-    💡 Отпуск вычитается из бесплатных часов (24ч = 1 сутки), остаток — из у.е. платных нарядов
-  </div>
-  <div class="vacation-list" id="vacationList"></div>
 </div>
 
 <div class="section">
@@ -209,7 +179,6 @@
           <th>у.е. за нед.</th>
           <th>Беспл. (сут/ч)</th>
           <th>Отгулы</th>
-          <th>Отпуска</th>
           <th>Баланс у.е.</th>
           <th>Баланс (сут/ч)</th>
         </tr>
@@ -242,7 +211,6 @@
 let state = {
   people: [],
   entries: [],
-  vacations: [],
   holidays: [],
   selectedPerson: null
 };
@@ -273,7 +241,6 @@ function load() {
 function renderPeople() {
   const list = document.getElementById('peopleList');
   const sel = document.getElementById('entryPerson');
-  const vacSel = document.getElementById('vacPerson');
   const tabs = document.getElementById('personTabs');
 
   list.innerHTML = state.people.map(p => `
@@ -287,7 +254,6 @@ function renderPeople() {
     state.people.map(p => `<option value="${escapeHtml(p)}" ${state.selectedPerson === p ? 'selected' : ''}>${escapeHtml(p)}</option>`).join('');
 
   sel.innerHTML = options;
-  vacSel.innerHTML = options;
 
   tabs.innerHTML = `<div class="tab ${!state.selectedPerson ? 'active' : ''}" onclick="selectPerson(null)">Все</div>` +
     state.people.map(p => `<div class="tab ${state.selectedPerson === p ? 'active' : ''}" onclick="selectPerson('${escapeHtml(p)}')">${escapeHtml(p)}</div>`).join('');
@@ -307,7 +273,6 @@ function deletePerson(name) {
   if (!confirm(`Удалить ${name} и все его записи?`)) return;
   state.people = state.people.filter(p => p !== name);
   state.entries = state.entries.filter(e => e.person !== name);
-  state.vacations = state.vacations.filter(v => v.person !== name);
   if (state.selectedPerson === name) state.selectedPerson = null;
   save(); render();
 }
@@ -325,55 +290,6 @@ function loadRF2026() {
 }
 function renderHolidays() {
   document.getElementById('holidaysInput').value = state.holidays.join('\n');
-}
-
-function addVacation() {
-  const person = document.getElementById('vacPerson').value;
-  const endDate = document.getElementById('vacEndDate').value;
-  const days = parseInt(document.getElementById('vacDays').value) || 5;
-
-  if (!person) return alert('Выберите сотрудника');
-  if (!endDate) return alert('Выберите дату выхода');
-
-  state.vacations.push({
-    id: 'vac' + Date.now() + Math.random().toString(36).substr(2, 5),
-    person, endDate, days
-  });
-  save(); render();
-}
-
-function deleteVacation(id) {
-  if (!confirm('Удалить отпуск?')) return;
-  state.vacations = state.vacations.filter(v => v.id !== id);
-  save(); render();
-}
-
-function renderVacations() {
-  const list = document.getElementById('vacationList');
-  let vacations = state.vacations.slice();
-  if (state.selectedPerson) vacations = vacations.filter(v => v.person === state.selectedPerson);
-
-  vacations.sort((a, b) => b.endDate.localeCompare(a.endDate));
-
-  list.innerHTML = vacations.map(v => {
-    const startDate = getStartDate(v.endDate, v.days);
-    return `
-      <div class="vacation-item">
-        <div class="vac-header">
-          <span class="vac-person">${escapeHtml(v.person)}</span>
-          <button class="small danger" onclick="deleteVacation('${v.id}')">×</button>
-        </div>
-        <div class="vac-dates">${startDate} → ${v.endDate}</div>
-        <div>${v.days} сут</div>
-      </div>
-    `;
-  }).join('') || '<div style="color:#94a3b8; font-size:11px;">Нет отпусков</div>';
-}
-
-function getStartDate(endDate, days) {
-  const d = new Date(endDate + 'T00:00:00');
-  d.setDate(d.getDate() - days + 1);
-  return d.toISOString().slice(0, 10);
 }
 
 function addEntry() {
@@ -434,15 +350,17 @@ function getWeekNumber(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
   const year = d.getFullYear();
   const jan1 = new Date(year, 0, 1);
-  const jan1Day = jan1.getDay();
   
-  const firstSunday = new Date(year, 0, 1 + ((7 - jan1Day) % 7));
+  const firstMonday = new Date(jan1);
+  const dayOfWeek = jan1.getDay();
+  const daysToMonday = dayOfWeek === 0 ? 1 : (dayOfWeek === 1 ? 0 : (8 - dayOfWeek));
+  firstMonday.setDate(jan1.getDate() + daysToMonday);
   
-  if (d <= firstSunday) {
+  if (d < firstMonday) {
     return `${year}-1`;
   }
   
-  const daysSinceMonday = Math.floor((d - firstSunday - 86400000) / 86400000);
+  const daysSinceMonday = Math.floor((d - firstMonday) / 86400000);
   const weekNum = Math.floor(daysSinceMonday / 7) + 2;
   
   return `${year}-${weekNum}`;
@@ -451,30 +369,36 @@ function getWeekNumber(dateStr) {
 function getWeekDates(weekStr) {
   const [year, week] = weekStr.split('-').map(Number);
   
+  const jan1 = new Date(year, 0, 1);
+  const dayOfWeek = jan1.getDay();
+  const daysToMonday = dayOfWeek === 0 ? 1 : (dayOfWeek === 1 ? 0 : (8 - dayOfWeek));
+  const firstMonday = new Date(jan1);
+  firstMonday.setDate(jan1.getDate() + daysToMonday);
+  
+  let startDate, endDate;
+  
   if (week === 1) {
-    const jan1 = new Date(year, 0, 1);
-    const jan1Day = jan1.getDay();
-    const firstSunday = new Date(year, 0, 1 + ((7 - jan1Day) % 7));
-    return {
-      start: jan1.toISOString().slice(0, 10),
-      end: firstSunday.toISOString().slice(0, 10)
-    };
+    startDate = jan1;
+    const firstSunday = new Date(firstMonday);
+    firstSunday.setDate(firstMonday.getDate() - 1);
+    endDate = firstSunday;
+  } else {
+    startDate = new Date(firstMonday);
+    startDate.setDate(firstMonday.getDate() + (week - 2) * 7);
+    endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
   }
   
-  const jan1 = new Date(year, 0, 1);
-  const jan1Day = jan1.getDay();
-  const firstSunday = new Date(year, 0, 1 + ((7 - jan1Day) % 7));
-  const firstMonday = new Date(firstSunday);
-  firstMonday.setDate(firstSunday.getDate() + 1);
-  
-  const startDate = new Date(firstMonday);
-  startDate.setDate(firstMonday.getDate() + (week - 2) * 7);
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 6);
+  const fmt = d => {
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
   
   return {
-    start: startDate.toISOString().slice(0, 10),
-    end: endDate.toISOString().slice(0, 10)
+    start: fmt(startDate),
+    end: fmt(endDate)
   };
 }
 
@@ -488,16 +412,8 @@ function getSortedEntries(person = null) {
   return entries;
 }
 
-function getSortedVacations(person = null) {
-  let vacations = state.vacations.slice();
-  if (person) vacations = vacations.filter(v => v.person === person);
-  vacations.sort((a, b) => a.endDate.localeCompare(b.endDate));
-  return vacations;
-}
-
 function calcBalance(person = null) {
   const entries = getSortedEntries(person);
-  const vacations = getSortedVacations(person);
 
   let paidCount = 0;
   let freeHours = 0;
@@ -506,7 +422,6 @@ function calcBalance(person = null) {
   let debtCount = 0;
   let currentWeek = null;
   let totalPaidAll = 0;
-  let vacIdx = 0;
 
   for (const e of entries) {
     const week = getWeekNumber(e.date);
@@ -539,28 +454,6 @@ function calcBalance(person = null) {
         }
       }
     }
-
-    while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
-      vacIdx++;
-    }
-    while (vacIdx < vacations.length && vacations[vacIdx].endDate === e.date) {
-      const vac = vacations[vacIdx];
-      const vacHours = vac.days * 24;
-      if (freeHours >= vacHours) {
-        freeHours -= vacHours;
-      } else {
-        const remainingHours = vacHours - freeHours;
-        freeHours = 0;
-        const remainingDays = Math.ceil(remainingHours / 24);
-        const availableUE = paidUE - paidUEUsed;
-        if (availableUE >= remainingDays) {
-          paidUEUsed += remainingDays;
-        } else {
-          debtCount += remainingDays;
-        }
-      }
-      vacIdx++;
-    }
   }
 
   const finalConverted = Math.floor(paidCount / 3);
@@ -583,14 +476,12 @@ function calcBalance(person = null) {
 
 function calcWithDetails(person = null) {
   const entries = getSortedEntries(person);
-  const vacations = getSortedVacations(person);
 
   let paidCount = 0;
   let freeHours = 0;
   let paidUE = 0;
   let paidUEUsed = 0;
   let currentWeek = null;
-  let vacIdx = 0;
 
   const details = [];
 
@@ -644,7 +535,6 @@ function calcWithDetails(person = null) {
 function render() {
   renderPeople();
   renderHolidays();
-  renderVacations();
   renderBalance();
   renderWeekly();
   renderJournal();
@@ -722,12 +612,10 @@ function renderWeekly() {
   });
 
   const allSorted = getSortedEntries(state.selectedPerson);
-  const vacations = getSortedVacations(state.selectedPerson);
 
   let paidCount = 0, freeHours = 0, paidUE = 0, paidUEUsed = 0, debtCount = 0;
   let currentWeek = null;
   let idx = 0;
-  let vacIdx = 0;
 
   let html = '';
 
@@ -759,28 +647,6 @@ function renderWeekly() {
         }
       }
 
-      while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
-        vacIdx++;
-      }
-      while (vacIdx < vacations.length && vacations[vacIdx].endDate === e.date) {
-        const vac = vacations[vacIdx];
-        const vacHours = vac.days * 24;
-        if (freeHours >= vacHours) {
-          freeHours -= vacHours;
-        } else {
-          const remainingHours = vacHours - freeHours;
-          freeHours = 0;
-          const remainingDays = Math.ceil(remainingHours / 24);
-          const availableUE = paidUE - paidUEUsed;
-          if (availableUE >= remainingDays) {
-            paidUEUsed += remainingDays;
-          } else {
-            debtCount += remainingDays;
-          }
-        }
-        vacIdx++;
-      }
-
       idx++;
     }
 
@@ -789,18 +655,12 @@ function renderWeekly() {
     const remainder = paidCount % 3;
 
     const weekEntries = weekMap[week];
-    let paidWeek = 0, freeWeekH = 0, otgulWeek = 0, vacWeek = 0;
+    let paidWeek = 0, freeWeekH = 0, otgulWeek = 0;
     for (const e of weekEntries) {
       if (e.type === 'paid') paidWeek += e.count;
       else if (e.type === 'free') freeWeekH += getFreeHours(e.date) * e.count;
       else if (e.type === 'pg') freeWeekH += getPgHours(e.date) * e.count;
       else if (e.type === 'otgul') otgulWeek += e.count;
-    }
-
-    for (const v of vacations) {
-      if (getWeekNumber(v.endDate) === week) {
-        vacWeek += v.days;
-      }
     }
 
     const totalUE = paidUE - paidUEUsed;
@@ -812,13 +672,12 @@ function renderWeekly() {
       <td class="ue-cell">${weekUE || '—'}</td>
       <td class="type-free">${freeWeekH ? formatHours(freeWeekH) : '—'}</td>
       <td class="type-otgul">${otgulWeek || '—'}</td>
-      <td class="type-vacation">${vacWeek || '—'}</td>
       <td class="${totalUE > 0 ? 'type-free' : (totalUE < 0 ? 'type-otgul' : '')}">${totalUE} у.е.</td>
       <td class="${freeHours > 0 ? 'type-free' : ''}">${formatHours(freeHours)}</td>
     </tr>`;
   }
 
-  tbody.innerHTML = html || '<tr><td colspan="9" style="text-align:center;color:#94a3b8;">Нет данных</td></tr>';
+  tbody.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#94a3b8;">Нет данных</td></tr>';
 }
 
 function renderJournal() {
@@ -909,17 +768,11 @@ function importData(event) {
         count: parseInt(getVal(e, 'count')) || 1,
         note: trim(getVal(e, 'note'))
       })).filter(e => e.id && e.person && e.date && e.type);
-      state.vacations = (getVal(data, 'vacations') || []).map(v => ({
-        id: trim(getVal(v, 'id')),
-        person: trim(getVal(v, 'person')),
-        endDate: trim(getVal(v, 'endDate')),
-        days: parseInt(getVal(v, 'days')) || 5
-      })).filter(v => v.id && v.person && v.endDate);
       state.holidays = (getVal(data, 'holidays') || []).map(trim).filter(Boolean);
       state.selectedPerson = trim(getVal(data, 'selectedPerson')) || null;
 
       save(); render();
-      alert(`Импортировано: ${state.people.length} сотр., ${state.entries.length} записей, ${state.vacations.length} отпусков`);
+      alert(`Импортировано: ${state.people.length} сотр., ${state.entries.length} записей`);
     } catch (err) {
       alert('Ошибка: ' + err.message);
     }
@@ -930,7 +783,7 @@ function importData(event) {
 
 function resetAll() {
   if (!confirm('Точно удалить ВСЕ данные?')) return;
-  state = { people: [], entries: [], vacations: [], holidays: [], selectedPerson: null };
+  state = { people: [], entries: [], holidays: [], selectedPerson: null };
   save(); render();
 }
 
