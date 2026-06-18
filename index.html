@@ -259,15 +259,15 @@
         const deduct = 8 * (e.count || 1);
         weeks[key].otgul += deduct;
         // 🔥 НОВАЯ ЛОГИКА: Если бесплатных >= 8, вычитаем из них. Если < 8, не трогаем бесплатные, вычитаем всё из платных.
-        if (cumFree >= deduct) {
-          cumFree -= deduct;
-        } else {
-          cumPaid = Math.max(0, cumPaid - deduct);
-        }
-      }
-      weeks[key].cumPaid = cumPaid;
-      weeks[key].cumFree = cumFree;
-    });
+       if (cumFree >= deduct) {
+    cumFree -= deduct;
+} else {
+    const remainder = deduct - cumFree;
+    cumFree = 0;
+    cumPaid = Math.max(0, cumPaid - remainder);
+}
+
+//обновление по вычету
 
     tbody.innerHTML = Object.keys(weeks).sort().map(k => {
       const w = weeks[k];
