@@ -239,7 +239,6 @@
 </div>
 
 <script>
-// ============ СОСТОЯНИЕ ============
 let state = {
   people: [],
   entries: [],
@@ -256,8 +255,6 @@ const RF_2026 = [
   "2026-06-12","2026-11-04","2026-12-31"
 ];
 
-// ============ ФОРМАТИРОВАНИЕ ============
-// Часы → "X сут Y ч"
 function formatHours(hours) {
   if (hours === 0) return '0 ч';
   const s = Math.floor(hours / 24);
@@ -267,14 +264,12 @@ function formatHours(hours) {
   return `${s} сут ${h} ч`;
 }
 
-// ============ СОХРАНЕНИЕ ============
 function save() { localStorage.setItem('vahta_data', JSON.stringify(state)); }
 function load() {
   const d = localStorage.getItem('vahta_data');
   if (d) { try { state = JSON.parse(d); } catch(e) {} }
 }
 
-// ============ ЛЮДИ ============
 function renderPeople() {
   const list = document.getElementById('peopleList');
   const sel = document.getElementById('entryPerson');
@@ -319,7 +314,6 @@ function deletePerson(name) {
 
 function selectPerson(p) { state.selectedPerson = p; save(); render(); }
 
-// ============ ПРАЗДНИКИ ============
 function saveHolidays() {
   const txt = document.getElementById('holidaysInput').value;
   state.holidays = txt.split('\n').map(s => s.trim()).filter(Boolean);
@@ -333,7 +327,6 @@ function renderHolidays() {
   document.getElementById('holidaysInput').value = state.holidays.join('\n');
 }
 
-// ============ ОТПУСКА ============
 function addVacation() {
   const person = document.getElementById('vacPerson').value;
   const endDate = document.getElementById('vacEndDate').value;
@@ -383,7 +376,6 @@ function getStartDate(endDate, days) {
   return d.toISOString().slice(0, 10);
 }
 
-// ============ ЗАПИСИ ============
 function addEntry() {
   const type = document.querySelector('input[name="entryType"]:checked').value;
   const person = document.getElementById('entryPerson').value;
@@ -408,7 +400,6 @@ function deleteEntry(id) {
   save(); render();
 }
 
-// ============ РАСЧЁТ ============
 function getDayOfWeek(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
   return d.getDay();
@@ -441,20 +432,46 @@ function getPgHours(dateStr) {
 
 function getWeekNumber(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
-  const onejan = new Date(d.getFullYear(), 0, 1);
-  const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-  return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`;
+  const year = d.getFullYear();
+  const jan1 = new Date(year, 0, 1);
+  const jan1Day = jan1.getDay();
+  
+  const firstSunday = new Date(year, 0, 1 + ((7 - jan1Day) % 7));
+  
+  if (d <= firstSunday) {
+    return `${year}-1`;
+  }
+  
+  const daysSinceMonday = Math.floor((d - firstSunday - 86400000) / 86400000);
+  const weekNum = Math.floor(daysSinceMonday / 7) + 2;
+  
+  return `${year}-${weekNum}`;
 }
 
 function getWeekDates(weekStr) {
-  const [year, week] = weekStr.split('-W').map(Number);
-  const onejan = new Date(year, 0, 1);
-  const firstMonday = new Date(onejan);
-  firstMonday.setDate(onejan.getDate() + ((8 - onejan.getDay()) % 7));
+  const [year, week] = weekStr.split('-').map(Number);
+  
+  if (week === 1) {
+    const jan1 = new Date(year, 0, 1);
+    const jan1Day = jan1.getDay();
+    const firstSunday = new Date(year, 0, 1 + ((7 - jan1Day) % 7));
+    return {
+      start: jan1.toISOString().slice(0, 10),
+      end: firstSunday.toISOString().slice(0, 10)
+    };
+  }
+  
+  const jan1 = new Date(year, 0, 1);
+  const jan1Day = jan1.getDay();
+  const firstSunday = new Date(year, 0, 1 + ((7 - jan1Day) % 7));
+  const firstMonday = new Date(firstSunday);
+  firstMonday.setDate(firstSunday.getDate() + 1);
+  
   const startDate = new Date(firstMonday);
-  startDate.setDate(firstMonday.getDate() + (week - 1) * 7);
+  startDate.setDate(firstMonday.getDate() + (week - 2) * 7);
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
+  
   return {
     start: startDate.toISOString().slice(0, 10),
     end: endDate.toISOString().slice(0, 10)
@@ -624,7 +641,6 @@ function calcWithDetails(person = null) {
   return details;
 }
 
-// ============ РЕНДЕР ============
 function render() {
   renderPeople();
   renderHolidays();
@@ -699,7 +715,11 @@ function renderWeekly() {
     if (!weekMap[w]) { weekMap[w] = []; weekOrder.push(w); }
     weekMap[w].push(e);
   }
-  weekOrder.sort();
+  weekOrder.sort((a, b) => {
+    const [ya, wa] = a.split('-').map(Number);
+    const [yb, wb] = b.split('-').map(Number);
+    return ya !== yb ? ya - yb : wa - wb;
+  });
 
   const allSorted = getSortedEntries(state.selectedPerson);
   const vacations = getSortedVacations(state.selectedPerson);
@@ -857,7 +877,6 @@ function renderJournal() {
   tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">Нет записей</td></tr>';
 }
 
-// ============ ЭКСПОРТ/ИМПОРТ ============
 function exportData() {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -922,7 +941,6 @@ function escapeHtml(s) {
   }[c]));
 }
 
-// ============ СТАРТ ============
 load();
 if (state.people.length === 0) {
   state.people = ["ГАВ","МАН","ЩВМ","НСМ","ВРВ","ЧИП","МАВ","СНВ","ТАА"];
