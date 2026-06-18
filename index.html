@@ -1,357 +1,868 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Учёт вахт</title>
-  <style>
-    :root { --bg: #f4f5f7; --card: #fff; --line: #dcdce1; --text: #1a1a1a; --muted: #6b7280; --accent: #2563eb; --accentBg: #eff6ff; --red: #dc2626; --green: #16a34a; --orange: #ea580c; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
-    h1, h2 { margin: 0 0 10px; }
-    .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-    .btns { display: flex; gap: 8px; flex-wrap: wrap; }
-    button, .btn { padding: 8px 14px; border: 1px solid var(--line); background: var(--card); border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
-    button:hover { background: #f3f4f6; }
-    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-    button.danger { color: var(--red); border-color: #fecaca; background: #fef2f2; }
-    button.danger:hover { background: #fee2e2; }
-    .grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-    label { font-size: 13px; font-weight: 600; color: var(--muted); }
-    input, select, textarea { padding: 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 14px; }
-    textarea { min-height: 80px; resize: vertical; }
-    .row { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
-    .modes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-    .mode { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line); background: var(--card); cursor: pointer; }
-    .mode.active { background: var(--accentBg); border-color: var(--accent); color: var(--accent); font-weight: 500; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
-    th { color: var(--muted); font-weight: 600; }
-    .people-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-    .person-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: #f9fafb; }
-    .badge { font-weight: bold; display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 12px; }
-    .paid { color: var(--accent); background: var(--accentBg); }
-    .free { color: var(--green); background: #f0fdf4; }
-    .otgul { color: var(--orange); background: #fff7ed; }
-    .pg { color: #7c3aed; background: #f5f3ff; }
-    .del-btn { padding: 4px 8px; font-size: 12px; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; border-radius: 6px; cursor: pointer; }
-    #importStatus { margin-top: 6px; font-size: 13px; min-height: 18px; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учёт вахт</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 12px;
+    font-size: 14px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 16px;
+    color: #60a5fa;
+    font-size: 20px;
+  }
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    justify-content: center;
+  }
+  button {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+  }
+  button:hover { background: #334155; }
+  button.primary { background: #2563eb; border-color: #2563eb; }
+  button.primary:hover { background: #1d4ed8; }
+  button.danger { background: #dc2626; border-color: #dc2626; }
+  button.danger:hover { background: #b91c1c; }
+  button.small { padding: 4px 8px; font-size: 11px; }
+
+  .section {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid #334155;
+  }
+  .section h2 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #60a5fa;
+  }
+
+  input, select, textarea {
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+  }
+
+  .people-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .person-chip {
+    background: #334155;
+    padding: 5px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .person-chip.active {
+    background: #2563eb;
+    color: white;
+  }
+  .person-chip .del {
+    cursor: pointer;
+    color: #f87171;
+    font-weight: bold;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .radio-group {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .radio-group label {
+    background: #334155;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    border: 1px solid transparent;
+  }
+  .radio-group input[type="radio"] { display: none; }
+  .radio-group input[type="radio"]:checked + span {
+    color: #60a5fa;
+    font-weight: bold;
+  }
+  .radio-group label:has(input:checked) {
+    background: #1e40af;
+    border-color: #2563eb;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  th {
+    background: #334155;
+    padding: 8px 6px;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+  td {
+    padding: 6px;
+    border-bottom: 1px solid #334155;
+  }
+  tr:hover { background: #1e293b; }
+
+  .type-paid { color: #fbbf24; font-weight: 600; }
+  .type-free { color: #34d399; font-weight: 600; }
+  .type-pg { color: #a78bfa; font-weight: 600; }
+  .type-otgul { color: #f87171; font-weight: 600; }
+  .type-otgul.debt { color: #dc2626; background: #7f1d1d; padding: 2px 6px; border-radius: 3px; }
+
+  .balance-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .balance-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .balance-card .label {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+  }
+  .balance-card .value {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .balance-card .value.positive { color: #34d399; }
+  .balance-card .value.negative { color: #f87171; }
+  .balance-card .value.neutral { color: #fbbf24; }
+  .balance-card .sub {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #334155;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .tab.active { background: #2563eb; }
+
+  .modal-bg {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    border: 1px solid #334155;
+  }
+  .modal h3 {
+    color: #60a5fa;
+    margin-bottom: 10px;
+  }
+  textarea { min-height: 120px; font-family: monospace; font-size: 11px; }
+
+  .info {
+    background: #0f172a;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    border-left: 3px solid #2563eb;
+  }
+
+  @media (max-width: 600px) {
+    table { font-size: 11px; }
+    th, td { padding: 4px; }
+    .balance-card .value { font-size: 15px; }
+  }
+</style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <h1>📊 Учёт вахт</h1>
-    <div class="btns">
-      <button onclick="exportData()">📤 Экспорт JSON</button>      <label class="btn primary" for="importFile">📥 Импорт JSON</label>
-      <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importData(this)">
-      <button class="danger" onclick="resetAll()">🗑 Сбросить всё</button>
-    </div>
+
+<h1>📊 Учёт вахт</h1>
+
+<div class="toolbar">
+  <button onclick="exportData()">📤 Экспорт JSON</button>
+  <button onclick="document.getElementById('importFile').click()">📥 Импорт JSON</button>
+  <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  <button class="danger" onclick="resetAll()">🗑 Сбросить всё</button>
+</div>
+
+<div class="section">
+  <h2>👥 Сотрудники</h2>
+  <div class="people-list" id="peopleList"></div>
+  <div class="form-row">
+    <input type="text" id="newPerson" placeholder="ФИО нового сотрудника">
+    <button class="primary" onclick="addPerson()">Добавить</button>
   </div>
-  <div id="importStatus" style="margin-bottom:10px; color:#6b7280"></div>
+</div>
 
-  <div class="grid">
-    <div>
-      <div class="card">
-        <h2>👥 Сотрудники</h2>
-        <div class="row" style="margin-bottom:10px">
-          <div class="field" style="flex:1"><input id="newPersonName" placeholder="Фамилия И.О."></div>
-          <button class="primary" onclick="addPerson()">Добавить</button>
-        </div>
-        <div id="peopleList" class="people-list"></div>
-      </div>
+<div class="section">
+  <h2>🎉 Праздники</h2>
+  <textarea id="holidaysInput" placeholder="Формат: ГГГГ-ММ-ДД, каждая с новой строки"></textarea>
+  <div style="display:flex; gap:8px; margin-top:8px;">
+    <button class="primary" onclick="saveHolidays()">Сохранить</button>
+    <button onclick="loadRF2026()">РФ 2026</button>
+  </div>
+</div>
 
-      <div class="card">
-        <h2>🎉 Праздники</h2>
-        <div class="muted" style="font-size:12px; margin-bottom:6px">Формат: ГГГГ-ММ-ДД, каждая с новой строки</div>
-        <textarea id="holidaysInput"></textarea>
-        <div class="btns" style="margin-top:8px">
-          <button onclick="saveHolidays()">Сохранить</button>
-          <button onclick="loadDefaultHolidays()">РФ 2026</button>
-        </div>
-      </div>
-    </div>
+<div class="section">
+  <h2>➕ Добавить запись</h2>
+  <div class="radio-group" id="typeGroup">
+    <label><input type="radio" name="entryType" value="paid" checked><span>Платная</span></label>
+    <label><input type="radio" name="entryType" value="free"><span>Бесплатная</span></label>
+    <label><input type="radio" name="entryType" value="pg"><span>ПГ</span></label>
+    <label><input type="radio" name="entryType" value="otgul"><span>Отгул</span></label>
+  </div>
+  <div class="form-row">
+    <select id="entryPerson"></select>
+    <input type="date" id="entryDate">
+    <input type="number" id="entryCount" value="1" min="1" max="10">
+    <input type="text" id="entryNote" placeholder="Комментарий">
+  </div>
+  <button class="primary" onclick="addEntry()">Сохранить запись</button>
+  <div class="info" style="margin-top:8px;">
+    💡 Платные: 3 наряда = 2 у.е. (отгула). Бесплатные: Пн-Чт 8ч, Пт 12ч, Сб 20ч, Вс 12ч. ПГ в выходной/праздник = 8ч. Отгул списывает сначала бесплатные часы, затем у.е.
+  </div>
+</div>
 
-    <div>
-      <div class="card">
-        <h2>➕ Добавить запись</h2>
-        <div class="modes">
-          <div class="mode active" data-type="paid" onclick="setMode(this)">Платная</div>
-          <div class="mode" data-type="free" onclick="setMode(this)">Бесплатная</div>
-          <div class="mode" data-type="pg" onclick="setMode(this)">ПГ</div>
-          <div class="mode" data-type="otgul" onclick="setMode(this)">Отгул</div>
-        </div>
-        <div class="row">
-          <div class="field" style="flex:1"><label>Сотрудник</label><select id="entryPerson"></select></div>
-          <div class="field"><label>Дата</label><input type="date" id="entryDate"></div>
-          <div class="field" style="width:80px"><label>Кол-во</label><input type="number" id="entryCount" value="1" min="1"></div>
-        </div>
-        <div class="field"><label>Комментарий</label><input id="entryNote" placeholder="Необязательно"></div>
-        <button class="primary" style="width:100%; margin-top:8px" onclick="addEntry()">Сохранить запись</button>
-      </div>
+<div class="section">
+  <h2>📊 Баланс</h2>
+  <div class="tabs" id="personTabs"></div>
+  <div class="balance-box" id="balanceBox"></div>
+</div>
 
-      <div class="card">
-        <h2>📅 Недельный баланс</h2>
-        <div class="row" style="margin-bottom:10px">          <div class="field" style="flex:1"><label>Выбрать сотрудника</label><select id="weekFilterPerson" onchange="renderWeeklyTable()"></select></div>
-        </div>
-        <div style="overflow:auto">
-          <table>
-            <thead><tr><th>Неделя</th><th>Платные, ч</th><th>Бесплатные, ч</th><th>Отгул, ч</th><th>Платные, сут/ч</th><th>Бесплатные, сут/ч</th></tr></thead>
-            <tbody id="weekTableBody"></tbody>
-          </table>
-        </div>
-      </div>
+<div class="section">
+  <h2>📅 Недельный баланс</h2>
+  <div style="overflow-x: auto;">
+    <table id="weeklyTable">
+      <thead>
+        <tr>
+          <th>Неделя</th>
+          <th>Платн. нар.</th>
+          <th>Беспл., ч</th>
+          <th>Отгулы</th>
+          <th>Баланс у.е.</th>
+          <th>Баланс ч</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
 
-      <div class="card">
-        <h2>📒 Журнал</h2>
-        <div style="overflow:auto; max-height:400px">
-          <table>
-            <thead><tr><th>Дата</th><th>Сотрудник</th><th>Тип</th><th>Часы</th><th>Прим.</th><th>Действие</th></tr></thead>
-            <tbody id="journalBody"></tbody>
-          </table>
-        </div>
-      </div>
+<div class="section">
+  <h2>📒 Журнал</h2>
+  <div style="overflow-x: auto;">
+    <table id="journalTable">
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>Сотрудник</th>
+          <th>Тип</th>
+          <th>Значение</th>
+          <th>Прим.</th>
+          <th>Действие</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+      <button onclick="closeModal()">Закрыть</button>
     </div>
   </div>
 </div>
 
 <script>
-
-// Перехват ошибок и вывод на экран
-window.onerror = function(msg, url, line) {
-    alert('Ошибка: ' + msg + '\nСтрока: ' + line);
-    return false;
+// ============ СОСТОЯНИЕ ============
+let state = {
+  people: [],
+  entries: [],
+  holidays: [],
+  selectedPerson: null
 };
 
-  // Хранилище данных
-  let DB = { people: [], holidays: [], entries: [] };
-  let currentMode = 'paid';
+const RF_2026 = [
+  "2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05",
+  "2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11",
+  "2026-02-23","2026-03-09",
+  "2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11",
+  "2026-06-12","2026-11-04","2026-12-31"
+];
 
-  // Безопасный парсер JSON (убирает пробелы в ключах и значениях)
-  function cleanObject(obj) {
-    if (!obj || typeof obj !== 'object') return obj;
-    const clean = {};
-    for (const k in obj) {
-      const cleanK = k.trim();
-      clean[cleanK] = Array.isArray(obj[k]) ? obj[k].map(item => typeof item === 'string' ? item.trim() : cleanObject(item)) : cleanObject(obj[k]);
-    }
-    return clean;
+// ============ СОХРАНЕНИЕ ============
+function save() {
+  localStorage.setItem('vahta_data', JSON.stringify(state));
+}
+function load() {
+  const d = localStorage.getItem('vahta_data');
+  if (d) {
+    try { state = JSON.parse(d); } catch(e) {}
   }
+}
 
-  // Загрузка из localStorage при старте
-  function init() {
-    const saved = localStorage.getItem('vahtaDB');
-    if (saved) { try { DB = cleanObject(JSON.parse(saved)); } catch(e) {} }
-    else { loadDefaultHolidays(); }
-    
-    // Делегирование событий для кнопок удаления
-    document.getElementById('journalBody').addEventListener('click', (e) => {
-      const btn = e.target.closest('.del-btn');
-      if (btn) deleteEntry(btn.dataset.id);
-    });
-    renderAll();
+// ============ ЛЮДИ ============
+function renderPeople() {
+  const list = document.getElementById('peopleList');
+  const sel = document.getElementById('entryPerson');
+  const tabs = document.getElementById('personTabs');
+
+  list.innerHTML = state.people.map(p => `
+    <div class="person-chip ${state.selectedPerson === p ? 'active' : ''}" onclick="selectPerson('${escapeHtml(p)}')">
+      ${escapeHtml(p)}
+      <span class="del" onclick="event.stopPropagation(); deletePerson('${escapeHtml(p)}')">×</span>
+    </div>
+  `).join('');
+
+  sel.innerHTML = '<option value="">Выберите сотрудника</option>' +
+    state.people.map(p => `<option value="${escapeHtml(p)}" ${state.selectedPerson === p ? 'selected' : ''}>${escapeHtml(p)}</option>`).join('');
+
+  tabs.innerHTML = `<div class="tab ${!state.selectedPerson ? 'active' : ''}" onclick="selectPerson(null)">Все</div>` +
+    state.people.map(p => `<div class="tab ${state.selectedPerson === p ? 'active' : ''}" onclick="selectPerson('${escapeHtml(p)}')">${escapeHtml(p)}</div>`).join('');
+}
+
+function addPerson() {
+  const inp = document.getElementById('newPerson');
+  const name = inp.value.trim();
+  if (!name) return alert('Введите имя');
+  if (state.people.includes(name)) return alert('Уже есть');
+  state.people.push(name);
+  inp.value = '';
+  save(); render();
+}
+
+function deletePerson(name) {
+  if (!confirm(`Удалить ${name} и все его записи?`)) return;
+  state.people = state.people.filter(p => p !== name);
+  state.entries = state.entries.filter(e => e.person !== name);
+  if (state.selectedPerson === name) state.selectedPerson = null;
+  save(); render();
+}
+
+function selectPerson(p) {
+  state.selectedPerson = p;
+  save(); render();
+}
+
+// ============ ПРАЗДНИКИ ============
+function saveHolidays() {
+  const txt = document.getElementById('holidaysInput').value;
+  state.holidays = txt.split('\n').map(s => s.trim()).filter(Boolean);
+  save(); render();
+  alert('Сохранено');
+}
+function loadRF2026() {
+  document.getElementById('holidaysInput').value = RF_2026.join('\n');
+}
+function renderHolidays() {
+  document.getElementById('holidaysInput').value = state.holidays.join('\n');
+}
+
+// ============ ЗАПИСИ ============
+function addEntry() {
+  const type = document.querySelector('input[name="entryType"]:checked').value;
+  const person = document.getElementById('entryPerson').value;
+  const date = document.getElementById('entryDate').value;
+  const count = parseInt(document.getElementById('entryCount').value) || 1;
+  const note = document.getElementById('entryNote').value.trim();
+
+  if (!person) return alert('Выберите сотрудника');
+  if (!date) return alert('Выберите дату');
+
+  state.entries.push({
+    id: 'id' + Date.now() + Math.random().toString(36).substr(2, 5),
+    person, date, type, count, note
+  });
+  document.getElementById('entryNote').value = '';
+  save(); render();
+}
+
+function deleteEntry(id) {
+  if (!confirm('Удалить запись?')) return;
+  state.entries = state.entries.filter(e => e.id !== id);
+  save(); render();
+}
+
+// ============ РАСЧЁТ ============
+function getDayOfWeek(dateStr) {
+  const d = new Date(dateStr);
+  return d.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
+}
+
+function isWeekend(dateStr) {
+  const dow = getDayOfWeek(dateStr);
+  return dow === 0 || dow === 6;
+}
+
+function isHoliday(dateStr) {
+  return state.holidays.includes(dateStr);
+}
+
+// Часы бесплатного наряда
+function getFreeHours(dateStr) {
+  const dow = getDayOfWeek(dateStr);
+  switch(dow) {
+    case 1: case 2: case 3: case 4: return 8;  // Пн-Чт
+    case 5: return 12;  // Пт (Пт→Сб)
+    case 6: return 20;  // Сб (Сб→Вс)
+    case 0: return 12;  // Вс (Вс→Пн)
   }
+  return 8;
+}
 
-  function saveDB() { localStorage.setItem('vahtaDB', JSON.stringify(DB)); renderAll(); }
-  function renderAll() { renderPeople(); renderSelects(); renderJournal(); renderWeeklyTable(); document.getElementById('holidaysInput').value = DB.holidays.join('\n'); }
+// ПГ: 8 часов если выходной или праздник
+function getPgHours(dateStr) {
+  if (isWeekend(dateStr) || isHoliday(dateStr)) return 8;
+  return 0;
+}
 
-  // --- Сотрудники ---
-  function addPerson() {
-    const name = document.getElementById('newPersonName').value.trim();
-    if (!name || DB.people.includes(name)) return alert('Введите уникальное имя');
-    DB.people.push(name);
-    document.getElementById('newPersonName').value = '';
-    saveDB();
-  }
-  function removePerson(name) {
-    if (!confirm(`Удалить ${name}? Записи останутся в журнале.`)) return;
-    DB.people = DB.people.filter(p => p !== name);
-    saveDB();
-  }
-  function renderPeople() {
-    document.getElementById('peopleList').innerHTML = DB.people.map(p => `
-      <div class="person-item"><span>${p}</span><button class="del-btn" onclick="removePerson('${p}')">Удалить</button></div>`).join('');
-  }
-  function renderSelects() {
-    const opts = DB.people.map(p => `<option value="${p}">${p}</option>`).join('');
-    document.getElementById('entryPerson').innerHTML = '<option value="">-- Выберите --</option>' + opts;
-    document.getElementById('weekFilterPerson').innerHTML = '<option value="">-- Все/Выберите --</option>' + opts;
-  }
+function getWeekNumber(dateStr) {
+  const d = new Date(dateStr);
+  const onejan = new Date(d.getFullYear(), 0, 1);
+  const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+  return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`;
+}
 
-  // --- Праздники ---
-  function saveHolidays() {
-    DB.holidays = document.getElementById('holidaysInput').value.split('\n').map(s => s.trim()).filter(Boolean);
-    saveDB(); alert('Праздники сохранены');
-  }
-  function loadDefaultHolidays() {
-    DB.holidays = ["2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11","2026-02-23","2026-03-09","2026-05-01","2026-05-11","2026-06-12","2026-11-04","2026-12-31"];
-    saveDB();
-  }
+// Основной расчёт баланса для человека (или всех)
+function calcBalance(person = null) {
+  let entries = state.entries.slice();
+  if (person) entries = entries.filter(e => e.person === person);
 
-  // --- Режимы и добавление записи ---
-  function setMode(el) {
-    document.querySelectorAll('.mode').forEach(b => b.classList.remove('active'));
-    el.classList.add('active'); currentMode = el.dataset.type;
-  }
-  function addEntry() {
-    const person = document.getElementById('entryPerson').value;
-    const date = document.getElementById('entryDate').value;
-    const count = parseInt(document.getElementById('entryCount').value) || 1;
-    const note = document.getElementById('entryNote').value.trim();    if (!person || !date) return alert('Выберите сотрудника и дату');
-    DB.entries.push({ id: Date.now().toString(), person, date, type: currentMode, count, note });
-    saveDB();
-    document.getElementById('entryNote').value = '';
-  }
-  function deleteEntry(rawId) {
-    const idToMatch = String(rawId).trim();
-    if (!confirm('Удалить эту запись из журнала? Баланс пересчитается.')) return;
-    DB.entries = DB.entries.filter(e => String(e.id).trim() !== idToMatch);
-    saveDB();
-  }
+  // Сортируем по дате, потом по id (чтобы был стабильный порядок)
+  entries.sort((a, b) => {
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    return a.id.localeCompare(b.id);
+  });
 
-  // --- Логика расчёта часов ---
-  function getHours(dateStr, type) {
-    const [y, m, d] = dateStr.split('-').map(Number);
-    const date = new Date(y, m-1, d);
-    const dow = date.getDay(); // 0=Вс
-    const isHoliday = DB.holidays.includes(dateStr);
+  let paidCount = 0;       // накопленные платные наряды (штуки)
+  let freeHours = 0;       // накопленные бесплатные часы
+  let paidUEUsed = 0;      // использованные у.е. из платных
+  let debtCount = 0;       // отгулы в долг (красные)
 
-    if (type === 'paid') return 16;
-    if (type === 'otgul') return 0;
-    if (type === 'pg') return (dow === 0 || dow === 6 || isHoliday) ? 8 : 0;
-    if (type === 'free') {
-      if (isHoliday) return 20; // 🎉 Праздник = 20ч
-      if (dow === 0) return 16; // Вс
-      if (dow === 6) return 20; // Сб
-      if (dow === 5) return 12; // Пт
-      return 8; // Пн-Чт
-    }
-    return 0;
-  }
-  function formatDaysHours(h) {
-    if (h <= 0) return '0 сут / 0 ч';
-    return `${Math.floor(h / 24)} сут / ${Math.round(h % 24)} ч`;
-  }
+  const log = []; // для отладки
 
-  // --- Недельная таблица ---
-  function renderWeeklyTable() {
-    const person = document.getElementById('weekFilterPerson').value;
-    const tbody = document.getElementById('weekTableBody');
-    if (!person) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#6b7280">Выберите сотрудника</td></tr>'; return; }
-
-    const entries = DB.entries.filter(e => e.person === person).sort((a,b) => a.date.localeCompare(b.date));
-    const weeks = {};
-    let cumPaid = 0, cumFree = 0;
-
-    entries.forEach(e => {
-      const [y, m, d] = e.date.split('-').map(Number);
-      const date = new Date(y, m-1, d);
-      const day = date.getDay();      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(y, m-1, diff);
-      const sunday = new Date(y, m-1, diff + 6);
-      
-      const key = monday.toISOString().slice(0,10);
-      const label = `${monday.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit'}).slice(0,5)} - ${sunday.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit'}).slice(0,5)}`;
-
-      if (!weeks[key]) weeks[key] = { label, paid:0, free:0, otgul:0 };
-
-      const h = getHours(e.date, e.type) * (e.count || 1);
-      if (e.type === 'paid') { cumPaid += h; weeks[key].paid += h; }
-      else if (e.type === 'free' || e.type === 'pg') { cumFree += h; weeks[key].free += h; }
-//обновление по расчету
-else if (e.type === 'otgul') {
-                const deduct = 8 * (e.count || 1);
-                weeks[key].otgul += deduct;
-                if (cumFree >= deduct) {
-                    cumFree -= deduct;
-                } else {
-                    const remainder = deduct - cumFree;
-                    cumFree = 0;
-                    cumPaid = Math.max(0, cumPaid - remainder);
-                }
-            }
-
-//обновление по вычету
-
-    tbody.innerHTML = Object.keys(weeks).sort().map(k => {
-      const w = weeks[k];
-      return `<tr><td>${w.label}</td><td>${w.paid}</td><td>${w.free}</td><td class="otgul">${w.otgul || 0}</td><td>${formatDaysHours(w.cumPaid)}</td><td>${formatDaysHours(w.cumFree)}</td></tr>`;
-    }).join('') || '<tr><td colspan="6" style="text-align:center">Нет записей</td></tr>';
-  }
-
-  // --- Журнал ---
-  function renderJournal() {
-    const sorted = [...DB.entries].sort((a,b) => b.date.localeCompare(a.date));
-    document.getElementById('journalBody').innerHTML = sorted.map(e => {
-      const safeId = String(e.id).trim();
-      return `<tr>
-        <td>${e.date}</td>
-        <td>${e.person}</td>
-        <td><span class="badge ${e.type}">${e.type.toUpperCase()}</span></td>
-        <td>${e.type === 'otgul' ? '-8' : getHours(e.date, e.type) * (e.count || 1)}</td>
-        <td>${e.note || '-'}</td>
-        <td><button class="del-btn" data-id="${safeId}">🗑 Удалить</button></td>
-      </tr>`;
-    }).join('');
-  }
-
-  // --- Импорт / Экспорт ---
-  function exportData() {    const blob = new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
-  }
-  function importData(input) {
-    const file = input.files[0]; 
-    const status = document.getElementById('importStatus');
-    if (!file) return;
-    status.textContent = '⏳ Чтение файла...';
-    status.style.color = '#6b7280';
-    
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const raw = JSON.parse(e.target.result);
-        const data = cleanObject(raw);
-        
-        DB.people = Array.isArray(data.people) ? data.people : [];
-        DB.entries = Array.isArray(data.entries) ? data.entries : [];
-        DB.holidays = Array.isArray(data.holidays) ? data.holidays : [];
-        
-        DB.entries = DB.entries.map(en => ({
-          id: String(en.id || Date.now() + Math.random()).trim(),
-          person: String(en.person || '').trim(),
-          date: String(en.date || '').trim(),
-          type: String(en.type || 'paid').trim().toLowerCase(),
-          count: Number(en.count) || 1,
-          note: String(en.note || '').trim()
-        })).filter(en => en.person && en.date);
-
-        DB.holidays = DB.holidays.filter(h => /^20\d{2}-\d{2}-\d{2}$/.test(h));
-        DB.people = DB.people.filter(p => p);
-
-        saveDB();
-        status.textContent = `✅ Успешно! Загружено ${DB.entries.length} записей, ${DB.people.length} сотрудников. Логика отгулов обновлена.`;
-        status.style.color = '#16a34a';
-      } catch(err) { 
-        status.textContent = `❌ Ошибка: ${err.message}`;
-        status.style.color = '#dc2626';
+  for (const e of entries) {
+    if (e.type === 'paid') {
+      paidCount += e.count;
+    } else if (e.type === 'free') {
+      freeHours += getFreeHours(e.date) * e.count;
+    } else if (e.type === 'pg') {
+      freeHours += getPgHours(e.date) * e.count;
+    } else if (e.type === 'otgul') {
+      // Списание: сначала бесплатные часы (по 8ч), потом у.е. из платных
+      for (let i = 0; i < e.count; i++) {
+        if (freeHours >= 8) {
+          freeHours -= 8;
+          // тип списания: free
+        } else {
+          const totalUE = Math.floor(paidCount / 3) * 2;
+          const availableUE = totalUE - paidUEUsed;
+          if (availableUE >= 1) {
+            paidUEUsed += 1;
+          } else {
+            debtCount += 1;
+          }
+        }
       }
-    };
-    reader.readAsText(file, 'UTF-8');
-    input.value = '';
+    }
   }
-  function resetAll() {
-    if (!confirm('Удалить ВСЕ данные безвозвратно?')) return;
-    DB = { people: [], holidays: [], entries: [] };
-    localStorage.removeItem('vahtaDB');
-    renderAll();
+
+  const totalUE = Math.floor(paidCount / 3) * 2;
+  const availableUE = totalUE - paidUEUsed;
+  const paidRemainder = paidCount % 3; // остаток нарядов до следующей конвертации
+
+  return {
+    paidCount, freeHours, totalUE, availableUE, paidRemainder,
+    paidUEUsed, debtCount
+  };
+}
+
+// Расчёт с детализацией по каждой записи (для подсветки отгулов)
+function calcWithDetails(person = null) {
+  let entries = state.entries.slice();
+  if (person) entries = entries.filter(e => e.person === person);
+
+  entries.sort((a, b) => {
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    return a.id.localeCompare(b.id);
+  });
+
+  let paidCount = 0;
+  let freeHours = 0;
+  let paidUEUsed = 0;
+
+  const details = [];
+
+  for (const e of entries) {
+    const detail = { ...e, calcInfo: null };
+
+    if (e.type === 'paid') {
+      paidCount += e.count;
+      detail.calcInfo = { kind: 'paid', value: `${e.count} наряд(ов)`, paidCount };
+    } else if (e.type === 'free') {
+      const h = getFreeHours(e.date) * e.count;
+      freeHours += h;
+      detail.calcInfo = { kind: 'free', value: `${h}ч`, freeHours };
+    } else if (e.type === 'pg') {
+      const h = getPgHours(e.date) * e.count;
+      freeHours += h;
+      detail.calcInfo = { kind: 'pg', value: h > 0 ? `${h}ч` : '0ч (будни)', freeHours };
+    } else if (e.type === 'otgul') {
+      const results = [];
+      for (let i = 0; i < e.count; i++) {
+        if (freeHours >= 8) {
+          freeHours -= 8;
+          results.push('free');
+        } else {
+          const totalUE = Math.floor(paidCount / 3) * 2;
+          const availableUE = totalUE - paidUEUsed;
+          if (availableUE >= 1) {
+            paidUEUsed += 1;
+            results.push('paid');
+          } else {
+            results.push('debt');
+          }
+        }
+      }
+      detail.calcInfo = { kind: 'otgul', results };
+    }
+
+    details.push(detail);
   }
-  init();
+
+  return details;
+}
+
+// ============ РЕНДЕР ============
+function render() {
+  renderPeople();
+  renderHolidays();
+  renderBalance();
+  renderWeekly();
+  renderJournal();
+}
+
+function renderBalance() {
+  const box = document.getElementById('balanceBox');
+
+  if (state.selectedPerson) {
+    const b = calcBalance(state.selectedPerson);
+    box.innerHTML = renderBalanceCards(b, state.selectedPerson);
+  } else {
+    // Показать всех
+    let html = '';
+    for (const p of state.people) {
+      const b = calcBalance(p);
+      html += `<div style="grid-column: 1 / -1; margin-top: 8px;">
+        <div style="color:#60a5fa; font-weight:bold; margin-bottom:4px;">${escapeHtml(p)}</div>
+        <div class="balance-box">${renderBalanceCards(b, p)}</div>
+      </div>`;
+    }
+    box.innerHTML = html || '<div style="color:#94a3b8;">Нет сотрудников</div>';
+  }
+}
+
+function renderBalanceCards(b, person) {
+  const ueClass = b.availableUE > 0 ? 'positive' : (b.availableUE < 0 ? 'negative' : 'neutral');
+  const freeClass = b.freeHours > 0 ? 'positive' : 'neutral';
+  const debtClass = b.debtCount > 0 ? 'negative' : 'neutral';
+
+  return `
+    <div class="balance-card">
+      <div class="label">Платных нарядов</div>
+      <div class="value neutral">${b.paidCount}</div>
+      <div class="sub">Остаток: ${b.paidRemainder}/3</div>
+    </div>
+    <div class="balance-card">
+      <div class="label">Доступно у.е. (отгулов)</div>
+      <div class="value ${ueClass}">${b.availableUE}</div>
+      <div class="sub">Всего: ${b.totalUE}, исп.: ${b.paidUEUsed}</div>
+    </div>
+    <div class="balance-card">
+      <div class="label">Бесплатных часов</div>
+      <div class="value ${freeClass}">${b.freeHours}ч</div>
+      <div class="sub">≈ ${Math.floor(b.freeHours / 8)} отгулов</div>
+    </div>
+    <div class="balance-card">
+      <div class="label">Отгулов в долг</div>
+      <div class="value ${debtClass}">${b.debtCount}</div>
+      <div class="sub">${b.debtCount > 0 ? '⚠ требуется покрытие' : 'всё ок'}</div>
+    </div>
+  `;
+}
+
+function renderWeekly() {
+  const tbody = document.querySelector('#weeklyTable tbody');
+  let entries = state.entries.slice();
+  if (state.selectedPerson) entries = entries.filter(e => e.person === state.selectedPerson);
+
+  // Группируем по неделям
+  const weeks = {};
+  for (const e of entries) {
+    const w = getWeekNumber(e.date);
+    if (!weeks[w]) weeks[w] = [];
+    weeks[w].push(e);
+  }
+
+  const sortedWeeks = Object.keys(weeks).sort();
+
+  // Пересчитываем накопительный баланс по неделям
+  let paidCount = 0, freeHours = 0, paidUEUsed = 0, debtCount = 0;
+  // Нужно пройти все записи по порядку до каждой недели
+  const allSorted = state.entries.slice();
+  if (state.selectedPerson) {
+    const filtered = state.entries.filter(e => e.person === state.selectedPerson);
+    allSorted.length = 0;
+    allSorted.push(...filtered);
+  }
+  allSorted.sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+
+  // Для каждой недели посчитаем статистику + накопленный баланс на конец недели
+  let html = '';
+  let idx = 0;
+
+  for (const week of sortedWeeks) {
+    const weekEntries = weeks[week];
+    let paidWeek = 0, freeWeekH = 0, otgulWeek = 0;
+
+    // Прогоняем все записи до конца этой недели
+    while (idx < allSorted.length && getWeekNumber(allSorted[idx].date) <= week) {
+      const e = allSorted[idx];
+      if (e.type === 'paid') paidCount += e.count;
+      else if (e.type === 'free') freeHours += getFreeHours(e.date) * e.count;
+      else if (e.type === 'pg') freeHours += getPgHours(e.date) * e.count;
+      else if (e.type === 'otgul') {
+        for (let i = 0; i < e.count; i++) {
+          if (freeHours >= 8) freeHours -= 8;
+          else {
+            const totalUE = Math.floor(paidCount / 3) * 2;
+            if (totalUE - paidUEUsed >= 1) paidUEUsed++;
+            else debtCount++;
+          }
+        }
+      }
+      idx++;
+    }
+
+    // Статистика по неделе
+    for (const e of weekEntries) {
+      if (e.type === 'paid') paidWeek += e.count;
+      else if (e.type === 'free') freeWeekH += getFreeHours(e.date) * e.count;
+      else if (e.type === 'pg') freeWeekH += getPgHours(e.date) * e.count;
+      else if (e.type === 'otgul') otgulWeek += e.count;
+    }
+
+    const totalUE = Math.floor(paidCount / 3) * 2;
+    const availableUE = totalUE - paidUEUsed;
+
+    html += `<tr>
+      <td>${week}</td>
+      <td class="type-paid">${paidWeek || '—'}</td>
+      <td class="type-free">${freeWeekH || '—'}</td>
+      <td class="type-otgul">${otgulWeek || '—'}</td>
+      <td class="${availableUE > 0 ? 'type-free' : (availableUE < 0 ? 'type-otgul' : '')}">${availableUE} у.е. (ост: ${paidCount % 3}/3)</td>
+      <td class="${freeHours > 0 ? 'type-free' : ''}">${freeHours}ч</td>
+    </tr>`;
+  }
+
+  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">Нет данных</td></tr>';
+}
+
+function renderJournal() {
+  const tbody = document.querySelector('#journalTable tbody');
+  let entries = state.entries.slice();
+  if (state.selectedPerson) entries = entries.filter(e => e.person === state.selectedPerson);
+
+  // Детали расчёта
+  const details = calcWithDetails(state.selectedPerson);
+  const detailMap = {};
+  for (const d of details) detailMap[d.id] = d;
+
+  entries.sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+
+  let html = '';
+  for (const e of entries) {
+    const d = detailMap[e.id];
+    const typeLabel = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул' }[e.type];
+    const typeClass = 'type-' + e.type;
+
+    let valueCell = '';
+    let rowClass = '';
+
+    if (e.type === 'paid') {
+      valueCell = `<span class="${typeClass}">${e.count} наряд</span>`;
+    } else if (e.type === 'free') {
+      const h = getFreeHours(e.date);
+      valueCell = `<span class="${typeClass}">${h * e.count}ч</span>`;
+    } else if (e.type === 'pg') {
+      const h = getPgHours(e.date);
+      valueCell = `<span class="${typeClass}">${h * e.count}ч</span>`;
+    } else if (e.type === 'otgul') {
+      // Показать как списан
+      if (d && d.calcInfo) {
+        const results = d.calcInfo.results;
+        const parts = results.map(r => {
+          if (r === 'free') return '<span class="type-free">−8ч</span>';
+          if (r === 'paid') return '<span class="type-paid">−1у.е.</span>';
+          return '<span class="type-otgul debt">ДОЛГ</span>';
+        });
+        valueCell = parts.join(' ');
+        if (results.some(r => r === 'debt')) rowClass = 'style="background:#450a0a;"';
+      } else {
+        valueCell = '<span class="type-otgul">1 отгул</span>';
+      }
+    }
+
+    html += `<tr ${rowClass}>
+      <td>${e.date}</td>
+      <td>${escapeHtml(e.person)}</td>
+      <td class="${typeClass}">${typeLabel}</td>
+      <td>${valueCell}</td>
+      <td>${escapeHtml(e.note || '')}</td>
+      <td><button class="small danger" onclick="deleteEntry('${e.id}')">×</button></td>
+    </tr>`;
+  }
+
+  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">Нет записей</td></tr>';
+}
+
+// ============ ЭКСПОРТ/ИМПОРТ ============
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      // Нормализация ключей (в бэкапе были пробелы в ключах)
+      state.people = (data.people || data['people '] || []).map(s => (s || '').trim()).filter(Boolean);
+      state.entries = (data.entries || data['entries '] || []).map(e => ({
+        id: (e.id || e['id '] || '').trim(),
+        person: (e.person || e['person '] || '').trim(),
+        date: (e.date || e['date '] || '').trim(),
+        type: (e.type || e['type '] || '').trim(),
+        count: e.count || e['count '] || 1,
+        note: (e.note || e['note '] || '').trim()
+      }));
+      state.holidays = (data.holidays || data['holidays '] || []).map(s => (s || '').trim()).filter(Boolean);
+      state.selectedPerson = (data.selectedPerson || data['selectedPerson '] || '').trim() || null;
+      save(); render();
+      alert('Импортировано!');
+    } catch (err) {
+      alert('Ошибка: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function resetAll() {
+  if (!confirm('Точно удалить ВСЕ данные?')) return;
+  state = { people: [], entries: [], holidays: [], selectedPerson: null };
+  save(); render();
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('show');
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// ============ СТАРТ ============
+load();
+// Если пусто — загрузим базовые данные из бэкапа (опционально)
+if (state.people.length === 0) {
+  state.people = ["ГАВ","МАН","ЩВМ","НСМ","ВРВ","ЧИП","МАВ","СНВ","ТАА"];
+  state.holidays = RF_2026.slice();
+}
+document.getElementById('entryDate').valueAsDate = new Date();
+render();
 </script>
+
 </body>
 </html>
