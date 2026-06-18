@@ -1,3 +1,9 @@
+// Перехват ошибок и вывод на экран
+window.onerror = function(msg, url, line) {
+    alert('Ошибка: ' + msg + '\nСтрока: ' + line);
+    return false;
+};
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
