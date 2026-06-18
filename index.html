@@ -13,28 +13,11 @@
     padding: 12px;
     font-size: 14px;
   }
-  h1 {
-    text-align: center;
-    margin-bottom: 16px;
-    color: #60a5fa;
-    font-size: 20px;
-  }
-  .toolbar {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-    justify-content: center;
-  }
+  h1 { text-align: center; margin-bottom: 16px; color: #60a5fa; font-size: 20px; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; justify-content: center; }
   button {
-    background: #1e293b;
-    color: #e2e8f0;
-    border: 1px solid #334155;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: 0.2s;
+    background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+    padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.2s;
   }
   button:hover { background: #334155; }
   button.primary { background: #2563eb; border-color: #2563eb; }
@@ -44,194 +27,97 @@
   button.small { padding: 4px 8px; font-size: 11px; }
 
   .section {
-    background: #1e293b;
-    border-radius: 8px;
-    padding: 14px;
-    margin-bottom: 12px;
-    border: 1px solid #334155;
+    background: #1e293b; border-radius: 8px; padding: 14px;
+    margin-bottom: 12px; border: 1px solid #334155;
   }
-  .section h2 {
-    font-size: 15px;
-    margin-bottom: 10px;
-    color: #60a5fa;
-  }
+  .section h2 { font-size: 15px; margin-bottom: 10px; color: #60a5fa; }
 
   input, select, textarea {
-    background: #0f172a;
-    color: #e2e8f0;
-    border: 1px solid #334155;
-    padding: 7px 10px;
-    border-radius: 5px;
-    font-size: 13px;
-    width: 100%;
+    background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
+    padding: 7px 10px; border-radius: 5px; font-size: 13px; width: 100%;
   }
-  input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: #2563eb;
-  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #2563eb; }
 
-  .people-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 10px;
-  }
+  .people-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
   .person-chip {
-    background: #334155;
-    padding: 5px 10px;
-    border-radius: 14px;
-    font-size: 12px;
-    display: flex;
-    gap: 6px;
-    align-items: center;
+    background: #334155; padding: 5px 10px; border-radius: 14px;
+    font-size: 12px; display: flex; gap: 6px; align-items: center;
   }
-  .person-chip.active {
-    background: #2563eb;
-    color: white;
-  }
-  .person-chip .del {
-    cursor: pointer;
-    color: #f87171;
-    font-weight: bold;
-  }
+  .person-chip.active { background: #2563eb; color: white; }
+  .person-chip .del { cursor: pointer; color: #f87171; font-weight: bold; }
 
   .form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 8px;
-    margin-bottom: 8px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px; margin-bottom: 8px;
   }
-  .radio-group {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
+  .radio-group { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
   .radio-group label {
-    background: #334155;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    border: 1px solid transparent;
+    background: #334155; padding: 6px 12px; border-radius: 5px;
+    cursor: pointer; font-size: 12px; border: 1px solid transparent;
   }
   .radio-group input[type="radio"] { display: none; }
-  .radio-group input[type="radio"]:checked + span {
-    color: #60a5fa;
-    font-weight: bold;
-  }
-  .radio-group label:has(input:checked) {
-    background: #1e40af;
-    border-color: #2563eb;
-  }
+  .radio-group label:has(input:checked) { background: #1e40af; border-color: #2563eb; }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
   th {
-    background: #334155;
-    padding: 8px 6px;
-    text-align: left;
-    font-weight: 600;
-    position: sticky;
-    top: 0;
+    background: #334155; padding: 8px 6px; text-align: left;
+    font-weight: 600; position: sticky; top: 0;
   }
-  td {
-    padding: 6px;
-    border-bottom: 1px solid #334155;
-  }
+  td { padding: 6px; border-bottom: 1px solid #334155; }
   tr:hover { background: #1e293b; }
 
   .type-paid { color: #fbbf24; font-weight: 600; }
   .type-free { color: #34d399; font-weight: 600; }
   .type-pg { color: #a78bfa; font-weight: 600; }
   .type-otgul { color: #f87171; font-weight: 600; }
-  .type-otgul.debt { color: #dc2626; background: #7f1d1d; padding: 2px 6px; border-radius: 3px; }
+  .type-vacation { color: #fb923c; font-weight: 600; }
+  .type-otgul.debt {
+    color: #fecaca; background: #7f1d1d;
+    padding: 2px 6px; border-radius: 3px;
+  }
 
   .balance-box {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 8px;
-    margin-bottom: 12px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px; margin-bottom: 12px;
   }
   .balance-card {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 8px; padding: 10px; text-align: center;
   }
-  .balance-card .label {
-    font-size: 11px;
-    color: #94a3b8;
-    margin-bottom: 4px;
-  }
-  .balance-card .value {
-    font-size: 18px;
-    font-weight: bold;
-  }
+  .balance-card .label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
+  .balance-card .value { font-size: 18px; font-weight: bold; }
   .balance-card .value.positive { color: #34d399; }
   .balance-card .value.negative { color: #f87171; }
   .balance-card .value.neutral { color: #fbbf24; }
-  .balance-card .sub {
-    font-size: 10px;
-    color: #64748b;
-    margin-top: 2px;
-  }
+  .balance-card .sub { font-size: 10px; color: #64748b; margin-top: 2px; }
 
-  .tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-  .tab {
-    background: #334155;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-  }
+  .tabs { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tab { background: #334155; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
   .tab.active { background: #2563eb; }
 
-  .modal-bg {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    padding: 12px;
-  }
-  .modal-bg.show { display: flex; }
-  .modal {
-    background: #1e293b;
-    border-radius: 8px;
-    padding: 16px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    border: 1px solid #334155;
-  }
-  .modal h3 {
-    color: #60a5fa;
-    margin-bottom: 10px;
-  }
-  textarea { min-height: 120px; font-family: monospace; font-size: 11px; }
-
   .info {
-    background: #0f172a;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 11px;
-    color: #94a3b8;
-    margin-bottom: 8px;
+    background: #0f172a; padding: 8px; border-radius: 5px;
+    font-size: 11px; color: #94a3b8; margin-bottom: 8px;
     border-left: 3px solid #2563eb;
   }
+
+  .carry-cell { font-family: monospace; font-weight: bold; color: #fbbf24; }
+  .ue-cell { color: #34d399; font-weight: bold; }
+
+  .vacation-list {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px; margin-top: 8px;
+  }
+  .vacation-item {
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 6px; padding: 8px; font-size: 11px;
+  }
+  .vacation-item .vac-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px;
+  }
+  .vacation-item .vac-person { color: #60a5fa; font-weight: bold; }
+  .vacation-item .vac-dates { color: #fb923c; }
 
   @media (max-width: 600px) {
     table { font-size: 11px; }
@@ -270,6 +156,20 @@
 </div>
 
 <div class="section">
+  <h2>🏖 Отпуска</h2>
+  <div class="form-row">
+    <select id="vacPerson"></select>
+    <input type="date" id="vacEndDate" title="Дата выхода из отпуска">
+    <input type="number" id="vacDays" value="5" min="1" max="30" title="Количество суток">
+    <button class="primary" onclick="addVacation()">Добавить отпуск</button>
+  </div>
+  <div class="info">
+    💡 Отпуск вычитается из бесплатных часов (24ч = 1 сутки), остаток — из у.е. платных нарядов
+  </div>
+  <div class="vacation-list" id="vacationList"></div>
+</div>
+
+<div class="section">
   <h2>➕ Добавить запись</h2>
   <div class="radio-group" id="typeGroup">
     <label><input type="radio" name="entryType" value="paid" checked><span>Платная</span></label>
@@ -285,7 +185,9 @@
   </div>
   <button class="primary" onclick="addEntry()">Сохранить запись</button>
   <div class="info" style="margin-top:8px;">
-    💡 Платные: 3 наряда = 2 у.е. (отгула). Бесплатные: Пн-Чт 8ч, Пт 12ч, Сб 20ч, Вс 12ч. ПГ в выходной/праздник = 8ч. Отгул списывает сначала бесплатные часы, затем у.е.
+    💡 <b>Бесплатные:</b> Пн-Чт 8ч, Пт→Сб 12ч, Сб→Вс 20ч, Вс→Пн 16ч. <b>ПГ:</b> в выходной/праздник = 8ч.<br>
+    💡 <b>Платные:</b> учёт по неделям. Каждые 3 наряда = 2 у.е. (отгул). Остаток переносится на след. неделю.<br>
+    💡 <b>Отгул:</b> сначала списывает бесплатные часы (8ч), потом у.е. Если ничего нет — долг (красный).
   </div>
 </div>
 
@@ -303,8 +205,11 @@
         <tr>
           <th>Неделя</th>
           <th>Платн. нар.</th>
+          <th>Конверт. (3/ост.)</th>
+          <th>у.е. за нед.</th>
           <th>Беспл., ч</th>
           <th>Отгулы</th>
+          <th>Отпуска</th>
           <th>Баланс у.е.</th>
           <th>Баланс ч</th>
         </tr>
@@ -333,22 +238,12 @@
   </div>
 </div>
 
-<!-- Модальное окно -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal">
-    <h3 id="modalTitle"></h3>
-    <div id="modalBody"></div>
-    <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
-      <button onclick="closeModal()">Закрыть</button>
-    </div>
-  </div>
-</div>
-
 <script>
 // ============ СОСТОЯНИЕ ============
 let state = {
   people: [],
   entries: [],
+  vacations: [],
   holidays: [],
   selectedPerson: null
 };
@@ -362,20 +257,17 @@ const RF_2026 = [
 ];
 
 // ============ СОХРАНЕНИЕ ============
-function save() {
-  localStorage.setItem('vahta_data', JSON.stringify(state));
-}
+function save() { localStorage.setItem('vahta_data', JSON.stringify(state)); }
 function load() {
   const d = localStorage.getItem('vahta_data');
-  if (d) {
-    try { state = JSON.parse(d); } catch(e) {}
-  }
+  if (d) { try { state = JSON.parse(d); } catch(e) {} }
 }
 
 // ============ ЛЮДИ ============
 function renderPeople() {
   const list = document.getElementById('peopleList');
   const sel = document.getElementById('entryPerson');
+  const vacSel = document.getElementById('vacPerson');
   const tabs = document.getElementById('personTabs');
 
   list.innerHTML = state.people.map(p => `
@@ -385,8 +277,11 @@ function renderPeople() {
     </div>
   `).join('');
 
-  sel.innerHTML = '<option value="">Выберите сотрудника</option>' +
+  const options = '<option value="">Выберите сотрудника</option>' +
     state.people.map(p => `<option value="${escapeHtml(p)}" ${state.selectedPerson === p ? 'selected' : ''}>${escapeHtml(p)}</option>`).join('');
+
+  sel.innerHTML = options;
+  vacSel.innerHTML = options;
 
   tabs.innerHTML = `<div class="tab ${!state.selectedPerson ? 'active' : ''}" onclick="selectPerson(null)">Все</div>` +
     state.people.map(p => `<div class="tab ${state.selectedPerson === p ? 'active' : ''}" onclick="selectPerson('${escapeHtml(p)}')">${escapeHtml(p)}</div>`).join('');
@@ -406,14 +301,12 @@ function deletePerson(name) {
   if (!confirm(`Удалить ${name} и все его записи?`)) return;
   state.people = state.people.filter(p => p !== name);
   state.entries = state.entries.filter(e => e.person !== name);
+  state.vacations = state.vacations.filter(v => v.person !== name);
   if (state.selectedPerson === name) state.selectedPerson = null;
   save(); render();
 }
 
-function selectPerson(p) {
-  state.selectedPerson = p;
-  save(); render();
-}
+function selectPerson(p) { state.selectedPerson = p; save(); render(); }
 
 // ============ ПРАЗДНИКИ ============
 function saveHolidays() {
@@ -427,6 +320,56 @@ function loadRF2026() {
 }
 function renderHolidays() {
   document.getElementById('holidaysInput').value = state.holidays.join('\n');
+}
+
+// ============ ОТПУСКА ============
+function addVacation() {
+  const person = document.getElementById('vacPerson').value;
+  const endDate = document.getElementById('vacEndDate').value;
+  const days = parseInt(document.getElementById('vacDays').value) || 5;
+
+  if (!person) return alert('Выберите сотрудника');
+  if (!endDate) return alert('Выберите дату выхода');
+
+  state.vacations.push({
+    id: 'vac' + Date.now() + Math.random().toString(36).substr(2, 5),
+    person, endDate, days
+  });
+  save(); render();
+}
+
+function deleteVacation(id) {
+  if (!confirm('Удалить отпуск?')) return;
+  state.vacations = state.vacations.filter(v => v.id !== id);
+  save(); render();
+}
+
+function renderVacations() {
+  const list = document.getElementById('vacationList');
+  let vacations = state.vacations.slice();
+  if (state.selectedPerson) vacations = vacations.filter(v => v.person === state.selectedPerson);
+
+  vacations.sort((a, b) => b.endDate.localeCompare(a.endDate));
+
+  list.innerHTML = vacations.map(v => {
+    const startDate = getStartDate(v.endDate, v.days);
+    return `
+      <div class="vacation-item">
+        <div class="vac-header">
+          <span class="vac-person">${escapeHtml(v.person)}</span>
+          <button class="small danger" onclick="deleteVacation('${v.id}')">×</button>
+        </div>
+        <div class="vac-dates">${startDate} → ${v.endDate}</div>
+        <div>${v.days} сут</div>
+      </div>
+    `;
+  }).join('') || '<div style="color:#94a3b8; font-size:11px;">Нет отпусков</div>';
+}
+
+function getStartDate(endDate, days) {
+  const d = new Date(endDate + 'T00:00:00');
+  d.setDate(d.getDate() - days + 1);
+  return d.toISOString().slice(0, 10);
 }
 
 // ============ ЗАПИСИ ============
@@ -456,8 +399,8 @@ function deleteEntry(id) {
 
 // ============ РАСЧЁТ ============
 function getDayOfWeek(dateStr) {
-  const d = new Date(dateStr);
-  return d.getDay(); // 0=Вс, 1=Пн, ..., 6=Сб
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.getDay();
 }
 
 function isWeekend(dateStr) {
@@ -469,107 +412,175 @@ function isHoliday(dateStr) {
   return state.holidays.includes(dateStr);
 }
 
-// Часы бесплатного наряда
 function getFreeHours(dateStr) {
   const dow = getDayOfWeek(dateStr);
   switch(dow) {
-    case 1: case 2: case 3: case 4: return 8;  // Пн-Чт
-    case 5: return 12;  // Пт (Пт→Сб)
-    case 6: return 20;  // Сб (Сб→Вс)
-    case 0: return 12;  // Вс (Вс→Пн)
+    case 1: case 2: case 3: case 4: return 8;
+    case 5: return 12;
+    case 6: return 20;
+    case 0: return 16;
   }
   return 8;
 }
 
-// ПГ: 8 часов если выходной или праздник
 function getPgHours(dateStr) {
   if (isWeekend(dateStr) || isHoliday(dateStr)) return 8;
   return 0;
 }
 
 function getWeekNumber(dateStr) {
-  const d = new Date(dateStr);
+  const d = new Date(dateStr + 'T00:00:00');
   const onejan = new Date(d.getFullYear(), 0, 1);
   const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
   return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
-// Основной расчёт баланса для человека (или всех)
-function calcBalance(person = null) {
+function getWeekDates(weekStr) {
+  const [year, week] = weekStr.split('-W').map(Number);
+  const onejan = new Date(year, 0, 1);
+  const firstMonday = new Date(onejan);
+  firstMonday.setDate(onejan.getDate() + ((8 - onejan.getDay()) % 7));
+  const startDate = new Date(firstMonday);
+  startDate.setDate(firstMonday.getDate() + (week - 1) * 7);
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+  return {
+    start: startDate.toISOString().slice(0, 10),
+    end: endDate.toISOString().slice(0, 10)
+  };
+}
+
+function getSortedEntries(person = null) {
   let entries = state.entries.slice();
   if (person) entries = entries.filter(e => e.person === person);
-
-  // Сортируем по дате, потом по id (чтобы был стабильный порядок)
   entries.sort((a, b) => {
     if (a.date !== b.date) return a.date.localeCompare(b.date);
     return a.id.localeCompare(b.id);
   });
+  return entries;
+}
 
-  let paidCount = 0;       // накопленные платные наряды (штуки)
-  let freeHours = 0;       // накопленные бесплатные часы
-  let paidUEUsed = 0;      // использованные у.е. из платных
-  let debtCount = 0;       // отгулы в долг (красные)
+function getSortedVacations(person = null) {
+  let vacations = state.vacations.slice();
+  if (person) vacations = vacations.filter(v => v.person === person);
+  vacations.sort((a, b) => a.endDate.localeCompare(b.endDate));
+  return vacations;
+}
 
-  const log = []; // для отладки
+function calcBalance(person = null) {
+  const entries = getSortedEntries(person);
+  const vacations = getSortedVacations(person);
+
+  let paidCount = 0;
+  let freeHours = 0;
+  let paidUE = 0;
+  let paidUEUsed = 0;
+  let debtCount = 0;
+  let currentWeek = null;
+  let totalPaidAll = 0;
+  let vacIdx = 0;
 
   for (const e of entries) {
+    const week = getWeekNumber(e.date);
+
+    if (currentWeek !== null && week !== currentWeek) {
+      const converted = Math.floor(paidCount / 3);
+      paidUE += converted * 2;
+      paidCount = paidCount % 3;
+    }
+    currentWeek = week;
+
     if (e.type === 'paid') {
       paidCount += e.count;
+      totalPaidAll += e.count;
     } else if (e.type === 'free') {
       freeHours += getFreeHours(e.date) * e.count;
     } else if (e.type === 'pg') {
       freeHours += getPgHours(e.date) * e.count;
     } else if (e.type === 'otgul') {
-      // Списание: сначала бесплатные часы (по 8ч), потом у.е. из платных
       for (let i = 0; i < e.count; i++) {
         if (freeHours >= 8) {
           freeHours -= 8;
-          // тип списания: free
         } else {
-          const totalUE = Math.floor(paidCount / 3) * 2;
-          const availableUE = totalUE - paidUEUsed;
+          const availableUE = paidUE - paidUEUsed;
           if (availableUE >= 1) {
-            paidUEUsed += 1;
+            paidUEUsed++;
           } else {
-            debtCount += 1;
+            debtCount++;
           }
         }
       }
     }
+
+    // Обработка отпусков в эту дату
+    while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
+      vacIdx++;
+    }
+    while (vacIdx < vacations.length && vacations[vacIdx].endDate === e.date) {
+      const vac = vacations[vacIdx];
+      const vacHours = vac.days * 24;
+      if (freeHours >= vacHours) {
+        freeHours -= vacHours;
+      } else {
+        const remainingHours = vacHours - freeHours;
+        freeHours = 0;
+        const remainingDays = Math.ceil(remainingHours / 24);
+        const availableUE = paidUE - paidUEUsed;
+        if (availableUE >= remainingDays) {
+          paidUEUsed += remainingDays;
+        } else {
+          debtCount += remainingDays;
+        }
+      }
+      vacIdx++;
+    }
   }
 
-  const totalUE = Math.floor(paidCount / 3) * 2;
+  const finalConverted = Math.floor(paidCount / 3);
+  const finalUE = finalConverted * 2;
+  const finalRemainder = paidCount % 3;
+
+  const totalUE = paidUE + finalUE;
   const availableUE = totalUE - paidUEUsed;
-  const paidRemainder = paidCount % 3; // остаток нарядов до следующей конвертации
 
   return {
-    paidCount, freeHours, totalUE, availableUE, paidRemainder,
-    paidUEUsed, debtCount
+    totalPaidAll,
+    totalUE,
+    availableUE,
+    paidUEUsed,
+    freeHours,
+    debtCount,
+    finalRemainder
   };
 }
 
-// Расчёт с детализацией по каждой записи (для подсветки отгулов)
 function calcWithDetails(person = null) {
-  let entries = state.entries.slice();
-  if (person) entries = entries.filter(e => e.person === person);
-
-  entries.sort((a, b) => {
-    if (a.date !== b.date) return a.date.localeCompare(b.date);
-    return a.id.localeCompare(b.id);
-  });
+  const entries = getSortedEntries(person);
+  const vacations = getSortedVacations(person);
 
   let paidCount = 0;
   let freeHours = 0;
+  let paidUE = 0;
   let paidUEUsed = 0;
+  let currentWeek = null;
+  let vacIdx = 0;
 
   const details = [];
 
   for (const e of entries) {
+    const week = getWeekNumber(e.date);
     const detail = { ...e, calcInfo: null };
+
+    if (currentWeek !== null && week !== currentWeek) {
+      const converted = Math.floor(paidCount / 3);
+      paidUE += converted * 2;
+      paidCount = paidCount % 3;
+    }
+    currentWeek = week;
 
     if (e.type === 'paid') {
       paidCount += e.count;
-      detail.calcInfo = { kind: 'paid', value: `${e.count} наряд(ов)`, paidCount };
+      detail.calcInfo = { kind: 'paid', value: `${e.count} нар.`, paidCount };
     } else if (e.type === 'free') {
       const h = getFreeHours(e.date) * e.count;
       freeHours += h;
@@ -585,10 +596,9 @@ function calcWithDetails(person = null) {
           freeHours -= 8;
           results.push('free');
         } else {
-          const totalUE = Math.floor(paidCount / 3) * 2;
-          const availableUE = totalUE - paidUEUsed;
+          const availableUE = paidUE - paidUEUsed;
           if (availableUE >= 1) {
-            paidUEUsed += 1;
+            paidUEUsed++;
             results.push('paid');
           } else {
             results.push('debt');
@@ -608,6 +618,7 @@ function calcWithDetails(person = null) {
 function render() {
   renderPeople();
   renderHolidays();
+  renderVacations();
   renderBalance();
   renderWeekly();
   renderJournal();
@@ -618,36 +629,40 @@ function renderBalance() {
 
   if (state.selectedPerson) {
     const b = calcBalance(state.selectedPerson);
-    box.innerHTML = renderBalanceCards(b, state.selectedPerson);
+    box.innerHTML = renderBalanceCards(b);
   } else {
-    // Показать всех
     let html = '';
     for (const p of state.people) {
       const b = calcBalance(p);
       html += `<div style="grid-column: 1 / -1; margin-top: 8px;">
         <div style="color:#60a5fa; font-weight:bold; margin-bottom:4px;">${escapeHtml(p)}</div>
-        <div class="balance-box">${renderBalanceCards(b, p)}</div>
+        <div class="balance-box">${renderBalanceCards(b)}</div>
       </div>`;
     }
     box.innerHTML = html || '<div style="color:#94a3b8;">Нет сотрудников</div>';
   }
 }
 
-function renderBalanceCards(b, person) {
+function renderBalanceCards(b) {
   const ueClass = b.availableUE > 0 ? 'positive' : (b.availableUE < 0 ? 'negative' : 'neutral');
   const freeClass = b.freeHours > 0 ? 'positive' : 'neutral';
   const debtClass = b.debtCount > 0 ? 'negative' : 'neutral';
 
   return `
     <div class="balance-card">
-      <div class="label">Платных нарядов</div>
-      <div class="value neutral">${b.paidCount}</div>
-      <div class="sub">Остаток: ${b.paidRemainder}/3</div>
+      <div class="label">Всего платных нарядов</div>
+      <div class="value neutral">${b.totalPaidAll}</div>
+      <div class="sub">Остаток до тройки: ${b.finalRemainder}/3</div>
+    </div>
+    <div class="balance-card">
+      <div class="label">Всего у.е. заработано</div>
+      <div class="value neutral">${b.totalUE}</div>
+      <div class="sub">Использовано: ${b.paidUEUsed}</div>
     </div>
     <div class="balance-card">
       <div class="label">Доступно у.е. (отгулов)</div>
       <div class="value ${ueClass}">${b.availableUE}</div>
-      <div class="sub">Всего: ${b.totalUE}, исп.: ${b.paidUEUsed}</div>
+      <div class="sub">1 у.е. = 1 отгул</div>
     </div>
     <div class="balance-card">
       <div class="label">Бесплатных часов</div>
@@ -667,38 +682,39 @@ function renderWeekly() {
   let entries = state.entries.slice();
   if (state.selectedPerson) entries = entries.filter(e => e.person === state.selectedPerson);
 
-  // Группируем по неделям
-  const weeks = {};
+  const weekMap = {};
+  const weekOrder = [];
   for (const e of entries) {
     const w = getWeekNumber(e.date);
-    if (!weeks[w]) weeks[w] = [];
-    weeks[w].push(e);
+    if (!weekMap[w]) { weekMap[w] = []; weekOrder.push(w); }
+    weekMap[w].push(e);
   }
+  weekOrder.sort();
 
-  const sortedWeeks = Object.keys(weeks).sort();
+  const allSorted = getSortedEntries(state.selectedPerson);
+  const vacations = getSortedVacations(state.selectedPerson);
 
-  // Пересчитываем накопительный баланс по неделям
-  let paidCount = 0, freeHours = 0, paidUEUsed = 0, debtCount = 0;
-  // Нужно пройти все записи по порядку до каждой недели
-  const allSorted = state.entries.slice();
-  if (state.selectedPerson) {
-    const filtered = state.entries.filter(e => e.person === state.selectedPerson);
-    allSorted.length = 0;
-    allSorted.push(...filtered);
-  }
-  allSorted.sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
-
-  // Для каждой недели посчитаем статистику + накопленный баланс на конец недели
-  let html = '';
+  let paidCount = 0, freeHours = 0, paidUE = 0, paidUEUsed = 0, debtCount = 0;
+  let currentWeek = null;
   let idx = 0;
+  let vacIdx = 0;
 
-  for (const week of sortedWeeks) {
-    const weekEntries = weeks[week];
-    let paidWeek = 0, freeWeekH = 0, otgulWeek = 0;
+  let html = '';
 
-    // Прогоняем все записи до конца этой недели
+  for (const week of weekOrder) {
+    const weekDates = getWeekDates(week);
+
     while (idx < allSorted.length && getWeekNumber(allSorted[idx].date) <= week) {
       const e = allSorted[idx];
+      const ew = getWeekNumber(e.date);
+
+      if (currentWeek !== null && ew !== currentWeek) {
+        const converted = Math.floor(paidCount / 3);
+        paidUE += converted * 2;
+        paidCount = paidCount % 3;
+      }
+      currentWeek = ew;
+
       if (e.type === 'paid') paidCount += e.count;
       else if (e.type === 'free') freeHours += getFreeHours(e.date) * e.count;
       else if (e.type === 'pg') freeHours += getPgHours(e.date) * e.count;
@@ -706,16 +722,44 @@ function renderWeekly() {
         for (let i = 0; i < e.count; i++) {
           if (freeHours >= 8) freeHours -= 8;
           else {
-            const totalUE = Math.floor(paidCount / 3) * 2;
-            if (totalUE - paidUEUsed >= 1) paidUEUsed++;
+            const availableUE = paidUE - paidUEUsed;
+            if (availableUE >= 1) paidUEUsed++;
             else debtCount++;
           }
         }
       }
+
+      while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
+        vacIdx++;
+      }
+      while (vacIdx < vacations.length && vacations[vacIdx].endDate === e.date) {
+        const vac = vacations[vacIdx];
+        const vacHours = vac.days * 24;
+        if (freeHours >= vacHours) {
+          freeHours -= vacHours;
+        } else {
+          const remainingHours = vacHours - freeHours;
+          freeHours = 0;
+          const remainingDays = Math.ceil(remainingHours / 24);
+          const availableUE = paidUE - paidUEUsed;
+          if (availableUE >= remainingDays) {
+            paidUEUsed += remainingDays;
+          } else {
+            debtCount += remainingDays;
+          }
+        }
+        vacIdx++;
+      }
+
       idx++;
     }
 
-    // Статистика по неделе
+    const converted = Math.floor(paidCount / 3);
+    const weekUE = converted * 2;
+    const remainder = paidCount % 3;
+
+    const weekEntries = weekMap[week];
+    let paidWeek = 0, freeWeekH = 0, otgulWeek = 0, vacWeek = 0;
     for (const e of weekEntries) {
       if (e.type === 'paid') paidWeek += e.count;
       else if (e.type === 'free') freeWeekH += getFreeHours(e.date) * e.count;
@@ -723,20 +767,28 @@ function renderWeekly() {
       else if (e.type === 'otgul') otgulWeek += e.count;
     }
 
-    const totalUE = Math.floor(paidCount / 3) * 2;
-    const availableUE = totalUE - paidUEUsed;
+    for (const v of vacations) {
+      if (getWeekNumber(v.endDate) === week) {
+        vacWeek += v.days;
+      }
+    }
+
+    const totalUE = paidUE - paidUEUsed;
 
     html += `<tr>
-      <td>${week}</td>
+      <td>${weekDates.start} → ${weekDates.end}</td>
       <td class="type-paid">${paidWeek || '—'}</td>
+      <td class="carry-cell">${converted * 3}/${remainder}</td>
+      <td class="ue-cell">${weekUE || '—'}</td>
       <td class="type-free">${freeWeekH || '—'}</td>
       <td class="type-otgul">${otgulWeek || '—'}</td>
-      <td class="${availableUE > 0 ? 'type-free' : (availableUE < 0 ? 'type-otgul' : '')}">${availableUE} у.е. (ост: ${paidCount % 3}/3)</td>
+      <td class="type-vacation">${vacWeek || '—'}</td>
+      <td class="${totalUE > 0 ? 'type-free' : (totalUE < 0 ? 'type-otgul' : '')}">${totalUE} у.е.</td>
       <td class="${freeHours > 0 ? 'type-free' : ''}">${freeHours}ч</td>
     </tr>`;
   }
 
-  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">Нет данных</td></tr>';
+  tbody.innerHTML = html || '<tr><td colspan="9" style="text-align:center;color:#94a3b8;">Нет данных</td></tr>';
 }
 
 function renderJournal() {
@@ -744,7 +796,6 @@ function renderJournal() {
   let entries = state.entries.slice();
   if (state.selectedPerson) entries = entries.filter(e => e.person === state.selectedPerson);
 
-  // Детали расчёта
   const details = calcWithDetails(state.selectedPerson);
   const detailMap = {};
   for (const d of details) detailMap[d.id] = d;
@@ -769,7 +820,6 @@ function renderJournal() {
       const h = getPgHours(e.date);
       valueCell = `<span class="${typeClass}">${h * e.count}ч</span>`;
     } else if (e.type === 'otgul') {
-      // Показать как списан
       if (d && d.calcInfo) {
         const results = d.calcInfo.results;
         const parts = results.map(r => {
@@ -814,20 +864,33 @@ function importData(event) {
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      // Нормализация ключей (в бэкапе были пробелы в ключах)
-      state.people = (data.people || data['people '] || []).map(s => (s || '').trim()).filter(Boolean);
-      state.entries = (data.entries || data['entries '] || []).map(e => ({
-        id: (e.id || e['id '] || '').trim(),
-        person: (e.person || e['person '] || '').trim(),
-        date: (e.date || e['date '] || '').trim(),
-        type: (e.type || e['type '] || '').trim(),
-        count: e.count || e['count '] || 1,
-        note: (e.note || e['note '] || '').trim()
-      }));
-      state.holidays = (data.holidays || data['holidays '] || []).map(s => (s || '').trim()).filter(Boolean);
-      state.selectedPerson = (data.selectedPerson || data['selectedPerson '] || '').trim() || null;
+      const getVal = (obj, key) => {
+        if (obj[key] !== undefined) return obj[key];
+        if (obj[key + ' '] !== undefined) return obj[key + ' '];
+        return undefined;
+      };
+      const trim = v => (v == null ? '' : String(v).trim());
+
+      state.people = (getVal(data, 'people') || []).map(trim).filter(Boolean);
+      state.entries = (getVal(data, 'entries') || []).map(e => ({
+        id: trim(getVal(e, 'id')),
+        person: trim(getVal(e, 'person')),
+        date: trim(getVal(e, 'date')),
+        type: trim(getVal(e, 'type')),
+        count: parseInt(getVal(e, 'count')) || 1,
+        note: trim(getVal(e, 'note'))
+      })).filter(e => e.id && e.person && e.date && e.type);
+      state.vacations = (getVal(data, 'vacations') || []).map(v => ({
+        id: trim(getVal(v, 'id')),
+        person: trim(getVal(v, 'person')),
+        endDate: trim(getVal(v, 'endDate')),
+        days: parseInt(getVal(v, 'days')) || 5
+      })).filter(v => v.id && v.person && v.endDate);
+      state.holidays = (getVal(data, 'holidays') || []).map(trim).filter(Boolean);
+      state.selectedPerson = trim(getVal(data, 'selectedPerson')) || null;
+
       save(); render();
-      alert('Импортировано!');
+      alert(`Импортировано: ${state.people.length} сотр., ${state.entries.length} записей, ${state.vacations.length} отпусков`);
     } catch (err) {
       alert('Ошибка: ' + err.message);
     }
@@ -838,12 +901,8 @@ function importData(event) {
 
 function resetAll() {
   if (!confirm('Точно удалить ВСЕ данные?')) return;
-  state = { people: [], entries: [], holidays: [], selectedPerson: null };
+  state = { people: [], entries: [], vacations: [], holidays: [], selectedPerson: null };
   save(); render();
-}
-
-function closeModal() {
-  document.getElementById('modalBg').classList.remove('show');
 }
 
 function escapeHtml(s) {
@@ -855,7 +914,6 @@ function escapeHtml(s) {
 
 // ============ СТАРТ ============
 load();
-// Если пусто — загрузим базовые данные из бэкапа (опционально)
 if (state.people.length === 0) {
   state.people = ["ГАВ","МАН","ЩВМ","НСМ","ВРВ","ЧИП","МАВ","СНВ","ТАА"];
   state.holidays = RF_2026.slice();
