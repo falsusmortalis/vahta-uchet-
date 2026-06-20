@@ -13,10 +13,10 @@
 <h1>📊 Учёт вахт</h1>
 
 <div class="toolbar">
-  <button onclick="document.getElementById('importFile').click()"> Импорт</button>
+  <button onclick="document.getElementById('importFile').click()">📥 Импорт</button>
   <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
   <button onclick="exportData()">📤 Экспорт</button>
-  <button class="danger" onclick="resetAll()">🗑 Сброс</button>
+  <button class="danger" onclick="resetAll()"> Сброс</button>
 </div>
 
 <div class="section" id="importInfo"></div>
@@ -40,7 +40,7 @@
 </div>
 
 <div class="section">
-  <h2>➕ Добавить запись</h2>
+  <h2> Добавить запись</h2>
   <div class="radio-group" id="typeGroup">
     <label class="checked" data-type="paid" onclick="setType('paid')">Платная</label>
     <label data-type="free" onclick="setType('free')">Бесплатная</label>
@@ -334,22 +334,17 @@ function getWeekDates(ws) {
   return { start: fmt(sd), end: fmt(ed) };
 }
 
-function getMonthFromDate(ds) {
-  return ds.substring(0, 7); // "2026-01"
-}
-
+function getMonthFromDate(ds) { return ds.substring(0, 7); }
 function getQuarterFromDate(ds) {
   var m = parseInt(ds.substring(5, 7));
   var q = Math.ceil(m / 3);
   return ds.substring(0, 4) + '-Q' + q;
 }
-
 function getMonthName(key) {
   var names = ['','Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
   var parts = key.split('-');
   return names[parseInt(parts[1])] + ' ' + parts[0];
 }
-
 function getQuarterName(key) {
   var parts = key.split('-');
   var qNames = {'1':'I кв.','2':'II кв.','3':'III кв.','4':'IV кв.'};
@@ -574,7 +569,6 @@ function renderWeekly() {
 function renderMonthly() {
   var tbody = document.querySelector('#monthlyTable tbody');
   var entries = state.selectedPerson ? state.entries.filter(function(e) { return e.person === state.selectedPerson; }) : state.entries.slice();
-  
   var monthMap = {};
   var monthOrder = [];
   entries.forEach(function(e) {
@@ -583,20 +577,15 @@ function renderMonthly() {
     monthMap[m].push(e);
   });
   monthOrder.sort();
-  
-  var allSorted = getSorted(state.selectedPerson);
   var totalPaidAll = 0;
   var totalUEAll = 0;
-  
   var html = '';
   var prevQuarter = null;
-  
   monthOrder.forEach(function(month) {
     var monthEntries = monthMap[month];
     var paid = 0, free = 0, ue = 0, ueUsed = 0, debt = 0;
     var totalPaidMonth = 0;
     var curWeek = null;
-    
     monthEntries.forEach(function(e) {
       var w = getWeekNumber(e.date);
       if (curWeek !== null && w !== curWeek) {
@@ -626,13 +615,10 @@ function renderMonthly() {
         }
       }
     });
-    
     var finalUE = Math.floor(paid / 3) * 2;
     var totalUEMonth = ue + finalUE;
-    
     totalPaidAll += totalPaidMonth;
     totalUEAll += totalUEMonth;
-    
     var otgulMonth = 0, vacationMonth = 0;
     monthEntries.forEach(function(e) {
       if (e.type === 'otgul') {
@@ -641,7 +627,6 @@ function renderMonthly() {
         else otgulMonth += e.count;
       }
     });
-    
     html += '<tr class="month-row"><td>' + getMonthName(month) + '</td>' +
       '<td class="type-paid">' + totalPaidMonth + '</td>' +
       '<td class="type-free">' + formatHours(free) + '</td>' +
@@ -650,7 +635,6 @@ function renderMonthly() {
       '<td class="type-vacation">' + (vacationMonth || '—') + '</td>' +
       '<td class="type-paid">' + totalPaidAll + '</td>' +
       '<td class="ue-cell">' + totalUEAll + '</td></tr>';
-    
     var quarter = getQuarterFromDate(month + '-01');
     if (quarter !== prevQuarter && prevQuarter !== null) {
       html += '<tr class="quarter-row"><td><b>' + getQuarterName(quarter) + '</b></td>' +
@@ -658,16 +642,15 @@ function renderMonthly() {
     }
     prevQuarter = quarter;
   });
-  
   if (monthOrder.length > 0) {
     html += '<tr class="total-row"><td><b>ИТОГО ВСЕГО</b></td>' +
       '<td class="type-paid">' + totalPaidAll + '</td>' +
       '<td colspan="5"></td>' +
       '<td class="ue-cell">' + totalUEAll + '</td></tr>';
   }
-  
   tbody.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
 }
+
 function renderJournal() {
   var tbody = document.querySelector('#journalTable tbody');
   var entries = state.selectedPerson ? state.entries.filter(function(e) { return e.person === state.selectedPerson; }) : state.entries.slice();
