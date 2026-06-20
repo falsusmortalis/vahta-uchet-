@@ -5,123 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Учёт вахт</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 12px;
-    font-size: 14px;
-  }
-  h1 { text-align: center; margin-bottom: 16px; color: #60a5fa; font-size: 20px; }
-  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; justify-content: center; }
-  button {
-    background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
-    padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.2s;
-  }
-  button:hover { background: #334155; }
-  button.primary { background: #2563eb; border-color: #2563eb; }
-  button.primary:hover { background: #1d4ed8; }
-  button.danger { background: #dc2626; border-color: #dc2626; }
-  button.danger:hover { background: #b91c1c; }
-  button.small { padding: 4px 8px; font-size: 11px; }
-
-  .section {
-    background: #1e293b; border-radius: 8px; padding: 14px;
-    margin-bottom: 12px; border: 1px solid #334155;
-  }
-  .section h2 { font-size: 15px; margin-bottom: 10px; color: #60a5fa; }
-
-  input, select, textarea {
-    background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
-    padding: 7px 10px; border-radius: 5px; font-size: 13px; width: 100%;
-  }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: #2563eb; }
-
-  .people-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-  .person-chip {
-    background: #334155; padding: 5px 10px; border-radius: 14px;
-    font-size: 12px; display: flex; gap: 6px; align-items: center;
-  }
-  .person-chip.active { background: #2563eb; color: white; }
-  .person-chip .del { cursor: pointer; color: #f87171; font-weight: bold; }
-
-  .form-row {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));    gap: 8px; margin-bottom: 8px;
-  }
-  .radio-group { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
-  .radio-group label {
-    background: #334155; padding: 6px 12px; border-radius: 5px;
-    cursor: pointer; font-size: 12px; border: 1px solid transparent;
-  }
-  .radio-group input[type="radio"] { display: none; }
-  .radio-group label:has(input:checked) { background: #1e40af; border-color: #2563eb; }
-
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th {
-    background: #334155; padding: 8px 6px; text-align: left;
-    font-weight: 600; position: sticky; top: 0;
-  }
-  td { padding: 6px; border-bottom: 1px solid #334155; }
-  tr:hover { background: #1e293b; }
-
-  .type-paid { color: #fbbf24; font-weight: 600; }
-  .type-free { color: #34d399; font-weight: 600; }
-  .type-pg { color: #a78bfa; font-weight: 600; }
-  .type-otgul { color: #f87171; font-weight: 600; }
-  .type-vacation { color: #fb923c; font-weight: 600; }
-  .type-otgul.debt {
-    color: #fecaca; background: #7f1d1d;
-    padding: 2px 6px; border-radius: 3px;
-  }
-
-  .balance-box {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 8px; margin-bottom: 12px;
-  }
-  .balance-card {
-    background: #0f172a; border: 1px solid #334155;
-    border-radius: 8px; padding: 10px; text-align: center;
-  }
-  .balance-card .label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
-  .balance-card .value { font-size: 18px; font-weight: bold; }
-  .balance-card .value.positive { color: #34d399; }
-  .balance-card .value.negative { color: #f87171; }
-  .balance-card .value.neutral { color: #fbbf24; }
-  .balance-card .sub { font-size: 10px; color: #64748b; margin-top: 2px; }
-
-  .tabs { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
-  .tab { background: #334155; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-  .tab.active { background: #2563eb; }
-
-  .info {
-    background: #0f172a; padding: 8px; border-radius: 5px;
-    font-size: 11px; color: #94a3b8; margin-bottom: 8px;    border-left: 3px solid #2563eb;
-  }
-
-  .carry-cell { font-family: monospace; font-weight: bold; color: #fbbf24; }
-  .ue-cell { color: #34d399; font-weight: bold; }
-
-  .vacation-list {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 8px; margin-top: 8px;
-  }
-  .vacation-item {
-    background: #0f172a; border: 1px solid #334155;
-    border-radius: 6px; padding: 8px; font-size: 11px;
-  }
-  .vacation-item .vac-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 4px;
-  }
-  .vacation-item .vac-person { color: #60a5fa; font-weight: bold; }
-  .vacation-item .vac-dates { color: #fb923c; }
-
-  @media (max-width: 600px) {
-    table { font-size: 11px; }
-    th, td { padding: 4px; }
-    .balance-card .value { font-size: 15px; }
-  }
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:12px;font-size:14px}h1{text-align:center;margin-bottom:16px;color:#60a5fa}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 14px;border-radius:6px;cursor:pointer}button:hover{background:#334155}button.primary{background:#2563eb;border-color:#2563eb}button.danger{background:#dc2626;border-color:#dc2626}.section{background:#1e293b;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid #334155}.section h2{font-size:15px;margin-bottom:10px;color:#60a5fa}input,select,textarea{background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:7px 10px;border-radius:5px;width:100%}.people-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.person-chip{background:#334155;padding:5px 10px;border-radius:14px;font-size:12px;display:flex;gap:6px;align-items:center}.person-chip.active{background:#2563eb}.person-chip .del{cursor:pointer;color:#f87171;font-weight:bold}.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:8px}.radio-group{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.radio-group label{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer}.radio-group input[type="radio"]{display:none}.radio-group label.checked{background:#1e40af;border:1px solid #2563eb}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#334155;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0}td{padding:6px;border-bottom:1px solid #334155}.type-paid{color:#fbbf24;font-weight:600}.type-free{color:#34d399;font-weight:600}.type-pg{color:#a78bfa;font-weight:600}.type-otgul{color:#f87171;font-weight:600}.type-otgul.debt{color:#fecaca;background:#7f1d1d;padding:2px 6px;border-radius:3px}.balance-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}.balance-card{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center}.balance-card .label{font-size:11px;color:#94a3b8;margin-bottom:4px}.balance-card .value{font-size:18px;font-weight:bold}.balance-card .value.positive{color:#34d399}.balance-card .value.negative{color:#f87171}.balance-card .value.neutral{color:#fbbf24}.balance-card .sub{font-size:10px;color:#64748b;margin-top:2px}.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}.tab{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer}.tab.active{background:#2563eb}.info{background:#0f172a;padding:8px;border-radius:5px;font-size:11px;color:#94a3b8;margin:8px 0;border-left:3px solid #2563eb}.carry-cell{font-family:monospace;font-weight:bold;color:#fbbf24}.ue-cell{color:#34d399;font-weight:bold}
 </style>
 </head>
 <body>
@@ -129,50 +13,39 @@
 <h1>📊 Учёт вахт</h1>
 
 <div class="toolbar">
-  <button onclick="exportData()"> Экспорт JSON</button>
-  <button onclick="document.getElementById('importFile').click()"> Импорт JSON</button>
+  <button onclick="document.getElementById('importFile').click()">📥 Импорт</button>
   <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-  <button class="danger" onclick="resetAll()">🗑 Сбросить всё</button>
+  <button onclick="exportData()">📤 Экспорт</button>
+  <button class="danger" onclick="resetAll()">🗑 Сброс</button>
 </div>
+
+<div class="section" id="importInfo"></div>
 
 <div class="section">
   <h2>👥 Сотрудники</h2>
   <div class="people-list" id="peopleList"></div>
   <div class="form-row">
-    <input type="text" id="newPerson" placeholder="ФИО нового сотрудника">
+    <input type="text" id="newPerson" placeholder="ФИО">
     <button class="primary" onclick="addPerson()">Добавить</button>
   </div>
 </div>
 
 <div class="section">
-  <h2>🎉 Праздники</h2>  <textarea id="holidaysInput" placeholder="Формат: ГГГГ-ММ-ДД, каждая с новой строки"></textarea>
-  <div style="display:flex; gap:8px; margin-top:8px;">
+  <h2>🎉 Праздники</h2>
+  <textarea id="holidaysInput" placeholder="ГГГГ-ММ-ДД" rows="4"></textarea>
+  <div style="display:flex;gap:8px;margin-top:8px">
     <button class="primary" onclick="saveHolidays()">Сохранить</button>
     <button onclick="loadRF2026()">РФ 2026</button>
   </div>
 </div>
 
 <div class="section">
-  <h2>🏖 Отпуска</h2>
-  <div class="form-row">
-    <select id="vacPerson"></select>
-    <input type="date" id="vacEndDate" title="Дата выхода из отпуска">
-    <input type="number" id="vacDays" value="5" min="1" max="30" title="Количество суток">
-    <button class="primary" onclick="addVacation()">Добавить отпуск</button>
-  </div>
-  <div class="info">
-    💡 Отпуск вычитается из бесплатных часов (24ч = 1 сутки), остаток — из у.е. платных нарядов
-  </div>
-  <div class="vacation-list" id="vacationList"></div>
-</div>
-
-<div class="section">
   <h2>➕ Добавить запись</h2>
   <div class="radio-group" id="typeGroup">
-    <label><input type="radio" name="entryType" value="paid" checked><span>Платная</span></label>
-    <label><input type="radio" name="entryType" value="free"><span>Бесплатная</span></label>
-    <label><input type="radio" name="entryType" value="pg"><span>ПГ</span></label>
-    <label><input type="radio" name="entryType" value="otgul"><span>Отгул</span></label>
+    <label class="checked" data-type="paid" onclick="setType('paid')">Платная</label>
+    <label data-type="free" onclick="setType('free')">Бесплатная</label>
+    <label data-type="pg" onclick="setType('pg')">ПГ</label>
+    <label data-type="otgul" onclick="setType('otgul')">Отгул</label>
   </div>
   <div class="form-row">
     <select id="entryPerson"></select>
@@ -180,11 +53,11 @@
     <input type="number" id="entryCount" value="1" min="1" max="10">
     <input type="text" id="entryNote" placeholder="Комментарий">
   </div>
-  <button class="primary" onclick="addEntry()">Сохранить запись</button>
-  <div class="info" style="margin-top:8px;">
-    💡 <b>Бесплатные:</b> Пн-Чт 8ч, Пт→Сб 12ч, Сб→Вс 20ч, Вс→Пн 16ч. <b>ПГ:</b> в выходной/праздник = 8ч.<br>
-    💡 <b>Платные:</b> учёт по неделям. Каждые 3 наряда = 2 у.е. (отгул). Остаток переносится на след. неделю.<br>
-    💡 <b>Отгул:</b> сначала списывает бесплатные часы (8ч), потом у.е. Если ничего нет — долг (красный).
+  <button class="primary" onclick="addEntry()">Сохранить</button>
+  <div class="info">
+    Бесплатные: Пн-Чт 8ч, Пт→Сб 12ч, Сб→Вс 20ч, Вс→Пн 16ч. ПГ в выходной/праздник = 8ч.<br>
+    Платные: 3 наряда = 2 у.е. Остаток переносится.<br>
+    Отгул: сначала бесплатные (8ч), потом у.е. Иначе — долг.
   </div>
 </div>
 
@@ -194,22 +67,14 @@
   <div class="balance-box" id="balanceBox"></div>
 </div>
 
-<div class="section">  <h2>📅 Недельный баланс</h2>
-  <div style="overflow-x: auto;">
+<div class="section">
+  <h2>📅 Недельный баланс</h2>
+  <div style="overflow-x:auto">
     <table id="weeklyTable">
-      <thead>
-        <tr>
-          <th>Неделя</th>
-          <th>Платн. нар.</th>
-          <th>Конверт. (3/ост.)</th>
-          <th>у.е. за нед.</th>
-          <th>Беспл. (сут/ч)</th>
-          <th>Отгулы</th>
-          <th>Отпуска</th>
-          <th>Баланс у.е.</th>
-          <th>Баланс (сут/ч)</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th>Неделя</th><th>Платн.нар.</th><th>Конверт.(3/ост.)</th><th>у.е.за нед.</th>
+        <th>Беспл.(сут/ч)</th><th>Отгулы</th><th>Баланс у.е.</th><th>Баланс(сут/ч)</th>
+      </tr></thead>
       <tbody></tbody>
     </table>
   </div>
@@ -217,91 +82,172 @@
 
 <div class="section">
   <h2>📒 Журнал</h2>
-  <div style="overflow-x: auto;">
+  <div style="overflow-x:auto">
     <table id="journalTable">
-      <thead>
-        <tr>
-          <th>Дата</th>
-          <th>Сотрудник</th>
-          <th>Тип</th>
-          <th>Значение</th>
-          <th>Прим.</th>
-          <th>Действие</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th>Дата</th><th>Сотрудник</th><th>Тип</th><th>Значение</th><th>Прим.</th><th>Действие</th>
+      </tr></thead>
       <tbody></tbody>
     </table>
   </div>
 </div>
 
 <script>
-let state = {
-  people: [],
-  entries: [],
-  vacations: [],
-  holidays: [],
-  selectedPerson: null
-};
+var state = { people: [], entries: [], holidays: [], selectedPerson: null };
+var currentType = 'paid';
+var RF_2026 = ["2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11","2026-02-23","2026-03-09","2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11","2026-06-12","2026-11-04","2026-12-31"];
 
-const RF_2026 = [  "2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05",
-  "2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11",
-  "2026-02-23","2026-03-09",
-  "2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11",
-  "2026-06-12","2026-11-04","2026-12-31"
-];
+// ===== ИМПОРТ С ОЧИСТКОЙ ВСЕХ ПРОБЕЛОВ =====
+function importData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      
+      // Очищаем ВСЕ ключи и значения от пробелов
+      var cleanData = {};
+      for (var key in data) {
+        var cleanKey = key.trim();
+        if (cleanKey === 'people') {
+          cleanData.people = data[key].map(function(p) { return p.trim(); });
+        } else if (cleanKey === 'entries') {
+          cleanData.entries = data[key].map(function(entry) {
+            var clean = {};
+            for (var k in entry) {
+              var ck = k.trim();
+              var val = entry[k];
+              if (typeof val === 'string') val = val.trim();
+              clean[ck] = val;
+            }
+            return clean;
+          });
+        } else if (cleanKey === 'holidays') {
+          cleanData.holidays = data[key].map(function(h) { return h.trim(); });
+        } else if (cleanKey === 'selectedPerson') {
+          cleanData.selectedPerson = data[key] ? data[key].trim() : null;
+        }
+      }
+      
+      state.people = cleanData.people || [];
+      state.entries = cleanData.entries || [];
+      state.holidays = cleanData.holidays || [];
+      state.selectedPerson = cleanData.selectedPerson || null;
+      
+      save();
+      render();
+      
+      document.getElementById('importInfo').innerHTML = '<b style="color:#34d399">✅ ИМПОРТИРОВАНО!</b><br>Людей: ' + state.people.length + '<br>Записей: ' + state.entries.length;
+    } catch(err) {
+      document.getElementById('importInfo').innerHTML = '<b style="color:#f87171">❌ ОШИБКА:</b> ' + err.message;
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
 
-function formatHours(hours) {
-  if (hours === 0) return '0 ч';
-  const s = Math.floor(hours / 24);
-  const h = hours % 24;
-  if (s === 0) return `${h} ч`;
-  if (h === 0) return `${s} сут`;
-  return `${s} сут ${h} ч`;
+function exportData() {
+  var blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'vahta_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function resetAll() {
+  if (!confirm('Удалить ВСЕ данные?')) return;
+  state = { people: [], entries: [], holidays: [], selectedPerson: null };
+  save(); render();
+  document.getElementById('importInfo').innerHTML = '';
+}
+
+function formatHours(h) {
+  if (h === 0) return '0 ч';
+  var s = Math.floor(h / 24);
+  var r = h % 24;
+  if (s === 0) return r + ' ч';
+  if (r === 0) return s + ' сут';
+  return s + ' сут ' + r + ' ч';
 }
 
 function save() { localStorage.setItem('vahta_data', JSON.stringify(state)); }
+
 function load() {
-  const d = localStorage.getItem('vahta_data');
-  if (d) { try { state = JSON.parse(d); } catch(e) {} }
+  var d = localStorage.getItem('vahta_data');
+  if (d) {
+    try {
+      var parsed = JSON.parse(d);
+      state.people = parsed.people || [];
+      state.entries = parsed.entries || [];
+      state.holidays = parsed.holidays || [];
+      state.selectedPerson = parsed.selectedPerson || null;
+    } catch(e) { console.error(e); }
+  }
+}
+
+function setType(t) {
+  currentType = t;
+  var labels = document.querySelectorAll('#typeGroup label');
+  for (var i = 0; i < labels.length; i++) {
+    labels[i].className = labels[i].getAttribute('data-type') === t ? 'checked' : '';
+  }
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function renderPeople() {
-  const list = document.getElementById('peopleList');
-  const sel = document.getElementById('entryPerson');
-  const vacSel = document.getElementById('vacPerson');
-  const tabs = document.getElementById('personTabs');
-
-  list.innerHTML = state.people.map(p => `
-    <div class="person-chip ${state.selectedPerson === p ? 'active' : ''}" onclick="selectPerson('${escapeHtml(p)}')">
-      ${escapeHtml(p)}
-      <span class="del" onclick="event.stopPropagation(); deletePerson('${escapeHtml(p)}')">×</span>
-    </div>
-  `).join('');
-
-  const options = '<option value="">Выберите сотрудника</option>' +
-    state.people.map(p => `<option value="${escapeHtml(p)}" ${state.selectedPerson === p ? 'selected' : ''}>${escapeHtml(p)}</option>`).join('');
-
-  sel.innerHTML = options;
-  vacSel.innerHTML = options;
-
-  tabs.innerHTML = `<div class="tab ${!state.selectedPerson ? 'active' : ''}" onclick="selectPerson(null)">Все</div>` +
-    state.people.map(p => `<div class="tab ${state.selectedPerson === p ? 'active' : ''}" onclick="selectPerson('${escapeHtml(p)}')">${escapeHtml(p)}</div>`).join('');
+  var list = document.getElementById('peopleList');
+  var sel = document.getElementById('entryPerson');
+  var tabs = document.getElementById('personTabs');
+  
+  var listHtml = '';
+  var selHtml = '<option value="">Выберите</option>';
+  var tabsHtml = '<div class="tab' + (!state.selectedPerson ? ' active' : '') + '" onclick="selectPerson(null)">Все</div>';
+  
+  for (var i = 0; i < state.people.length; i++) {
+    var p = state.people[i];
+    var isActive = state.selectedPerson === p;
+    listHtml += '<div class="person-chip' + (isActive ? ' active' : '') + '" onclick="selectPerson(\'' + esc(p) + '\')">' + esc(p) + '<span class="del" onclick="event.stopPropagation();deletePerson(\'' + esc(p) + '\')">×</span></div>';
+    selHtml += '<option value="' + esc(p) + '"' + (isActive ? ' selected' : '') + '>' + esc(p) + '</option>';
+    tabsHtml += '<div class="tab' + (isActive ? ' active' : '') + '" onclick="selectPerson(\'' + esc(p) + '\')">' + esc(p) + '</div>';
+  }
+  
+  list.innerHTML = listHtml;
+  sel.innerHTML = selHtml;
+  tabs.innerHTML = tabsHtml;
 }
 
 function addPerson() {
-  const inp = document.getElementById('newPerson');
-  const name = inp.value.trim();
-  if (!name) return alert('Введите имя');
-  if (state.people.includes(name)) return alert('Уже есть');  state.people.push(name);
+  var inp = document.getElementById('newPerson');
+  var name = inp.value.trim();
+  if (!name) { alert('Введите имя'); return; }
+  for (var i = 0; i < state.people.length; i++) {
+    if (state.people[i] === name) { alert('Уже есть'); return; }
+  }
+  state.people.push(name);
   inp.value = '';
   save(); render();
 }
 
 function deletePerson(name) {
-  if (!confirm(`Удалить ${name} и все его записи?`)) return;
-  state.people = state.people.filter(p => p !== name);
-  state.entries = state.entries.filter(e => e.person !== name);
-  state.vacations = state.vacations.filter(v => v.person !== name);
+  if (!confirm('Удалить ' + name + '?')) return;
+  var newPeople = [];
+  var newEntries = [];
+  for (var i = 0; i < state.people.length; i++) {
+    if (state.people[i] !== name) newPeople.push(state.people[i]);
+  }
+  for (var i = 0; i < state.entries.length; i++) {
+    if (state.entries[i].person !== name) newEntries.push(state.entries[i]);
+  }
+  state.people = newPeople;
+  state.entries = newEntries;
   if (state.selectedPerson === name) state.selectedPerson = null;
   save(); render();
 }
@@ -309,638 +255,368 @@ function deletePerson(name) {
 function selectPerson(p) { state.selectedPerson = p; save(); render(); }
 
 function saveHolidays() {
-  const txt = document.getElementById('holidaysInput').value;
-  state.holidays = txt.split('\n').map(s => s.trim()).filter(Boolean);
+  var txt = document.getElementById('holidaysInput').value;
+  var arr = txt.split('\n');
+  var result = [];
+  for (var i = 0; i < arr.length; i++) {
+    var s = arr[i].trim();
+    if (s) result.push(s);
+  }
+  state.holidays = result;
   save(); render();
   alert('Сохранено');
 }
+
 function loadRF2026() {
   document.getElementById('holidaysInput').value = RF_2026.join('\n');
 }
+
 function renderHolidays() {
   document.getElementById('holidaysInput').value = state.holidays.join('\n');
 }
 
-function addVacation() {
-  const person = document.getElementById('vacPerson').value;
-  const endDate = document.getElementById('vacEndDate').value;
-  const days = parseInt(document.getElementById('vacDays').value) || 5;
-
-  if (!person) return alert('Выберите сотрудника');
-  if (!endDate) return alert('Выберите дату выхода');
-
-  state.vacations.push({
-    id: 'vac' + Date.now() + Math.random().toString(36).substr(2, 5),
-    person, endDate, days
-  });
-  save(); render();
-}
-
-function deleteVacation(id) {
-  if (!confirm('Удалить отпуск?')) return;
-  state.vacations = state.vacations.filter(v => v.id !== id);
-  save(); render();
-}
-function renderVacations() {
-  const list = document.getElementById('vacationList');
-  let vacations = state.vacations.slice();
-  if (state.selectedPerson) vacations = vacations.filter(v => v.person === state.selectedPerson);
-
-  vacations.sort((a, b) => b.endDate.localeCompare(a.endDate));
-
-  list.innerHTML = vacations.map(v => {
-    const startDate = getStartDate(v.endDate, v.days);
-    return `
-      <div class="vacation-item">
-        <div class="vac-header">
-          <span class="vac-person">${escapeHtml(v.person)}</span>
-          <button class="small danger" onclick="deleteVacation('${v.id}')">×</button>
-        </div>
-        <div class="vac-dates">${startDate} → ${v.endDate}</div>
-        <div>${v.days} сут</div>
-      </div>
-    `;
-  }).join('') || '<div style="color:#94a3b8; font-size:11px;">Нет отпусков</div>';
-}
-
-function getStartDate(endDate, days) {
-  const d = new Date(endDate + 'T00:00:00');
-  d.setDate(d.getDate() - days + 1);
-  return d.toISOString().slice(0, 10);
-}
-
 function addEntry() {
-  const type = document.querySelector('input[name="entryType"]:checked').value;
-  const person = document.getElementById('entryPerson').value;
-  const date = document.getElementById('entryDate').value;
-  const count = parseInt(document.getElementById('entryCount').value) || 1;
-  const note = document.getElementById('entryNote').value.trim();
-
-  if (!person) return alert('Выберите сотрудника');
-  if (!date) return alert('Выберите дату');
-
+  var person = document.getElementById('entryPerson').value;
+  var date = document.getElementById('entryDate').value;
+  var count = parseInt(document.getElementById('entryCount').value) || 1;
+  var note = document.getElementById('entryNote').value.trim();
+  if (!person) { alert('Выберите сотрудника'); return; }
+  if (!date) { alert('Выберите дату'); return; }
   state.entries.push({
     id: 'id' + Date.now() + Math.random().toString(36).substr(2, 5),
-    person, date, type, count, note
+    person: person, date: date, type: currentType, count: count, note: note
   });
   document.getElementById('entryNote').value = '';
   save(); render();
 }
 
 function deleteEntry(id) {
-  if (!confirm('Удалить запись?')) return;
-  state.entries = state.entries.filter(e => e.id !== id);
-  save(); render();}
-
-function getDayOfWeek(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.getDay();
-}
-
-function isWeekend(dateStr) {
-  const dow = getDayOfWeek(dateStr);
-  return dow === 0 || dow === 6;
-}
-
-function isHoliday(dateStr) {
-  return state.holidays.includes(dateStr);
-}
-
-function getFreeHours(dateStr) {
-  const dow = getDayOfWeek(dateStr);
-  switch(dow) {
-    case 1: case 2: case 3: case 4: return 8;
-    case 5: return 12;
-    case 6: return 20;
-    case 0: return 16;
+  if (!confirm('Удалить?')) return;
+  var newEntries = [];
+  for (var i = 0; i < state.entries.length; i++) {
+    if (state.entries[i].id !== id) newEntries.push(state.entries[i]);
   }
-  return 8;
+  state.entries = newEntries;
+  save(); render();
 }
 
-function getPgHours(dateStr) {
-  if (isWeekend(dateStr) || isHoliday(dateStr)) return 8;
-  return 0;
+function getDOW(ds) { return new Date(ds + 'T00:00:00').getDay(); }
+function isWeekend(ds) { var d = getDOW(ds); return d === 0 || d === 6; }
+function isHoliday(ds) { for (var i = 0; i < state.holidays.length; i++) { if (state.holidays[i] === ds) return true; } return false; }
+
+function getFreeHours(ds) {
+  var d = getDOW(ds);
+  if (d >= 1 && d <= 4) return 8;
+  if (d === 5) return 12;
+  if (d === 6) return 20;
+  return 16;
 }
 
-function getWeekNumber(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  const year = d.getFullYear();
-  const jan1 = new Date(year, 0, 1);
-  
-  const firstMonday = new Date(jan1);
-  const dayOfWeek = jan1.getDay();
-  const daysToMonday = dayOfWeek === 0 ? 1 : (dayOfWeek === 1 ? 0 : (8 - dayOfWeek));
-  firstMonday.setDate(jan1.getDate() + daysToMonday);
-  
-  if (d < firstMonday) {
-    return `${year}-1`;
-  }
-  
-  const daysSinceMonday = Math.floor((d - firstMonday) / 86400000);
-  const weekNum = Math.floor(daysSinceMonday / 7) + 2;
-  
-  return `${year}-${weekNum}`;}
+function getPgHours(ds) {
+  return (isWeekend(ds) || isHoliday(ds)) ? 8 : 0;
+}
 
-function getWeekDates(weekStr) {
-  const [year, week] = weekStr.split('-').map(Number);
-  
-  const jan1 = new Date(year, 0, 1);
-  const dayOfWeek = jan1.getDay();
-  const daysToMonday = dayOfWeek === 0 ? 1 : (dayOfWeek === 1 ? 0 : (8 - dayOfWeek));
-  const firstMonday = new Date(jan1);
-  firstMonday.setDate(jan1.getDate() + daysToMonday);
-  
-  let startDate, endDate;
-  
-  if (week === 1) {
-    startDate = jan1;
-    const firstSunday = new Date(firstMonday);
-    firstSunday.setDate(firstMonday.getDate() - 1);
-    endDate = firstSunday;
+function getWeekNumber(ds) {
+  var d = new Date(ds + 'T00:00:00');
+  var y = d.getFullYear();
+  var jan1 = new Date(y, 0, 1);
+  var dow = jan1.getDay();
+  var daysToMon = dow === 0 ? 1 : (dow === 1 ? 0 : (8 - dow));
+  var firstMon = new Date(y, 0, 1 + daysToMon);
+  if (d < firstMon) return y + '-1';
+  var daysSince = Math.floor((d - firstMon) / 86400000);
+  return y + '-' + (Math.floor(daysSince / 7) + 2);
+}
+
+function getWeekDates(ws) {
+  var parts = ws.split('-');
+  var y = parseInt(parts[0]);
+  var w = parseInt(parts[1]);
+  var jan1 = new Date(y, 0, 1);
+  var dow = jan1.getDay();
+  var daysToMon = dow === 0 ? 1 : (dow === 1 ? 0 : (8 - dow));
+  var firstMon = new Date(y, 0, 1 + daysToMon);
+  var sd, ed;
+  if (w === 1) {
+    sd = jan1;
+    ed = new Date(firstMon);
+    ed.setDate(firstMon.getDate() - 1);
   } else {
-    startDate = new Date(firstMonday);
-    startDate.setDate(firstMonday.getDate() + (week - 2) * 7);
-    endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6);
+    sd = new Date(firstMon);
+    sd.setDate(firstMon.getDate() + (w - 2) * 7);
+    ed = new Date(sd);
+    ed.setDate(sd.getDate() + 6);
   }
-  
-  const fmt = d => {
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}.${month}.${year}`;
+  var fmt = function(d) {
+    return String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
   };
-  
-  return {
-    start: fmt(startDate),
-    end: fmt(endDate)
-  };
+  return { start: fmt(sd), end: fmt(ed) };
 }
 
-function getSortedEntries(person = null) {
-  let entries = state.entries.slice();
-  if (person) entries = entries.filter(e => e.person === person);
-  entries.sort((a, b) => {
+function getSorted(person) {
+  var e = [];
+  for (var i = 0; i < state.entries.length; i++) {
+    if (!person || state.entries[i].person === person) {
+      e.push(state.entries[i]);
+    }
+  }
+  e.sort(function(a, b) {
     if (a.date !== b.date) return a.date.localeCompare(b.date);
     return a.id.localeCompare(b.id);
   });
-  return entries;
+  return e;
 }
 
-function getSortedVacations(person = null) {
-  let vacations = state.vacations.slice();  if (person) vacations = vacations.filter(v => v.person === person);
-  vacations.sort((a, b) => a.endDate.localeCompare(b.endDate));
-  return vacations;
-}
-
-function calcBalance(person = null) {
-  const entries = getSortedEntries(person);
-  const vacations = getSortedVacations(person);
-
-  let paidCount = 0;
-  let freeHours = 0;
-  let paidUE = 0;
-  let paidUEUsed = 0;
-  let debtCount = 0;
-  let currentWeek = null;
-  let totalPaidAll = 0;
-  let vacIdx = 0;
-
-  for (const e of entries) {
-    const week = getWeekNumber(e.date);
-
-    if (currentWeek !== null && week !== currentWeek) {
-      const converted = Math.floor(paidCount / 3);
-      paidUE += converted * 2;
-      paidCount = paidCount % 3;
+function calcBalance(person) {
+  var entries = getSorted(person);
+  var paid = 0, free = 0, ue = 0, ueUsed = 0, debt = 0, totalPaid = 0, curWeek = null;
+  
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    var w = getWeekNumber(e.date);
+    if (curWeek !== null && w !== curWeek) {
+      ue += Math.floor(paid / 3) * 2;
+      paid = paid % 3;
     }
-    currentWeek = week;
-
-    if (e.type === 'paid') {
-      paidCount += e.count;
-      totalPaidAll += e.count;
-    } else if (e.type === 'free') {
-      freeHours += getFreeHours(e.date) * e.count;
-    } else if (e.type === 'pg') {
-      freeHours += getPgHours(e.date) * e.count;
-    } else if (e.type === 'otgul') {
-      for (let i = 0; i < e.count; i++) {
-        if (freeHours >= 8) {
-          freeHours -= 8;
-        } else {
-          const availableUE = paidUE - paidUEUsed;
-          if (availableUE >= 1) {
-            paidUEUsed++;
-          } else {
-            debtCount++;
-          }
-        }
+    curWeek = w;
+    
+    if (e.type === 'paid') { paid += e.count; totalPaid += e.count; }
+    else if (e.type === 'free') { free += getFreeHours(e.date) * e.count; }
+    else if (e.type === 'pg') { free += getPgHours(e.date) * e.count; }
+    else if (e.type === 'otgul') {
+      for (var j = 0; j < e.count; j++) {
+        if (free >= 8) { free -= 8; }
+        else if (ue - ueUsed >= 1) { ueUsed++; }
+        else { debt++; }
       }
-    }
-    while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
-      vacIdx++;
-    }
-    while (vacIdx < vacations.length && vacations[vacIdx].endDate === e.date) {
-      const vac = vacations[vacIdx];
-      const vacHours = vac.days * 24;
-      if (freeHours >= vacHours) {
-        freeHours -= vacHours;
-      } else {
-        const remainingHours = vacHours - freeHours;
-        freeHours = 0;
-        const remainingDays = Math.ceil(remainingHours / 24);
-        const availableUE = paidUE - paidUEUsed;
-        if (availableUE >= remainingDays) {
-          paidUEUsed += remainingDays;
-        } else {
-          debtCount += remainingDays;
-        }
-      }
-      vacIdx++;
     }
   }
-
-  const finalConverted = Math.floor(paidCount / 3);
-  const finalUE = finalConverted * 2;
-  const finalRemainder = paidCount % 3;
-
-  const totalUE = paidUE + finalUE;
-  const availableUE = totalUE - paidUEUsed;
-
+  
+  var finalUE = Math.floor(paid / 3) * 2;
+  var totalUE = ue + finalUE;
   return {
-    totalPaidAll,
-    totalUE,
-    availableUE,
-    paidUEUsed,
-    freeHours,
-    debtCount,
-    finalRemainder
+    totalPaid: totalPaid, totalUE: totalUE, availableUE: totalUE - ueUsed,
+    ueUsed: ueUsed, free: free, debt: debt, remainder: paid % 3
   };
 }
 
-function calcWithDetails(person = null) {
-  const entries = getSortedEntries(person);
-  const vacations = getSortedVacations(person);
-
-  let paidCount = 0;
-  let freeHours = 0;
-  let paidUE = 0;
-  let paidUEUsed = 0;
-  let currentWeek = null;  let vacIdx = 0;
-
-  const details = [];
-
-  for (const e of entries) {
-    const week = getWeekNumber(e.date);
-    const detail = { ...e, calcInfo: null };
-
-    if (currentWeek !== null && week !== currentWeek) {
-      const converted = Math.floor(paidCount / 3);
-      paidUE += converted * 2;
-      paidCount = paidCount % 3;
+function calcDetails(person) {
+  var entries = getSorted(person);
+  var paid = 0, free = 0, ue = 0, ueUsed = 0, curWeek = null;
+  var details = [];
+  
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    var w = getWeekNumber(e.date);
+    var d = { id: e.id, person: e.person, date: e.date, type: e.type, count: e.count, note: e.note, calcInfo: null };
+    
+    if (curWeek !== null && w !== curWeek) {
+      ue += Math.floor(paid / 3) * 2;
+      paid = paid % 3;
     }
-    currentWeek = week;
-
+    curWeek = w;
+    
     if (e.type === 'paid') {
-      paidCount += e.count;
-      detail.calcInfo = { kind: 'paid', value: `${e.count} нар.`, paidCount };
+      paid += e.count;
+      d.calcInfo = { kind: 'paid', paidCount: paid };
     } else if (e.type === 'free') {
-      const h = getFreeHours(e.date) * e.count;
-      freeHours += h;
-      detail.calcInfo = { kind: 'free', value: formatHours(h), freeHours };
+      var h = getFreeHours(e.date) * e.count;
+      free += h;
+      d.calcInfo = { kind: 'free', value: formatHours(h), freeHours: free };
     } else if (e.type === 'pg') {
-      const h = getPgHours(e.date) * e.count;
-      freeHours += h;
-      detail.calcInfo = { kind: 'pg', value: h > 0 ? formatHours(h) : '0ч (будни)', freeHours };
+      var h = getPgHours(e.date) * e.count;
+      free += h;
+      d.calcInfo = { kind: 'pg', value: h > 0 ? formatHours(h) : '0ч', freeHours: free };
     } else if (e.type === 'otgul') {
-      const results = [];
-      for (let i = 0; i < e.count; i++) {
-        if (freeHours >= 8) {
-          freeHours -= 8;
-          results.push('free');
-        } else {
-          const availableUE = paidUE - paidUEUsed;
-          if (availableUE >= 1) {
-            paidUEUsed++;
-            results.push('paid');
-          } else {
-            results.push('debt');
-          }
-        }
+      var results = [];
+      for (var j = 0; j < e.count; j++) {
+        if (free >= 8) { free -= 8; results.push('free'); }
+        else if (ue - ueUsed >= 1) { ueUsed++; results.push('paid'); }
+        else { results.push('debt'); }
       }
-      detail.calcInfo = { kind: 'otgul', results };
+      d.calcInfo = { kind: 'otgul', results: results };
     }
-
-    details.push(detail);
+    details.push(d);
   }
-
   return details;
 }
+
 function render() {
   renderPeople();
   renderHolidays();
-  renderVacations();
   renderBalance();
   renderWeekly();
   renderJournal();
 }
 
 function renderBalance() {
-  const box = document.getElementById('balanceBox');
-
+  var box = document.getElementById('balanceBox');
   if (state.selectedPerson) {
-    const b = calcBalance(state.selectedPerson);
-    box.innerHTML = renderBalanceCards(b);
+    box.innerHTML = cards(calcBalance(state.selectedPerson));
   } else {
-    let html = '';
-    for (const p of state.people) {
-      const b = calcBalance(p);
-      html += `<div style="grid-column: 1 / -1; margin-top: 8px;">
-        <div style="color:#60a5fa; font-weight:bold; margin-bottom:4px;">${escapeHtml(p)}</div>
-        <div class="balance-box">${renderBalanceCards(b)}</div>
-      </div>`;
+    var h = '';
+    for (var i = 0; i < state.people.length; i++) {
+      var p = state.people[i];
+      h += '<div style="grid-column:1/-1;margin-top:8px"><div style="color:#60a5fa;font-weight:bold;margin-bottom:4px">' + esc(p) + '</div><div class="balance-box">' + cards(calcBalance(p)) + '</div></div>';
     }
-    box.innerHTML = html || '<div style="color:#94a3b8;">Нет сотрудников</div>';
+    box.innerHTML = h || '<div style="color:#94a3b8">Нет сотрудников</div>';
   }
 }
 
-function renderBalanceCards(b) {
-  const ueClass = b.availableUE > 0 ? 'positive' : (b.availableUE < 0 ? 'negative' : 'neutral');
-  const freeClass = b.freeHours > 0 ? 'positive' : 'neutral';
-  const debtClass = b.debtCount > 0 ? 'negative' : 'neutral';
-
-  return `
-    <div class="balance-card">
-      <div class="label">Всего платных нарядов</div>
-      <div class="value neutral">${b.totalPaidAll}</div>
-      <div class="sub">Остаток до тройки: ${b.finalRemainder}/3</div>
-    </div>
-    <div class="balance-card">
-      <div class="label">Всего у.е. заработано</div>
-      <div class="value neutral">${b.totalUE}</div>
-      <div class="sub">Использовано: ${b.paidUEUsed}</div>
-    </div>
-    <div class="balance-card">
-      <div class="label">Доступно у.е. (отгулов)</div>
-      <div class="value ${ueClass}">${b.availableUE}</div>
-      <div class="sub">1 у.е. = 1 отгул</div>
-    </div>    <div class="balance-card">
-      <div class="label">Бесплатных часов</div>
-      <div class="value ${freeClass}">${formatHours(b.freeHours)}</div>
-      <div class="sub">≈ ${Math.floor(b.freeHours / 8)} отгулов</div>
-    </div>
-    <div class="balance-card">
-      <div class="label">Отгулов в долг</div>
-      <div class="value ${debtClass}">${b.debtCount}</div>
-      <div class="sub">${b.debtCount > 0 ? ' требуется покрытие' : 'всё ок'}</div>
-    </div>
-  `;
+function cards(b) {
+  var uc = b.availableUE > 0 ? 'positive' : (b.availableUE < 0 ? 'negative' : 'neutral');
+  var fc = b.free > 0 ? 'positive' : 'neutral';
+  var dc = b.debt > 0 ? 'negative' : 'neutral';
+  return '<div class="balance-card"><div class="label">Платных нарядов</div><div class="value neutral">' + b.totalPaid + '</div><div class="sub">Остаток: ' + b.remainder + '/3</div></div>' +
+    '<div class="balance-card"><div class="label">Всего у.е.</div><div class="value neutral">' + b.totalUE + '</div><div class="sub">Исп.: ' + b.ueUsed + '</div></div>' +
+    '<div class="balance-card"><div class="label">Доступно у.е.</div><div class="value ' + uc + '">' + b.availableUE + '</div><div class="sub">1 у.е. = 1 отгул</div></div>' +
+    '<div class="balance-card"><div class="label">Бесплатных</div><div class="value ' + fc + '">' + formatHours(b.free) + '</div><div class="sub">≈ ' + Math.floor(b.free / 8) + ' отгулов</div></div>' +
+    '<div class="balance-card"><div class="label">Долг</div><div class="value ' + dc + '">' + b.debt + '</div><div class="sub">' + (b.debt > 0 ? '⚠ требуется покрытие' : 'всё ок') + '</div></div>';
 }
 
 function renderWeekly() {
-  const tbody = document.querySelector('#weeklyTable tbody');
-  let entries = state.entries.slice();
-  if (state.selectedPerson) entries = entries.filter(e => e.person === state.selectedPerson);
-
-  const weekMap = {};
-  const weekOrder = [];
-  for (const e of entries) {
-    const w = getWeekNumber(e.date);
-    if (!weekMap[w]) { weekMap[w] = []; weekOrder.push(w); }
-    weekMap[w].push(e);
+  var tbody = document.querySelector('#weeklyTable tbody');
+  var entries = [];
+  for (var i = 0; i < state.entries.length; i++) {
+    if (!state.selectedPerson || state.entries[i].person === state.selectedPerson) entries.push(state.entries[i]);
   }
-  weekOrder.sort((a, b) => {
-    const [ya, wa] = a.split('-').map(Number);
-    const [yb, wb] = b.split('-').map(Number);
+  
+  var weekMap = {};
+  var weekOrder = [];
+  for (var i = 0; i < entries.length; i++) {
+    var w = getWeekNumber(entries[i].date);
+    if (!weekMap[w]) { weekMap[w] = []; weekOrder.push(w); }
+    weekMap[w].push(entries[i]);
+  }
+  weekOrder.sort(function(a, b) {
+    var pa = a.split('-'), pb = b.split('-');
+    var ya = parseInt(pa[0]), wa = parseInt(pa[1]);
+    var yb = parseInt(pb[0]), wb = parseInt(pb[1]);
     return ya !== yb ? ya - yb : wa - wb;
   });
-
-  const allSorted = getSortedEntries(state.selectedPerson);
-  const vacations = getSortedVacations(state.selectedPerson);
-
-  let paidCount = 0, freeHours = 0, paidUE = 0, paidUEUsed = 0, debtCount = 0;
-  let currentWeek = null;
-  let idx = 0;
-  let vacIdx = 0;
-
-  let html = '';
-
-  for (const week of weekOrder) {
-    const weekDates = getWeekDates(week);
-
-    while (idx < allSorted.length && getWeekNumber(allSorted[idx].date) <= week) {
-      const e = allSorted[idx];
-      const ew = getWeekNumber(e.date);
-
-      if (currentWeek !== null && ew !== currentWeek) {
-        const converted = Math.floor(paidCount / 3);        paidUE += converted * 2;
-        paidCount = paidCount % 3;
-      }
-      currentWeek = ew;
-
-      if (e.type === 'paid') paidCount += e.count;
-      else if (e.type === 'free') freeHours += getFreeHours(e.date) * e.count;
-      else if (e.type === 'pg') freeHours += getPgHours(e.date) * e.count;
+  
+  var allSorted = getSorted(state.selectedPerson);
+  var paid = 0, free = 0, ue = 0, ueUsed = 0, debt = 0, curWeek = null, idx = 0;
+  var html = '';
+  
+  for (var wi = 0; wi < weekOrder.length; wi++) {
+    var week = weekOrder[wi];
+    var wd = getWeekDates(week);
+    
+    // КОНВЕРТАЦИЯ В НАЧАЛЕ НЕДЕЛИ (как в calcBalance)
+    if (curWeek !== null) {
+      var conv = Math.floor(paid / 3);
+      var weekUE = conv * 2;
+      ue += weekUE;
+      paid = paid % 3;
+    }
+    curWeek = week;
+    
+    while (idx < allSorted.length && getWeekNumber(allSorted[idx].date) === week) {
+      var e = allSorted[idx];
+      
+      if (e.type === 'paid') paid += e.count;
+      else if (e.type === 'free') free += getFreeHours(e.date) * e.count;
+      else if (e.type === 'pg') free += getPgHours(e.date) * e.count;
       else if (e.type === 'otgul') {
-        for (let i = 0; i < e.count; i++) {
-          if (freeHours >= 8) freeHours -= 8;
-          else {
-            const availableUE = paidUE - paidUEUsed;
-            if (availableUE >= 1) paidUEUsed++;
-            else debtCount++;
-          }
+        for (var j = 0; j < e.count; j++) {
+          if (free >= 8) free -= 8;
+          else if (ue - ueUsed >= 1) ueUsed++;
+          else debt++;
         }
       }
-
-      while (vacIdx < vacations.length && vacations[vacIdx].endDate < e.date) {
-        vacIdx++;
-      }
-      while (vacIdx < vacations.length && vacations[vacIdx].endDate === e.date) {
-        const vac = vacations[vacIdx];
-        const vacHours = vac.days * 24;
-        if (freeHours >= vacHours) {
-          freeHours -= vacHours;
-        } else {
-          const remainingHours = vacHours - freeHours;
-          freeHours = 0;
-          const remainingDays = Math.ceil(remainingHours / 24);
-          const availableUE = paidUE - paidUEUsed;
-          if (availableUE >= remainingDays) {
-            paidUEUsed += remainingDays;
-          } else {
-            debtCount += remainingDays;
-          }
-        }
-        vacIdx++;
-      }
-
       idx++;
     }
-
-    // Конвертация в конце недели и применение к балансу
-    const converted = Math.floor(paidCount / 3);
-    const weekUE = converted * 2;
-    const remainder = paidCount % 3;
     
-    // Применяем конвертацию к балансу    paidUE += weekUE;
-    paidCount = remainder;
-
-    const weekEntries = weekMap[week];
-    let paidWeek = 0, freeWeekH = 0, otgulWeek = 0, vacWeek = 0;
-    for (const e of weekEntries) {
-      if (e.type === 'paid') paidWeek += e.count;
-      else if (e.type === 'free') freeWeekH += getFreeHours(e.date) * e.count;
-      else if (e.type === 'pg') freeWeekH += getPgHours(e.date) * e.count;
-      else if (e.type === 'otgul') otgulWeek += e.count;
+    var we = weekMap[week];
+    var pw = 0, fw = 0, ow = 0;
+    for (var i = 0; i < we.length; i++) {
+      var e = we[i];
+      if (e.type === 'paid') pw += e.count;
+      else if (e.type === 'free') fw += getFreeHours(e.date) * e.count;
+      else if (e.type === 'pg') fw += getPgHours(e.date) * e.count;
+      else if (e.type === 'otgul') ow += e.count;
     }
-
-    for (const v of vacations) {
-      if (getWeekNumber(v.endDate) === week) {
-        vacWeek += v.days;
-      }
-    }
-
-    const totalUE = paidUE - paidUEUsed;
-
-    html += `<tr>
-      <td>${weekDates.start} → ${weekDates.end}</td>
-      <td class="type-paid">${paidWeek || '—'}</td>
-      <td class="carry-cell">${converted * 3}/${remainder}</td>
-      <td class="ue-cell">${weekUE || '—'}</td>
-      <td class="type-free">${freeWeekH ? formatHours(freeWeekH) : '—'}</td>
-      <td class="type-otgul">${otgulWeek || '—'}</td>
-      <td class="type-vacation">${vacWeek || '—'}</td>
-      <td class="${totalUE > 0 ? 'type-free' : (totalUE < 0 ? 'type-otgul' : '')}">${totalUE} у.е.</td>
-      <td class="${freeHours > 0 ? 'type-free' : ''}">${formatHours(freeHours)}</td>
-    </tr>`;
+    
+    var bal = ue - ueUsed;
+    var bc = bal > 0 ? 'type-free' : (bal < 0 ? 'type-otgul' : '');
+    var conv = Math.floor(paid / 3);
+    var rem = paid % 3;
+    
+    html += '<tr><td>' + wd.start + ' → ' + wd.end + '</td>' +
+      '<td class="type-paid">' + (pw || '—') + '</td>' +
+      '<td class="carry-cell">' + (conv * 3) + '/' + rem + '</td>' +
+      '<td class="ue-cell">' + (conv * 2 || '—') + '</td>' +
+      '<td class="type-free">' + (fw ? formatHours(fw) : '—') + '</td>' +
+      '<td class="type-otgul">' + (ow || '—') + '</td>' +
+      '<td class="' + bc + '">' + bal + ' у.е.</td>' +
+      '<td class="' + (free > 0 ? 'type-free' : '') + '">' + formatHours(free) + '</td></tr>';
   }
-
-  tbody.innerHTML = html || '<tr><td colspan="9" style="text-align:center;color:#94a3b8;">Нет данных</td></tr>';
+  
+  tbody.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
 }
-
 function renderJournal() {
-  const tbody = document.querySelector('#journalTable tbody');
-  let entries = state.entries.slice();
-  if (state.selectedPerson) entries = entries.filter(e => e.person === state.selectedPerson);
-
-  const details = calcWithDetails(state.selectedPerson);
-  const detailMap = {};
-  for (const d of details) detailMap[d.id] = d;
-
-  entries.sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
-
-  let html = '';
-  for (const e of entries) {
-    const d = detailMap[e.id];    const typeLabel = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул' }[e.type];
-    const typeClass = 'type-' + e.type;
-
-    let valueCell = '';
-    let rowClass = '';
-
+  var tbody = document.querySelector('#journalTable tbody');
+  var entries = [];
+  for (var i = 0; i < state.entries.length; i++) {
+    if (!state.selectedPerson || state.entries[i].person === state.selectedPerson) entries.push(state.entries[i]);
+  }
+  
+  var details = calcDetails(state.selectedPerson);
+  var dmap = {};
+  for (var i = 0; i < details.length; i++) dmap[details[i].id] = details[i];
+  
+  entries.sort(function(a, b) {
+    if (b.date !== a.date) return b.date.localeCompare(a.date);
+    return b.id.localeCompare(a.id);
+  });
+  
+  var html = '';
+  var labels = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул' };
+  
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    var d = dmap[e.id];
+    var tc = 'type-' + e.type;
+    var vc = '', rc = '';
+    
     if (e.type === 'paid') {
-      valueCell = `<span class="${typeClass}">${e.count} наряд</span>`;
+      vc = '<span class="' + tc + '">' + e.count + ' наряд</span>';
     } else if (e.type === 'free') {
-      const h = getFreeHours(e.date);
-      valueCell = `<span class="${typeClass}">${formatHours(h * e.count)}</span>`;
+      vc = '<span class="' + tc + '">' + formatHours(getFreeHours(e.date) * e.count) + '</span>';
     } else if (e.type === 'pg') {
-      const h = getPgHours(e.date);
-      valueCell = `<span class="${typeClass}">${formatHours(h * e.count)}</span>`;
+      vc = '<span class="' + tc + '">' + formatHours(getPgHours(e.date) * e.count) + '</span>';
     } else if (e.type === 'otgul') {
-      if (d && d.calcInfo) {
-        const results = d.calcInfo.results;
-        const parts = results.map(r => {
-          if (r === 'free') return '<span class="type-free">−8ч</span>';
-          if (r === 'paid') return '<span class="type-paid">−1у.е.</span>';
-          return '<span class="type-otgul debt">ДОЛГ</span>';
-        });
-        valueCell = parts.join(' ');
-        if (results.some(r => r === 'debt')) rowClass = 'style="background:#450a0a;"';
+      if (d && d.calcInfo && d.calcInfo.results) {
+        var parts = [];
+        for (var j = 0; j < d.calcInfo.results.length; j++) {
+          var r = d.calcInfo.results[j];
+          if (r === 'free') parts.push('<span class="type-free">−8ч</span>');
+          else if (r === 'paid') parts.push('<span class="type-paid">−1у.е.</span>');
+          else parts.push('<span class="type-otgul debt">ДОЛГ</span>');
+        }
+        vc = parts.join(' ');
+        for (var j = 0; j < d.calcInfo.results.length; j++) {
+          if (d.calcInfo.results[j] === 'debt') { rc = ' style="background:#450a0a"'; break; }
+        }
       } else {
-        valueCell = '<span class="type-otgul">1 отгул</span>';
+        vc = '<span class="type-otgul">1 отгул</span>';
       }
     }
-
-    html += `<tr ${rowClass}>
-      <td>${e.date}</td>
-      <td>${escapeHtml(e.person)}</td>
-      <td class="${typeClass}">${typeLabel}</td>
-      <td>${valueCell}</td>
-      <td>${escapeHtml(e.note || '')}</td>
-      <td><button class="small danger" onclick="deleteEntry('${e.id}')">×</button></td>
-    </tr>`;
+    
+    html += '<tr' + rc + '><td>' + e.date + '</td><td>' + esc(e.person) + '</td><td class="' + tc + '">' + labels[e.type] + '</td><td>' + vc + '</td><td>' + esc(e.note || '') + '</td><td><button class="small danger" onclick="deleteEntry(\'' + e.id + '\')">×</button></td></tr>';
   }
-
-  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">Нет записей</td></tr>';
-}
-
-function exportData() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `vahta_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-}
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const data = JSON.parse(e.target.result);
-      const getVal = (obj, key) => {
-        if (obj[key] !== undefined) return obj[key];
-        if (obj[key + ' '] !== undefined) return obj[key + ' '];
-        return undefined;
-      };
-      const trim = v => (v == null ? '' : String(v).trim());
-
-      state.people = (getVal(data, 'people') || []).map(trim).filter(Boolean);
-      state.entries = (getVal(data, 'entries') || []).map(e => ({
-        id: trim(getVal(e, 'id')),
-        person: trim(getVal(e, 'person')),
-        date: trim(getVal(e, 'date')),
-        type: trim(getVal(e, 'type')),
-        count: parseInt(getVal(e, 'count')) || 1,
-        note: trim(getVal(e, 'note'))
-      })).filter(e => e.id && e.person && e.date && e.type);
-      state.vacations = (getVal(data, 'vacations') || []).map(v => ({
-        id: trim(getVal(v, 'id')),
-        person: trim(getVal(v, 'person')),
-        endDate: trim(getVal(v, 'endDate')),
-        days: parseInt(getVal(v, 'days')) || 5
-      })).filter(v => v.id && v.person && v.endDate);
-      state.holidays = (getVal(data, 'holidays') || []).map(trim).filter(Boolean);
-      state.selectedPerson = trim(getVal(data, 'selectedPerson')) || null;
-
-      save(); render();
-      alert(`Импортировано: ${state.people.length} сотр., ${state.entries.length} записей, ${state.vacations.length} отпусков`);
-    } catch (err) {
-      alert('Ошибка: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-function resetAll() {
-  if (!confirm('Точно удалить ВСЕ данные?')) return;
-  state = { people: [], entries: [], vacations: [], holidays: [], selectedPerson: null };
-  save(); render();
-}
-
-function escapeHtml(s) {  if (s == null) return '';
-  return String(s).replace(/[&<>"']/g, c => ({
-    '&':'&','<':'<','>':'>','"':'"',"'":'''
-  }[c]));
+  
+  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8">Нет записей</td></tr>';
 }
 
 load();
 if (state.people.length === 0) {
-  state.people = ["ГАВ","МАН","ЩВМ","НСМ","ВРВ","ЧИП","МАВ","СНВ","ТАА"];
+  state.people = ['ГАВ','МАН','ЩВМ','НСМ','ВРВ','ЧИП','МАВ','СНВ','ТАА'];
   state.holidays = RF_2026.slice();
 }
 document.getElementById('entryDate').valueAsDate = new Date();
+setType('paid');
 render();
 </script>
 
