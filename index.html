@@ -575,7 +575,6 @@ function renderMonthly() {
   var tbody = document.querySelector('#monthlyTable tbody');
   var entries = state.selectedPerson ? state.entries.filter(function(e) { return e.person === state.selectedPerson; }) : state.entries.slice();
   
-  // Группируем по месяцам
   var monthMap = {};
   var monthOrder = [];
   entries.forEach(function(e) {
@@ -585,7 +584,6 @@ function renderMonthly() {
   });
   monthOrder.sort();
   
-  // Считаем накопительно по всем записям (хронологически)
   var allSorted = getSorted(state.selectedPerson);
   var totalPaidAll = 0;
   var totalUEAll = 0;
@@ -629,7 +627,6 @@ function renderMonthly() {
       }
     });
     
-    // Финальная конвертация месяца
     var finalUE = Math.floor(paid / 3) * 2;
     var totalUEMonth = ue + finalUE;
     
@@ -654,7 +651,6 @@ function renderMonthly() {
       '<td class="type-paid">' + totalPaidAll + '</td>' +
       '<td class="ue-cell">' + totalUEAll + '</td></tr>';
     
-    // Проверяем конец квартала
     var quarter = getQuarterFromDate(month + '-01');
     if (quarter !== prevQuarter && prevQuarter !== null) {
       html += '<tr class="quarter-row"><td><b>' + getQuarterName(quarter) + '</b></td>' +
@@ -663,7 +659,6 @@ function renderMonthly() {
     prevQuarter = quarter;
   });
   
-  // Итого за всё время
   if (monthOrder.length > 0) {
     html += '<tr class="total-row"><td><b>ИТОГО ВСЕГО</b></td>' +
       '<td class="type-paid">' + totalPaidAll + '</td>' +
@@ -673,7 +668,6 @@ function renderMonthly() {
   
   tbody.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
 }
-
 function renderJournal() {
   var tbody = document.querySelector('#journalTable tbody');
   var entries = state.selectedPerson ? state.entries.filter(function(e) { return e.person === state.selectedPerson; }) : state.entries.slice();
