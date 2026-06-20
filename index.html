@@ -580,6 +580,12 @@ function renderWeekly() {
     if (!state.selectedPerson || state.entries[i].person === state.selectedPerson) entries.push(state.entries[i]);
   }
   
+  if (entries.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
+    return;
+  }
+  
+  // Группируем записи по неделям (ТОЛЬКО недели с записями!)
   var weekMap = {};
   var weekOrder = [];
   for (var i = 0; i < entries.length; i++) {
@@ -588,13 +594,15 @@ function renderWeekly() {
     weekMap[w].push(entries[i]);
   }
   weekOrder.sort(function(a, b) {
-    var pa = a.split('-'), pb = b.split('-');
-    var ya = parseInt(pa[0]), wa = parseInt(pa[1]);
-    var yb = parseInt(pb[0]), wb = parseInt(pb[1]);
-    return ya !== yb ? ya - yb : wa - wb;
+    var pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+    return pa[0] !== pb[0] ? pa[0] - pb[0] : pa[1] - pb[1];
   });
   
-  var allSorted = getSorted(state.selectedPerson);
+  var allSorted = entries.slice().sort(function(a, b) {
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    return a.id.localeCompare(b.id);
+  });
+  
   var paid = 0, free = 0, ue = 0, ueUsed = 0, debt = 0, curWeek = null, idx = 0;
   var html = '';
   
@@ -602,6 +610,7 @@ function renderWeekly() {
     var week = weekOrder[wi];
     var wd = getWeekDates(week);
     
+    // Конвертация в НАЧАЛЕ недели (перед обработкой записей)
     if (curWeek !== null) {
       var converted = Math.floor(paid / 3);
       var weekUE = converted * 2;
@@ -610,6 +619,7 @@ function renderWeekly() {
     }
     curWeek = week;
     
+    // Обрабатываем ТОЛЬКО записи этой недели
     while (idx < allSorted.length && getWeekNumber(allSorted[idx].date) === week) {
       var e = allSorted[idx];
       if (e.type === 'paid') paid += e.count;
@@ -617,6 +627,7 @@ function renderWeekly() {
       else if (e.type === 'pg') free += getPgHours(e.date) * e.count;
       else if (e.type === 'otgul') {
         if (e.isVacation && e.vacationDays) {
+          // ОТПУСК: 24 часа = 1 сутки
           var days = e.vacationDays;
           var hoursNeeded = days * 24;
           while (hoursNeeded > 0) {
@@ -625,6 +636,7 @@ function renderWeekly() {
             else { debt++; hoursNeeded -= 24; }
           }
         } else {
+          // Обычный отгул: 8 часов
           for (var j = 0; j < e.count; j++) {
             if (free >= 8) free -= 8;
             else if (ue - ueUsed >= 1) ueUsed++;
@@ -664,7 +676,7 @@ function renderWeekly() {
       '<td class="' + (free > 0 ? 'type-free' : '') + '">' + formatHours(free) + '</td></tr>';
   }
   
-  tbody.innerHTML = html || '<tr><td colspan="9" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
+  tbody.innerHTML = html;
 }
 
 function renderJournal() {
