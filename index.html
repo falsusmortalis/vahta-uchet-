@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Учёт вахт</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;padding:12px;font-size:14px}h1{text-align:center;margin-bottom:16px;color:#60a5fa}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:.2s}button:hover{background:#334155}button.primary{background:#2563eb;border-color:#2563eb}button.vacation{background:#7c3aed;border-color:#7c3aed}button.vacation:hover{background:#6d28d9}button.danger{background:#dc2626;border-color:#dc2626}.section{background:#1e293b;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid #334155}.section h2{font-size:15px;margin-bottom:10px;color:#60a5fa}input,select,textarea{background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:7px 10px;border-radius:5px;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:#2563eb}.people-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.person-chip{background:#334155;padding:5px 10px;border-radius:14px;font-size:12px;display:flex;gap:6px;align-items:center}.person-chip.active{background:#2563eb}.person-chip .del{cursor:pointer;color:#f87171;font-weight:bold}.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:8px}.radio-group{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.radio-group label{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;border:1px solid transparent}.radio-group input[type="radio"]{display:none}.radio-group label.checked{background:#1e40af;border-color:#2563eb}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#334155;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0}td{padding:6px;border-bottom:1px solid #334155}tr:hover{background:#1e293b}.type-paid{color:#fbbf24;font-weight:600}.type-free{color:#34d399;font-weight:600}.type-pg{color:#a78bfa;font-weight:600}.type-otgul{color:#f87171;font-weight:600}.type-otgul.debt{color:#fecaca;background:#7f1d1d;padding:2px 6px;border-radius:3px}.type-vacation{color:#a78bfa;font-weight:600}.balance-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px}.balance-card{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center}.balance-card .label{font-size:11px;color:#94a3b8;margin-bottom:4px}.balance-card .value{font-size:18px;font-weight:bold}.balance-card .value.positive{color:#34d399}.balance-card .value.negative{color:#f87171}.balance-card .value.neutral{color:#fbbf24}.balance-card .sub{font-size:10px;color:#64748b;margin-top:2px}.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}.tab{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px}.tab.active{background:#2563eb}.info{background:#0f172a;padding:8px;border-radius:5px;font-size:11px;color:#94a3b8;margin:8px 0;border-left:3px solid #2563eb}.carry-cell{font-family:monospace;font-weight:bold;color:#fbbf24}.ue-cell{color:#34d399;font-weight:bold}@media(max-width:600px){table{font-size:11px}th,td{padding:4px}.balance-card .value{font-size:15px}}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;padding:12px;font-size:14px;padding-bottom:60px}h1{text-align:center;margin-bottom:16px;color:#60a5fa}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:.2s}button:hover{background:#334155}button.primary{background:#2563eb;border-color:#2563eb}button.vacation{background:#7c3aed;border-color:#7c3aed}button.vacation:hover{background:#6d28d9}button.danger{background:#dc2626;border-color:#dc2626}button.small{padding:4px 8px;font-size:11px}.section{background:#1e293b;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid #334155}.section h2{font-size:15px;margin-bottom:10px;color:#60a5fa}input,select,textarea{background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:7px 10px;border-radius:5px;font-size:13px;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:#2563eb}.people-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.person-chip{background:#334155;padding:5px 10px;border-radius:14px;font-size:12px;display:flex;gap:6px;align-items:center}.person-chip.active{background:#2563eb}.person-chip .del{cursor:pointer;color:#f87171;font-weight:bold}.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:8px}.radio-group{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.radio-group label{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;border:1px solid transparent}.radio-group input[type="radio"]{display:none}.radio-group label.checked{background:#1e40af;border-color:#2563eb}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#334155;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0}td{padding:6px;border-bottom:1px solid #334155}tr:hover{background:#1e293b}.type-paid{color:#fbbf24;font-weight:600}.type-free{color:#34d399;font-weight:600}.type-pg{color:#a78bfa;font-weight:600}.type-otgul{color:#f87171;font-weight:600}.type-otgul.debt{color:#fecaca;background:#7f1d1d;padding:2px 6px;border-radius:3px}.type-vacation{color:#a78bfa;font-weight:600}.balance-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px}.balance-card{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center}.balance-card .label{font-size:11px;color:#94a3b8;margin-bottom:4px}.balance-card .value{font-size:18px;font-weight:bold}.balance-card .value.positive{color:#34d399}.balance-card .value.negative{color:#f87171}.balance-card .value.neutral{color:#fbbf24}.balance-card .sub{font-size:10px;color:#64748b;margin-top:2px}.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}.tab{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px}.tab.active{background:#2563eb}.info{background:#0f172a;padding:8px;border-radius:5px;font-size:11px;color:#94a3b8;margin:8px 0;border-left:3px solid #2563eb}.carry-cell{font-family:monospace;font-weight:bold;color:#fbbf24}.ue-cell{color:#34d399;font-weight:bold}.donate-footer{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:12px;text-align:center;font-size:12px;color:#94a3b8}.donate-footer a{color:#60a5fa;text-decoration:none}.donate-footer a:hover{text-decoration:underline}@media(max-width:600px){table{font-size:11px}th,td{padding:4px}.balance-card .value{font-size:15px}}
 </style>
 </head>
 <body>
@@ -13,9 +13,9 @@
 <h1>📊 Учёт вахт</h1>
 
 <div class="toolbar">
-  <button onclick="exportData()">📤 Экспорт</button>
   <button onclick="document.getElementById('importFile').click()">📥 Импорт</button>
   <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  <button onclick="exportData()">📤 Экспорт</button>
   <button class="danger" onclick="resetAll()">🗑 Сброс</button>
 </div>
 
@@ -57,22 +57,22 @@
   </div>
   <button class="primary" onclick="addEntry()" style="margin-top:8px">Сохранить запись</button>
   
-  <div style="margin:12px 0;border-top:1px solid #334155"></div>
+  <div style="margin:16px 0;border-top:1px solid #334155"></div>
   
-  <h3 style="color:#a78bfa;margin-bottom:8px">🏖 Отгулы к отпуску</h3>
+  <h3 style="color:#a78bfa;margin-bottom:8px">🏖 Дополнительные сутки К отпуску</h3>
   <div class="form-row">
     <select id="vacationPerson"></select>
     <input type="date" id="vacationDate">
-    <input type="number" id="vacationDays" min="1" max="30" placeholder="Сутки отпуска">
+    <input type="number" id="vacationDays" min="1" max="30" placeholder="Кол-во суток" value="5">
     <input type="text" id="vacationNote" placeholder="Комментарий">
   </div>
-  <button class="vacation" onclick="addVacation()" style="margin-top:8px">✈ Добавить отгулы к отпуску</button>
+  <button class="vacation" onclick="addVacation()" style="margin-top:8px">✈ Добавить сутки к отпуску</button>
   
   <div class="info" style="margin-top:12px">
     💡 <b>Бесплатные:</b> Пн-Чт 8ч, Пт→Сб 12ч, Сб→Вс 20ч, Вс→Пн 16ч. ПГ в выходной/праздник = 8ч.<br>
     💡 <b>Платные:</b> 3 наряда = 2 у.е. Остаток переносится.<br>
     💡 <b>Отгул:</b> сначала списывает бесплатные часы (8ч), потом у.е. Если ничего нет — долг (красный).<br>
-    💡 <b>Отпуск:</b> 24 часа = 1 сутки. Сначала бесплатная переработка (24ч/сутки), потом 1 у.е./сутки.
+    💡 <b>Доп. сутки к отпуску:</b> 24ч из бесплатных за сутки, иначе 1 у.е. за сутки.
   </div>
 </div>
 
@@ -88,7 +88,7 @@
     <table id="weeklyTable">
       <thead><tr>
         <th>Неделя</th><th>Платн.нар.</th><th>Конверт.(3/ост.)</th><th>у.е.за нед.</th>
-        <th>Беспл.(сут/ч)</th><th>Отгулы</th><th>Отпуск</th><th>Баланс у.е.</th><th>Баланс(сут/ч)</th>
+        <th>Беспл.(сут/ч)</th><th>Отгулы</th><th>Доп.сутки к отпуску</th><th>Баланс у.е.</th><th>Баланс(сут/ч)</th>
       </tr></thead>
       <tbody></tbody>
     </table>
@@ -105,6 +105,10 @@
       <tbody></tbody>
     </table>
   </div>
+</div>
+
+<div class="donate-footer">
+  💰 <b>Сказать спасибо:</b> +7 989 275 82 74 (Озон/ВТБ/Тинькофф)
 </div>
 
 <script>
@@ -162,6 +166,17 @@ function setType(t) {
 function esc(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function getVacationDaysFromEntry(entry) {
+  if (entry.vacationDays && entry.vacationDays > 0) return entry.vacationDays;
+  var note = entry.note || '';
+  if (/отпуск/i.test(note)) {
+    var match = note.match(/(\d+)\s*сут/);
+    if (match) return parseInt(match[1]);
+    return 5;
+  }
+  return null;
 }
 
 function renderPeople() {
@@ -254,13 +269,12 @@ function addVacation() {
     count: days,
     isVacation: true,
     vacationDays: days,
-    note: note || 'Отпуск ' + days + ' сут.'
+    note: (note ? note + ' | ' : '') + 'Доп. сутки к отпуску: ' + days + ' сут.'
   });
   
-  document.getElementById('vacationDays').value = '';
   document.getElementById('vacationNote').value = '';
   save(); render();
-  alert('✅ Добавлено ' + days + ' сут. отпуска');
+  alert('✅ Добавлено ' + days + ' дополнительных суток к отпуску');
 }
 
 function deleteEntry(id) {
@@ -349,26 +363,25 @@ function calcBalance(person) {
     else if (e.type === 'free') { free += getFreeHours(e.date) * e.count; }
     else if (e.type === 'pg') { free += getPgHours(e.date) * e.count; }
     else if (e.type === 'otgul') {
-      if (e.isVacation && e.vacationDays) {
-        var days = e.vacationDays;
-        var hoursNeeded = days * 24;
-        while (hoursNeeded > 0) {
-          if (free >= 24) { free -= 24; hoursNeeded -= 24; }
-          else if (ue - ueUsed >= 1) { ueUsed++; hoursNeeded -= 24; }
-          else { debt++; hoursNeeded -= 24; }
-        }
+      var vacationDays = getVacationDaysFromEntry(e);
+      
+      if (vacationDays !== null) {
+        var days = vacationDays;
+        var freeDaysUsed = Math.min(Math.floor(free / 24), days);
+        var ueDaysUsed = days - freeDaysUsed;
+        free = free - (freeDaysUsed * 24);
+        ueUsed += ueDaysUsed;
       } else {
         for (var j = 0; j < e.count; j++) {
           if (free >= 8) free -= 8;
-          else if (ue - ueUsed >= 1) ueUsed++;
+          else if ((ue - ueUsed) >= 1) ueUsed++;
           else debt++;
         }
       }
     }
   });
   
-  var finalConverted = Math.floor(paid / 3);
-  var finalUE = finalConverted * 2;
+  var finalUE = Math.floor(paid / 3) * 2;
   var finalRemainder = paid % 3;
   var totalUE = ue + finalUE;
   var availableUE = totalUE - ueUsed;
@@ -407,21 +420,20 @@ function calcDetails(person) {
       free += h;
       d.calcInfo = { kind: 'pg', value: h > 0 ? formatHours(h) : '0ч', freeHours: free };
     } else if (e.type === 'otgul') {
-      if (e.isVacation && e.vacationDays) {
-        var days = e.vacationDays;
-        var hoursNeeded = days * 24;
-        var results = [];
-        while (hoursNeeded > 0) {
-          if (free >= 24) { free -= 24; results.push('free24'); hoursNeeded -= 24; }
-          else if (ue - ueUsed >= 1) { ueUsed++; results.push('paid'); hoursNeeded -= 24; }
-          else { results.push('debt'); hoursNeeded -= 24; }
-        }
-        d.calcInfo = { kind: 'vacation', days: days, results: results };
+      var vacationDays = getVacationDaysFromEntry(e);
+      
+      if (vacationDays !== null) {
+        var days = vacationDays;
+        var freeDaysUsed = Math.min(Math.floor(free / 24), days);
+        var ueDaysUsed = days - freeDaysUsed;
+        free = free - (freeDaysUsed * 24);
+        ueUsed += ueDaysUsed;
+        d.calcInfo = { kind: 'vacation', days: days, freeDaysUsed: freeDaysUsed, ueDaysUsed: ueDaysUsed };
       } else {
         var results = [];
         for (var j = 0; j < e.count; j++) {
           if (free >= 8) { free -= 8; results.push('free'); }
-          else if (ue - ueUsed >= 1) { ueUsed++; results.push('paid'); }
+          else if ((ue - ueUsed) >= 1) { ueUsed++; results.push('paid'); }
           else { results.push('debt'); }
         }
         d.calcInfo = { kind: 'otgul', results: results };
@@ -459,9 +471,9 @@ function cards(b) {
   var dc = b.debt > 0 ? 'negative' : 'neutral';
   return '<div class="balance-card"><div class="label">Платных нарядов</div><div class="value neutral">' + b.totalPaid + '</div><div class="sub">Остаток: ' + b.remainder + '/3</div></div>' +
     '<div class="balance-card"><div class="label">Всего у.е.</div><div class="value neutral">' + b.totalUE + '</div><div class="sub">Исп.: ' + b.ueUsed + '</div></div>' +
-    '<div class="balance-card"><div class="label">Доступно у.е.</div><div class="value ' + uc + '">' + b.availableUE + '</div><div class="sub">1 у.е. = 1 отгул</div></div>' +
+    '<div class="balance-card"><div class="label">Доступно у.е.</div><div class="value ' + uc + '">' + b.availableUE + '</div><div class="sub">1 у.е. = 1 отгул = 1 сутки к отпуску</div></div>' +
     '<div class="balance-card"><div class="label">Бесплатных</div><div class="value ' + fc + '">' + formatHours(b.free) + '</div><div class="sub">≈ ' + Math.floor(b.free / 8) + ' отгулов</div></div>' +
-    '<div class="balance-card"><div class="label">Долг</div><div class="value ' + dc + '">' + b.debt + '</div><div class="sub">' + (b.debt > 0 ? '⚠ требуется покрытие' : 'всё ок') + '</div></div>';
+    '<div class="balance-card"><div class="label">Долг</div><div class="value ' + dc + '">' + b.debt + '</div><div class="sub">' + (b.debt > 0 ? ' требуется покрытие' : 'всё ок') + '</div></div>';
 }
 
 function renderWeekly() {
@@ -501,18 +513,18 @@ function renderWeekly() {
       else if (e.type === 'free') free += getFreeHours(e.date) * e.count;
       else if (e.type === 'pg') free += getPgHours(e.date) * e.count;
       else if (e.type === 'otgul') {
-        if (e.isVacation && e.vacationDays) {
-          var days = e.vacationDays;
-          var hoursNeeded = days * 24;
-          while (hoursNeeded > 0) {
-            if (free >= 24) { free -= 24; hoursNeeded -= 24; }
-            else if (ue - ueUsed >= 1) { ueUsed++; hoursNeeded -= 24; }
-            else { debt++; hoursNeeded -= 24; }
-          }
+        var vacationDays = getVacationDaysFromEntry(e);
+        
+        if (vacationDays !== null) {
+          var days = vacationDays;
+          var freeDaysUsed = Math.min(Math.floor(free / 24), days);
+          var ueDaysUsed = days - freeDaysUsed;
+          free = free - (freeDaysUsed * 24);
+          ueUsed += ueDaysUsed;
         } else {
           for (var j = 0; j < e.count; j++) {
             if (free >= 8) free -= 8;
-            else if (ue - ueUsed >= 1) ueUsed++;
+            else if ((ue - ueUsed) >= 1) ueUsed++;
             else debt++;
           }
         }
@@ -527,12 +539,14 @@ function renderWeekly() {
       else if (e.type === 'free') fw += getFreeHours(e.date) * e.count;
       else if (e.type === 'pg') fw += getPgHours(e.date) * e.count;
       else if (e.type === 'otgul') {
-        if (e.isVacation && e.vacationDays) vw += e.vacationDays;
+        var vDays = getVacationDaysFromEntry(e);
+        if (vDays !== null) vw += vDays;
         else ow += e.count;
       }
     });
     
-    var bal = ue - ueUsed;
+    // ИСПРАВЛЕНИЕ: баланс с учётом конвертации нарядов текущей недели
+    var bal = ue - ueUsed + Math.floor(paid / 3) * 2;
     var bc = bal > 0 ? 'type-free' : (bal < 0 ? 'type-otgul' : '');
     var converted = Math.floor(paid / 3);
     var rem = paid % 3;
@@ -565,12 +579,13 @@ function renderJournal() {
   });
   
   var html = '';
-  var labels = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул/Отпуск' };
+  var labels = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул' };
   
   entries.forEach(function(e) {
     var d = dmap[e.id];
     var tc = 'type-' + e.type;
     var vc = '', rc = '';
+    var displayType = labels[e.type];
     
     if (e.type === 'paid') {
       vc = '<span class="' + tc + '">' + e.count + ' наряд</span>';
@@ -581,19 +596,16 @@ function renderJournal() {
     } else if (e.type === 'otgul') {
       if (d && d.calcInfo) {
         if (d.calcInfo.kind === 'vacation') {
+          displayType = 'Отпуск';
           var days = d.calcInfo.days;
-          var results = d.calcInfo.results;
-          var freeCount = 0, paidCount = 0, debtCount = 0;
-          results.forEach(function(r) {
-            if (r === 'free24') freeCount++;
-            else if (r === 'paid') paidCount++;
-            else debtCount++;
-          });
-          vc = '<span class="type-vacation">' + days + ' сут. (24ч×' + freeCount + ' из бесплатных';
-          if (paidCount > 0) vc += ', ' + paidCount + ' у.е.';
-          if (debtCount > 0) vc += ', <span class="type-otgul debt">' + debtCount + ' долг</span>';
-          vc += ')</span>';
-          if (debtCount > 0) rc = ' style="background:#450a0a"';
+          var freeDays = d.calcInfo.freeDaysUsed;
+          var ueDays = d.calcInfo.ueDaysUsed;
+          vc = '<span class="type-vacation">' + days + ' сут. к отпуску';
+          var parts = [];
+          if (freeDays > 0) parts.push(freeDays + '×24ч из бесплатных');
+          if (ueDays > 0) parts.push(ueDays + ' у.е.');
+          if (parts.length > 0) vc += ' (' + parts.join(', ') + ')';
+          vc += '</span>';
         } else {
           var results = d.calcInfo.results;
           var parts = [];
@@ -607,11 +619,11 @@ function renderJournal() {
           if (hasDebt) rc = ' style="background:#450a0a"';
         }
       } else {
-        vc = '<span class="type-otgul">1 отгул</span>';
+        vc = '<span class="type-otgul">' + e.count + ' отгул</span>';
       }
     }
     
-    html += '<tr' + rc + '><td>' + e.date + '</td><td>' + esc(e.person) + '</td><td class="' + tc + '">' + labels[e.type] + '</td><td>' + vc + '</td><td>' + esc(e.note || '') + '</td><td><button class="small danger" onclick="deleteEntry(\'' + e.id + '\')">×</button></td></tr>';
+    html += '<tr' + rc + '><td>' + e.date + '</td><td>' + esc(e.person) + '</td><td class="' + tc + '">' + displayType + '</td><td>' + vc + '</td><td>' + esc(e.note || '') + '</td><td><button class="small danger" onclick="deleteEntry(\'' + e.id + '\')">×</button></td></tr>';
   });
   
   tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:#94a3b8">Нет записей</td></tr>';
@@ -624,6 +636,7 @@ function exportData() {
   a.href = url;
   a.download = 'vahta_backup_' + new Date().toISOString().slice(0,10) + '.json';
   a.click();
+  URL.revokeObjectURL(url);
 }
 
 function importData(event) {
