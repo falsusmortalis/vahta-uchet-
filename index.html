@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Учёт вахт</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:12px;font-size:14px}h1{text-align:center;margin-bottom:16px;color:#60a5fa}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 14px;border-radius:6px;cursor:pointer}button:hover{background:#334155}button.primary{background:#2563eb;border-color:#2563eb}button.danger{background:#dc2626;border-color:#dc2626}.section{background:#1e293b;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid #334155}.section h2{font-size:15px;margin-bottom:10px;color:#60a5fa}input,select,textarea{background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:7px 10px;border-radius:5px;width:100%}.people-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.person-chip{background:#334155;padding:5px 10px;border-radius:14px;font-size:12px;display:flex;gap:6px;align-items:center}.person-chip.active{background:#2563eb}.person-chip .del{cursor:pointer;color:#f87171;font-weight:bold}.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:8px}.radio-group{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.radio-group label{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer}.radio-group input[type="radio"]{display:none}.radio-group label.checked{background:#1e40af;border:1px solid #2563eb}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#334155;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0}td{padding:6px;border-bottom:1px solid #334155}.type-paid{color:#fbbf24;font-weight:600}.type-free{color:#34d399;font-weight:600}.type-pg{color:#a78bfa;font-weight:600}.type-otgul{color:#f87171;font-weight:600}.type-otgul.debt{color:#fecaca;background:#7f1d1d;padding:2px 6px;border-radius:3px}.balance-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}.balance-card{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center}.balance-card .label{font-size:11px;color:#94a3b8;margin-bottom:4px}.balance-card .value{font-size:18px;font-weight:bold}.balance-card .value.positive{color:#34d399}.balance-card .value.negative{color:#f87171}.balance-card .value.neutral{color:#fbbf24}.balance-card .sub{font-size:10px;color:#64748b;margin-top:2px}.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}.tab{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer}.tab.active{background:#2563eb}.info{background:#0f172a;padding:8px;border-radius:5px;font-size:11px;color:#94a3b8;margin:8px 0;border-left:3px solid #2563eb}.carry-cell{font-family:monospace;font-weight:bold;color:#fbbf24}.ue-cell{color:#34d399;font-weight:bold}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:12px;font-size:14px}h1{text-align:center;margin-bottom:16px;color:#60a5fa}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:8px 14px;border-radius:6px;cursor:pointer}button:hover{background:#334155}button.primary{background:#2563eb;border-color:#2563eb}button.danger{background:#dc2626;border-color:#dc2626}.section{background:#1e293b;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid #334155}.section h2{font-size:15px;margin-bottom:10px;color:#60a5fa}input,select,textarea{background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:7px 10px;border-radius:5px;width:100%}.people-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.person-chip{background:#334155;padding:5px 10px;border-radius:14px;font-size:12px;display:flex;gap:6px;align-items:center}.person-chip.active{background:#2563eb}.person-chip .del{cursor:pointer;color:#f87171;font-weight:bold}.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:8px}.radio-group{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.radio-group label{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer}.radio-group input[type="radio"]{display:none}.radio-group label.checked{background:#1e40af;border:1px solid #2563eb}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#334155;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0}td{padding:6px;border-bottom:1px solid #334155}.type-paid{color:#fbbf24;font-weight:600}.type-free{color:#34d399;font-weight:600}.type-pg{color:#a78bfa;font-weight:600}.type-otgul{color:#f87171;font-weight:600}.type-otgul.debt{color:#fecaca;background:#7f1d1d;padding:2px 6px;border-radius:3px}.type-vacation{color:#a78bfa;font-weight:600}.balance-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}.balance-card{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center}.balance-card .label{font-size:11px;color:#94a3b8;margin-bottom:4px}.balance-card .value{font-size:18px;font-weight:bold}.balance-card .value.positive{color:#34d399}.balance-card .value.negative{color:#f87171}.balance-card .value.neutral{color:#fbbf24}.balance-card .sub{font-size:10px;color:#64748b;margin-top:2px}.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}.tab{background:#334155;padding:6px 12px;border-radius:5px;cursor:pointer}.tab.active{background:#2563eb}.info{background:#0f172a;padding:8px;border-radius:5px;font-size:11px;color:#94a3b8;margin:8px 0;border-left:3px solid #2563eb}.carry-cell{font-family:monospace;font-weight:bold;color:#fbbf24}.ue-cell{color:#34d399;font-weight:bold}.checkbox-label{display:flex;align-items:center;gap:6px;margin:8px 0;padding:6px 12px;background:#334155;border-radius:5px;cursor:pointer}.checkbox-label input[type="checkbox"]{width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -47,6 +47,16 @@
     <label data-type="pg" onclick="setType('pg')">ПГ</label>
     <label data-type="otgul" onclick="setType('otgul')">Отгул</label>
   </div>
+  
+  <label class="checkbox-label">
+    <input type="checkbox" id="isVacation" onchange="toggleVacation()">
+    <span>🏖 Отпуск (сутки к отпуску)</span>
+  </label>
+  
+  <div class="form-row" id="vacationDaysRow" style="display:none">
+    <input type="number" id="vacationDays" placeholder="Сутки отпуска" min="1" max="30">
+  </div>
+  
   <div class="form-row">
     <select id="entryPerson"></select>
     <input type="date" id="entryDate">
@@ -55,9 +65,10 @@
   </div>
   <button class="primary" onclick="addEntry()">Сохранить</button>
   <div class="info">
-    Бесплатные: Пн-Чт 8ч, Пт→Сб 12ч, Сб→Вс 20ч, Вс→Пн 16ч. ПГ в выходной/праздник = 8ч.<br>
-    Платные: 3 наряда = 2 у.е. Остаток переносится.<br>
-    Отгул: сначала бесплатные (8ч), потом у.е. Иначе — долг.
+    💡 Бесплатные: Пн-Чт 8ч, Пт→Сб 12ч, Сб→Вс 20ч, Вс→Пн 16ч. ПГ в выходной/праздник = 8ч.<br>
+    💡 Платные: 3 наряда = 2 у.е. Остаток переносится.<br>
+    💡 Отгул: сначала списывает бесплатные часы (8ч), потом у.е. Если ничего нет — долг (красный).<br>
+    💡 <b>Отпуск:</b> 24 часа = 1 сутки. Сначала бесплатная переработка (24ч/сутки), потом 1 у.е./сутки.
   </div>
 </div>
 
@@ -72,8 +83,8 @@
   <div style="overflow-x:auto">
     <table id="weeklyTable">
       <thead><tr>
-        <th>Неделя</th><th>Платн.нар.</th><th>Конверт.(3/ост.)</th><th>у.е.за нед.</th>
-        <th>Беспл.(сут/ч)</th><th>Отгулы</th><th>Баланс у.е.</th><th>Баланс(сут/ч)</th>
+        <th>Неделя</th><th>Платн. нар.</th><th>Конверт. (3/ост.)</th><th>у.е. за нед.</th>
+        <th>Беспл. (сут/ч)</th><th>Отгулы</th><th>Отпуск (сут)</th><th>Баланс у.е.</th><th>Баланс (сут/ч)</th>
       </tr></thead>
       <tbody></tbody>
     </table>
@@ -97,17 +108,18 @@ var state = { people: [], entries: [], holidays: [], selectedPerson: null };
 var currentType = 'paid';
 var RF_2026 = ["2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11","2026-02-23","2026-03-09","2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11","2026-06-12","2026-11-04","2026-12-31"];
 
-// ===== ИМПОРТ С ОЧИСТКОЙ ВСЕХ ПРОБЕЛОВ =====
+function toggleVacation() {
+  var isVac = document.getElementById('isVacation').checked;
+  document.getElementById('vacationDaysRow').style.display = isVac ? 'grid' : 'none';
+}
+
 function importData(event) {
   var file = event.target.files[0];
   if (!file) return;
-  
   var reader = new FileReader();
   reader.onload = function(e) {
     try {
       var data = JSON.parse(e.target.result);
-      
-      // Очищаем ВСЕ ключи и значения от пробелов
       var cleanData = {};
       for (var key in data) {
         var cleanKey = key.trim();
@@ -130,15 +142,12 @@ function importData(event) {
           cleanData.selectedPerson = data[key] ? data[key].trim() : null;
         }
       }
-      
       state.people = cleanData.people || [];
       state.entries = cleanData.entries || [];
       state.holidays = cleanData.holidays || [];
       state.selectedPerson = cleanData.selectedPerson || null;
-      
       save();
       render();
-      
       document.getElementById('importInfo').innerHTML = '<b style="color:#34d399">✅ ИМПОРТИРОВАНО!</b><br>Людей: ' + state.people.length + '<br>Записей: ' + state.entries.length;
     } catch(err) {
       document.getElementById('importInfo').innerHTML = '<b style="color:#f87171">❌ ОШИБКА:</b> ' + err.message;
@@ -206,11 +215,9 @@ function renderPeople() {
   var list = document.getElementById('peopleList');
   var sel = document.getElementById('entryPerson');
   var tabs = document.getElementById('personTabs');
-  
   var listHtml = '';
   var selHtml = '<option value="">Выберите</option>';
   var tabsHtml = '<div class="tab' + (!state.selectedPerson ? ' active' : '') + '" onclick="selectPerson(null)">Все</div>';
-  
   for (var i = 0; i < state.people.length; i++) {
     var p = state.people[i];
     var isActive = state.selectedPerson === p;
@@ -218,7 +225,6 @@ function renderPeople() {
     selHtml += '<option value="' + esc(p) + '"' + (isActive ? ' selected' : '') + '>' + esc(p) + '</option>';
     tabsHtml += '<div class="tab' + (isActive ? ' active' : '') + '" onclick="selectPerson(\'' + esc(p) + '\')">' + esc(p) + '</div>';
   }
-  
   list.innerHTML = listHtml;
   sel.innerHTML = selHtml;
   tabs.innerHTML = tabsHtml;
@@ -280,13 +286,33 @@ function addEntry() {
   var date = document.getElementById('entryDate').value;
   var count = parseInt(document.getElementById('entryCount').value) || 1;
   var note = document.getElementById('entryNote').value.trim();
+  var isVacation = document.getElementById('isVacation').checked;
+  var vacationDays = isVacation ? parseInt(document.getElementById('vacationDays').value) || 0 : 0;
+  
   if (!person) { alert('Выберите сотрудника'); return; }
   if (!date) { alert('Выберите дату'); return; }
-  state.entries.push({
+  
+  var entry = {
     id: 'id' + Date.now() + Math.random().toString(36).substr(2, 5),
-    person: person, date: date, type: currentType, count: count, note: note
-  });
+    person: person, 
+    date: date, 
+    type: currentType, 
+    count: count, 
+    note: note
+  };
+  
+  if (isVacation && vacationDays > 0) {
+    entry.isVacation = true;
+    entry.vacationDays = vacationDays;
+    if (note) entry.note = 'Отпуск ' + vacationDays + ' сут. ' + note;
+    else entry.note = 'Отпуск ' + vacationDays + ' сут.';
+  }
+  
+  state.entries.push(entry);
   document.getElementById('entryNote').value = '';
+  document.getElementById('isVacation').checked = false;
+  document.getElementById('vacationDays').value = '';
+  toggleVacation();
   save(); render();
 }
 
@@ -369,34 +395,76 @@ function getSorted(person) {
 
 function calcBalance(person) {
   var entries = getSorted(person);
-  var paid = 0, free = 0, ue = 0, ueUsed = 0, debt = 0, totalPaid = 0, curWeek = null;
+  var paid = 0, free = 0, ue = 0, ueUsed = 0, debt = 0, totalPaid = 0, curWeek = null, vacationDaysTotal = 0;
   
   for (var i = 0; i < entries.length; i++) {
     var e = entries[i];
     var w = getWeekNumber(e.date);
     if (curWeek !== null && w !== curWeek) {
-      ue += Math.floor(paid / 3) * 2;
+      var converted = Math.floor(paid / 3);
+      ue += converted * 2;
       paid = paid % 3;
     }
     curWeek = w;
     
-    if (e.type === 'paid') { paid += e.count; totalPaid += e.count; }
-    else if (e.type === 'free') { free += getFreeHours(e.date) * e.count; }
-    else if (e.type === 'pg') { free += getPgHours(e.date) * e.count; }
-    else if (e.type === 'otgul') {
-      for (var j = 0; j < e.count; j++) {
-        if (free >= 8) { free -= 8; }
-        else if (ue - ueUsed >= 1) { ueUsed++; }
-        else { debt++; }
+    if (e.type === 'paid') { 
+      paid += e.count; 
+      totalPaid += e.count; 
+    } else if (e.type === 'free') { 
+      free += getFreeHours(e.date) * e.count; 
+    } else if (e.type === 'pg') { 
+      free += getPgHours(e.date) * e.count; 
+    } else if (e.type === 'otgul') {
+      // Проверяем, это отпуск или обычный отгул
+      if (e.isVacation && e.vacationDays) {
+        // Отпуск: 24 часа = 1 сутки
+        var days = e.vacationDays;
+        var hoursNeeded = days * 24;
+        vacationDaysTotal += days;
+        
+        // Сначала используем бесплатные часы
+        while (hoursNeeded > 0) {
+          if (free >= 24) {
+            free -= 24;
+            hoursNeeded -= 24;
+          } else if (ue - ueUsed >= 1) {
+            ueUsed++;
+            hoursNeeded -= 24;
+          } else {
+            debt++;
+            hoursNeeded -= 24;
+          }
+        }
+      } else {
+        // Обычный отгул: 8 часов
+        for (var j = 0; j < e.count; j++) {
+          if (free >= 8) { 
+            free -= 8; 
+          } else if (ue - ueUsed >= 1) { 
+            ueUsed++; 
+          } else { 
+            debt++; 
+          }
+        }
       }
     }
   }
   
-  var finalUE = Math.floor(paid / 3) * 2;
+  var finalConverted = Math.floor(paid / 3);
+  var finalUE = finalConverted * 2;
+  var finalRemainder = paid % 3;
   var totalUE = ue + finalUE;
+  var availableUE = totalUE - ueUsed;
+  
   return {
-    totalPaid: totalPaid, totalUE: totalUE, availableUE: totalUE - ueUsed,
-    ueUsed: ueUsed, free: free, debt: debt, remainder: paid % 3
+    totalPaid: totalPaid, 
+    totalUE: totalUE, 
+    availableUE: availableUE,
+    ueUsed: ueUsed, 
+    free: free, 
+    debt: debt, 
+    remainder: finalRemainder,
+    vacationDays: vacationDaysTotal
   };
 }
 
@@ -408,10 +476,11 @@ function calcDetails(person) {
   for (var i = 0; i < entries.length; i++) {
     var e = entries[i];
     var w = getWeekNumber(e.date);
-    var d = { id: e.id, person: e.person, date: e.date, type: e.type, count: e.count, note: e.note, calcInfo: null };
+    var d = { id: e.id, person: e.person, date: e.date, type: e.type, count: e.count, note: e.note, isVacation: e.isVacation, vacationDays: e.vacationDays, calcInfo: null };
     
     if (curWeek !== null && w !== curWeek) {
-      ue += Math.floor(paid / 3) * 2;
+      var converted = Math.floor(paid / 3);
+      ue += converted * 2;
       paid = paid % 3;
     }
     curWeek = w;
@@ -428,13 +497,42 @@ function calcDetails(person) {
       free += h;
       d.calcInfo = { kind: 'pg', value: h > 0 ? formatHours(h) : '0ч', freeHours: free };
     } else if (e.type === 'otgul') {
-      var results = [];
-      for (var j = 0; j < e.count; j++) {
-        if (free >= 8) { free -= 8; results.push('free'); }
-        else if (ue - ueUsed >= 1) { ueUsed++; results.push('paid'); }
-        else { results.push('debt'); }
+      if (e.isVacation && e.vacationDays) {
+        // Отпуск
+        var days = e.vacationDays;
+        var hoursNeeded = days * 24;
+        var results = [];
+        while (hoursNeeded > 0) {
+          if (free >= 24) {
+            free -= 24;
+            results.push('free24');
+            hoursNeeded -= 24;
+          } else if (ue - ueUsed >= 1) {
+            ueUsed++;
+            results.push('paid');
+            hoursNeeded -= 24;
+          } else {
+            results.push('debt');
+            hoursNeeded -= 24;
+          }
+        }
+        d.calcInfo = { kind: 'vacation', days: days, results: results };
+      } else {
+        // Обычный отгул
+        var results = [];
+        for (var j = 0; j < e.count; j++) {
+          if (free >= 8) { 
+            free -= 8; 
+            results.push('free'); 
+          } else if (ue - ueUsed >= 1) { 
+            ueUsed++; 
+            results.push('paid'); 
+          } else { 
+            results.push('debt'); 
+          }
+        }
+        d.calcInfo = { kind: 'otgul', results: results };
       }
-      d.calcInfo = { kind: 'otgul', results: results };
     }
     details.push(d);
   }
@@ -467,9 +565,10 @@ function cards(b) {
   var uc = b.availableUE > 0 ? 'positive' : (b.availableUE < 0 ? 'negative' : 'neutral');
   var fc = b.free > 0 ? 'positive' : 'neutral';
   var dc = b.debt > 0 ? 'negative' : 'neutral';
+  var vacationText = b.vacationDays > 0 ? '<div class="sub">Отпуск: ' + b.vacationDays + ' сут.</div>' : '';
   return '<div class="balance-card"><div class="label">Платных нарядов</div><div class="value neutral">' + b.totalPaid + '</div><div class="sub">Остаток: ' + b.remainder + '/3</div></div>' +
     '<div class="balance-card"><div class="label">Всего у.е.</div><div class="value neutral">' + b.totalUE + '</div><div class="sub">Исп.: ' + b.ueUsed + '</div></div>' +
-    '<div class="balance-card"><div class="label">Доступно у.е.</div><div class="value ' + uc + '">' + b.availableUE + '</div><div class="sub">1 у.е. = 1 отгул</div></div>' +
+    '<div class="balance-card"><div class="label">Доступно у.е.</div><div class="value ' + uc + '">' + b.availableUE + '</div><div class="sub">1 у.е. = 1 отгул</div>' + vacationText + '</div>' +
     '<div class="balance-card"><div class="label">Бесплатных</div><div class="value ' + fc + '">' + formatHours(b.free) + '</div><div class="sub">≈ ' + Math.floor(b.free / 8) + ' отгулов</div></div>' +
     '<div class="balance-card"><div class="label">Долг</div><div class="value ' + dc + '">' + b.debt + '</div><div class="sub">' + (b.debt > 0 ? '⚠ требуется покрытие' : 'всё ок') + '</div></div>';
 }
@@ -503,10 +602,9 @@ function renderWeekly() {
     var week = weekOrder[wi];
     var wd = getWeekDates(week);
     
-    // КОНВЕРТАЦИЯ В НАЧАЛЕ НЕДЕЛИ (как в calcBalance)
     if (curWeek !== null) {
-      var conv = Math.floor(paid / 3);
-      var weekUE = conv * 2;
+      var converted = Math.floor(paid / 3);
+      var weekUE = converted * 2;
       ue += weekUE;
       paid = paid % 3;
     }
@@ -514,47 +612,61 @@ function renderWeekly() {
     
     while (idx < allSorted.length && getWeekNumber(allSorted[idx].date) === week) {
       var e = allSorted[idx];
-      
       if (e.type === 'paid') paid += e.count;
       else if (e.type === 'free') free += getFreeHours(e.date) * e.count;
       else if (e.type === 'pg') free += getPgHours(e.date) * e.count;
       else if (e.type === 'otgul') {
-        for (var j = 0; j < e.count; j++) {
-          if (free >= 8) free -= 8;
-          else if (ue - ueUsed >= 1) ueUsed++;
-          else debt++;
+        if (e.isVacation && e.vacationDays) {
+          var days = e.vacationDays;
+          var hoursNeeded = days * 24;
+          while (hoursNeeded > 0) {
+            if (free >= 24) { free -= 24; hoursNeeded -= 24; }
+            else if (ue - ueUsed >= 1) { ueUsed++; hoursNeeded -= 24; }
+            else { debt++; hoursNeeded -= 24; }
+          }
+        } else {
+          for (var j = 0; j < e.count; j++) {
+            if (free >= 8) free -= 8;
+            else if (ue - ueUsed >= 1) ueUsed++;
+            else debt++;
+          }
         }
       }
       idx++;
     }
     
     var we = weekMap[week];
-    var pw = 0, fw = 0, ow = 0;
+    var pw = 0, fw = 0, ow = 0, vw = 0;
     for (var i = 0; i < we.length; i++) {
       var e = we[i];
       if (e.type === 'paid') pw += e.count;
       else if (e.type === 'free') fw += getFreeHours(e.date) * e.count;
       else if (e.type === 'pg') fw += getPgHours(e.date) * e.count;
-      else if (e.type === 'otgul') ow += e.count;
+      else if (e.type === 'otgul') {
+        if (e.isVacation && e.vacationDays) vw += e.vacationDays;
+        else ow += e.count;
+      }
     }
     
     var bal = ue - ueUsed;
     var bc = bal > 0 ? 'type-free' : (bal < 0 ? 'type-otgul' : '');
-    var conv = Math.floor(paid / 3);
+    var converted = Math.floor(paid / 3);
     var rem = paid % 3;
     
     html += '<tr><td>' + wd.start + ' → ' + wd.end + '</td>' +
       '<td class="type-paid">' + (pw || '—') + '</td>' +
-      '<td class="carry-cell">' + (conv * 3) + '/' + rem + '</td>' +
-      '<td class="ue-cell">' + (conv * 2 || '—') + '</td>' +
+      '<td class="carry-cell">' + (converted * 3) + '/' + rem + '</td>' +
+      '<td class="ue-cell">' + (converted * 2 || '—') + '</td>' +
       '<td class="type-free">' + (fw ? formatHours(fw) : '—') + '</td>' +
       '<td class="type-otgul">' + (ow || '—') + '</td>' +
+      '<td class="type-vacation">' + (vw || '—') + '</td>' +
       '<td class="' + bc + '">' + bal + ' у.е.</td>' +
       '<td class="' + (free > 0 ? 'type-free' : '') + '">' + formatHours(free) + '</td></tr>';
   }
   
-  tbody.innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
+  tbody.innerHTML = html || '<tr><td colspan="9" style="text-align:center;color:#94a3b8">Нет данных</td></tr>';
 }
+
 function renderJournal() {
   var tbody = document.querySelector('#journalTable tbody');
   var entries = [];
@@ -572,7 +684,7 @@ function renderJournal() {
   });
   
   var html = '';
-  var labels = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул' };
+  var labels = { paid: 'Платная', free: 'Бесплатная', pg: 'ПГ', otgul: 'Отгул/Отпуск' };
   
   for (var i = 0; i < entries.length; i++) {
     var e = entries[i];
@@ -587,17 +699,35 @@ function renderJournal() {
     } else if (e.type === 'pg') {
       vc = '<span class="' + tc + '">' + formatHours(getPgHours(e.date) * e.count) + '</span>';
     } else if (e.type === 'otgul') {
-      if (d && d.calcInfo && d.calcInfo.results) {
-        var parts = [];
-        for (var j = 0; j < d.calcInfo.results.length; j++) {
-          var r = d.calcInfo.results[j];
-          if (r === 'free') parts.push('<span class="type-free">−8ч</span>');
-          else if (r === 'paid') parts.push('<span class="type-paid">−1у.е.</span>');
-          else parts.push('<span class="type-otgul debt">ДОЛГ</span>');
-        }
-        vc = parts.join(' ');
-        for (var j = 0; j < d.calcInfo.results.length; j++) {
-          if (d.calcInfo.results[j] === 'debt') { rc = ' style="background:#450a0a"'; break; }
+      if (d && d.calcInfo) {
+        if (d.calcInfo.kind === 'vacation') {
+          // Отпуск
+          var days = d.calcInfo.days;
+          var results = d.calcInfo.results;
+          var freeCount = 0, paidCount = 0, debtCount = 0;
+          for (var j = 0; j < results.length; j++) {
+            if (results[j] === 'free24') freeCount++;
+            else if (results[j] === 'paid') paidCount++;
+            else debtCount++;
+          }
+          vc = '<span class="type-vacation">' + days + ' сут. (24ч×' + freeCount + ' из бесплатных';
+          if (paidCount > 0) vc += ', ' + paidCount + ' у.е.';
+          if (debtCount > 0) vc += ', <span class="type-otgul debt">' + debtCount + ' долг</span>';
+          vc += ')</span>';
+          if (debtCount > 0) rc = ' style="background:#450a0a"';
+        } else {
+          // Обычный отгул
+          var results = d.calcInfo.results;
+          var parts = [];
+          var hasDebt = false;
+          for (var j = 0; j < results.length; j++) {
+            var r = results[j];
+            if (r === 'free') parts.push('<span class="type-free">−8ч</span>');
+            else if (r === 'paid') parts.push('<span class="type-paid">−1у.е.</span>');
+            else { parts.push('<span class="type-otgul debt">ДОЛГ</span>'); hasDebt = true; }
+          }
+          vc = parts.join(' ');
+          if (hasDebt) rc = ' style="background:#450a0a"';
         }
       } else {
         vc = '<span class="type-otgul">1 отгул</span>';
